@@ -95,7 +95,7 @@ billingRoutes.post('/create-checkout', async (req, res, next) => {
       customer.id,
       priceId,
       customer.metadata.tenant_id || '',
-      `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}&plan=${plan_id}&billing=${billing_cycle}`,
+      `${baseUrl}/app/checkout/success?session_id={CHECKOUT_SESSION_ID}&plan=${plan_id}&billing=${billing_cycle}`,
       `${baseUrl}/#precios`
     );
 
@@ -155,9 +155,12 @@ billingRoutes.post(
         case 'customer.subscription.created':
         case 'customer.subscription.updated': {
           const subscription = event.data.object as any;
+          logger.info(`Processing ${event.type} - Subscription ID: ${subscription.id}`);
+          logger.info(`Subscription metadata: ${JSON.stringify(subscription.metadata)}`);
+
           const subData = extractSubscriptionData(subscription);
 
-          logger.info(`Subscription ${subData.id} status: ${subData.status}`);
+          logger.info(`Subscription ${subData.id} - Status: ${subData.status}, Plan: ${subData.planId}, Tenant: ${subData.tenantId}`);
 
           if (subData.tenantId) {
             // Update tenant's plan based on subscription status
@@ -169,8 +172,10 @@ billingRoutes.post(
 
             const newPlan = subData.planId ? planMap[subData.planId] : undefined;
 
+            logger.info(`Mapped plan: ${newPlan}, Status is active: ${subData.status === 'active'}`);
+
             if (subData.status === 'active' && newPlan) {
-              await db
+              const updateResult = await db
                 .update(tenants)
                 .set({
                   plan: newPlan,
@@ -179,7 +184,17 @@ billingRoutes.post(
                 })
                 .where(eq(tenants.id, subData.tenantId));
 
-              logger.info(`Updated tenant ${subData.tenantId} to plan ${newPlan}`);
+              logger.info(`Updated tenant ${subData.tenantId} to plan ${newPlan}. Update result: ${JSON.stringify(updateResult)}`);
+            } else if (subData.status === 'active' && !newPlan) {
+              // Subscription is active but we couldn't detect the plan - just update subscription ID
+              logger.warn(`Active subscription but couldn't detect plan. Updating subscription ID only.`);
+              await db
+                .update(tenants)
+                .set({
+                  stripe_subscription_id: subscription.id,
+                  status: 'active',
+                })
+                .where(eq(tenants.id, subData.tenantId));
             } else if (['canceled', 'unpaid', 'past_due'].includes(subData.status)) {
               // Downgrade or suspend
               await db
@@ -191,6 +206,8 @@ billingRoutes.post(
 
               logger.info(`Tenant ${subData.tenantId} status changed to ${subData.status}`);
             }
+          } else {
+            logger.warn(`No tenant_id found in subscription metadata for subscription ${subscription.id}`);
           }
           break;
         }
@@ -254,6 +271,7 @@ billingRoutes.get(
   async (req, res, next) => {
     try {
       const tenantId = req.user!.tenant_id;
+      logger.info(`Getting subscription for tenant: ${tenantId}`);
 
       // Get tenant with Stripe IDs
       const [tenant] = await db
@@ -263,14 +281,18 @@ billingRoutes.get(
         .limit(1);
 
       if (!tenant) {
+        logger.warn(`Tenant not found: ${tenantId}`);
         return res.status(404).json({ error: 'Tenant not found' });
       }
 
-      // If no subscription, return basic info
+      logger.info(`Tenant data - plan: ${tenant.plan}, stripe_customer_id: ${tenant.stripe_customer_id}, stripe_subscription_id: ${tenant.stripe_subscription_id}`);
+
+      // If no subscription, return basic info based on tenant's stored plan
       if (!tenant.stripe_subscription_id) {
+        logger.info(`No Stripe subscription ID, returning tenant plan: ${tenant.plan}`);
         return res.json({
           tenant_id: tenantId,
-          plan_id: tenant.plan,
+          plan_id: tenant.plan || 'essential',
           status: 'no_subscription',
           billing_cycle: null,
           current_period_start: null,
@@ -285,9 +307,10 @@ billingRoutes.get(
       const subscription = await getSubscription(tenant.stripe_subscription_id);
 
       if (!subscription) {
+        logger.warn(`Subscription not found in Stripe: ${tenant.stripe_subscription_id}`);
         return res.json({
           tenant_id: tenantId,
-          plan_id: tenant.plan,
+          plan_id: tenant.plan || 'essential',
           status: 'subscription_not_found',
           billing_cycle: null,
           current_period_start: null,
@@ -300,9 +323,23 @@ billingRoutes.get(
 
       const subData = extractSubscriptionData(subscription);
 
+      // Use plan from Stripe subscription, fallback to tenant's stored plan
+      const resolvedPlanId = subData.planId || tenant.plan || 'essential';
+
+      // If Stripe has a different plan than the tenant, update tenant to match Stripe
+      if (subData.planId && subData.planId !== tenant.plan && subscription.status === 'active') {
+        logger.info(`Plan mismatch detected - Stripe: ${subData.planId}, Tenant: ${tenant.plan}. Updating tenant...`);
+        await db
+          .update(tenants)
+          .set({ plan: subData.planId as 'essential' | 'professional' | 'enterprise' })
+          .where(eq(tenants.id, tenantId));
+      }
+
+      logger.info(`Returning subscription - plan: ${resolvedPlanId}, status: ${subscription.status}`);
+
       res.json({
         tenant_id: tenantId,
-        plan_id: subData.planId || tenant.plan,
+        plan_id: resolvedPlanId,
         status: subscription.status,
         billing_cycle: subData.billingCycle,
         current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
@@ -381,8 +418,8 @@ billingRoutes.post(
         customer.id,
         priceId,
         tenantId,
-        `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        `${baseUrl}/billing?canceled=true`
+        `${baseUrl}/app/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+        `${baseUrl}/app/billing?canceled=true`
       );
 
       res.json({

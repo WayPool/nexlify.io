@@ -449,6 +449,7 @@ export function constructWebhookEvent(
 
 /**
  * Extracts subscription data from a Stripe event.
+ * Attempts multiple methods to detect the plan ID.
  */
 export function extractSubscriptionData(subscription: Stripe.Subscription): {
   id: string;
@@ -461,12 +462,55 @@ export function extractSubscriptionData(subscription: Stripe.Subscription): {
 } {
   const item = subscription.items.data[0];
   const price = item?.price;
+  const product = price?.product;
+
+  // Try to get planId from multiple sources
+  let planId: string | null = null;
+  let billingCycle: string | null = null;
+
+  // 1. Try price metadata (check both plan_id and plan_type)
+  if (price?.metadata?.plan_id || price?.metadata?.plan_type) {
+    planId = price.metadata.plan_id || price.metadata.plan_type;
+    billingCycle = price.metadata.billing_cycle || null;
+    logger.info(`Plan detected from price metadata: ${planId}`);
+  }
+
+  // 2. Try product metadata if price didn't have it (check both plan_id and plan_type)
+  if (!planId && product && typeof product === 'object' && 'metadata' in product) {
+    const productMeta = (product as Stripe.Product).metadata;
+    planId = productMeta?.plan_id || productMeta?.plan_type || null;
+    if (planId) {
+      logger.info(`Plan detected from product metadata: ${planId}`);
+    }
+  }
+
+  // 3. Try to infer from product name
+  if (!planId && product && typeof product === 'object' && 'name' in product) {
+    const productName = (product as Stripe.Product).name?.toLowerCase() || '';
+    if (productName.includes('starter') || productName.includes('essential')) {
+      planId = 'essential';
+    } else if (productName.includes('business') || productName.includes('professional')) {
+      planId = 'professional';
+    } else if (productName.includes('enterprise')) {
+      planId = 'enterprise';
+    }
+    if (planId) {
+      logger.info(`Plan inferred from product name "${productName}": ${planId}`);
+    }
+  }
+
+  // 4. Try to detect billing cycle from price interval
+  if (!billingCycle && price?.recurring?.interval) {
+    billingCycle = price.recurring.interval === 'year' ? 'yearly' : 'monthly';
+  }
+
+  logger.info(`Extracted subscription data - ID: ${subscription.id}, Plan: ${planId}, Cycle: ${billingCycle}, Tenant: ${subscription.metadata?.tenant_id}`);
 
   return {
     id: subscription.id,
     status: subscription.status,
-    planId: (price?.metadata?.plan_id as string) || null,
-    billingCycle: (price?.metadata?.billing_cycle as string) || null,
+    planId,
+    billingCycle,
     currentPeriodEnd: new Date(subscription.current_period_end * 1000),
     cancelAtPeriodEnd: subscription.cancel_at_period_end,
     tenantId: (subscription.metadata?.tenant_id as string) || null,
