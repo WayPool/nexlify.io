@@ -22,28 +22,72 @@ export interface PlanPrices {
 }
 declare const NEXLIFY_PLANS: {
     readonly essential: {
-        readonly name: "Nexlify Essential";
-        readonly description: "Para equipos pequeños que comienzan con la gestión de riesgos";
-        readonly monthlyPrice: 37500;
-        readonly yearlyPrice: 375000;
-        readonly features: readonly ["Hasta 10 usuarios", "3 módulos incluidos", "Motor de riesgos", "Dashboard completo", "Anclaje blockchain estándar", "Soporte por email"];
+        readonly name: "Nexlify Starter";
+        readonly description: "Ideal para pequeñas empresas y autónomos";
+        readonly monthlyPrice: 39500;
+        readonly yearlyPrice: 394800;
+        readonly features: readonly ["Hasta 2 usuarios", "3 Módulos activos", "50 detectores de riesgo", "Expediente inspección", "Auditorías IA", "Soporte email"];
     };
     readonly professional: {
-        readonly name: "Nexlify Professional";
-        readonly description: "Para organizaciones en crecimiento con necesidades avanzadas";
+        readonly name: "Nexlify Business";
+        readonly description: "Para empresas en crecimiento";
         readonly monthlyPrice: 235000;
-        readonly yearlyPrice: 2350000;
-        readonly features: readonly ["Hasta 50 usuarios", "10 módulos incluidos", "Motor de riesgos", "Dashboard completo", "Anclaje blockchain avanzado", "Asistente IA", "API completa", "SSO / SAML", "Soporte prioritario"];
+        readonly yearlyPrice: 2349600;
+        readonly features: readonly ["Hasta 25 usuarios", "15 Módulos activos", "150 detectores de riesgo", "Todo lo de Starter", "Multi-Empresas (3)", "Soporte prioritario"];
     };
     readonly enterprise: {
         readonly name: "Nexlify Enterprise";
-        readonly description: "Para grandes empresas con requisitos de seguridad máxima";
-        readonly monthlyPrice: 750000;
-        readonly yearlyPrice: 7500000;
-        readonly features: readonly ["Usuarios ilimitados", "Todos los módulos", "Motor de riesgos", "Dashboard completo", "Anclaje blockchain dedicado", "Asistente IA avanzado", "Integraciones personalizadas", "SLA personalizado", "Account manager dedicado", "Soporte 24/7", "On-premise disponible"];
+        readonly description: "Solución completa para grandes corporaciones";
+        readonly monthlyPrice: 795000;
+        readonly yearlyPrice: 7950000;
+        readonly features: readonly ["Usuarios ilimitados", "Todos los Módulos", "395+ detectores de riesgo", "Todo lo de Business", "Multi-Empresas ilimitado", "Asistente IA avanzado", "API completa", "Account Manager dedicado"];
     };
 };
 export type PlanId = keyof typeof NEXLIFY_PLANS;
+export declare const PLAN_LIMITS: {
+    readonly essential: {
+        readonly users: 2;
+        readonly modules: 3;
+        readonly detectors: 50;
+        readonly companies: 1;
+        readonly apiAccess: false;
+        readonly aiAssistant: "basic";
+        readonly support: "email";
+    };
+    readonly professional: {
+        readonly users: 25;
+        readonly modules: 15;
+        readonly detectors: 150;
+        readonly companies: 3;
+        readonly apiAccess: false;
+        readonly aiAssistant: "advanced";
+        readonly support: "priority";
+    };
+    readonly enterprise: {
+        readonly users: -1;
+        readonly modules: -1;
+        readonly detectors: 395;
+        readonly companies: -1;
+        readonly apiAccess: true;
+        readonly aiAssistant: "full";
+        readonly support: "dedicated";
+    };
+};
+export type PlanLimits = typeof PLAN_LIMITS[PlanId];
+/**
+ * Gets the limits for a specific plan.
+ */
+export declare function getPlanLimits(planId: PlanId): PlanLimits;
+/**
+ * Checks if a value exceeds the plan limit.
+ * Returns true if within limit, false if exceeded.
+ * -1 means unlimited.
+ */
+export declare function isWithinLimit(current: number, limit: number): boolean;
+/**
+ * Gets usage percentage (capped at 100 for unlimited).
+ */
+export declare function getUsagePercentage(used: number, limit: number): number;
 /**
  * Ensures all Nexlify products and prices exist in Stripe.
  * Creates them if they don't exist, returns cached IDs if they do.

@@ -1,1 +1,0 @@
-{"version":3,"file":"TableWidget.d.ts","sourceRoot":"","sources":["TableWidget.tsx"],"names":[],"mappings":"AAAA;;;;GAIG;AAKH,OAAO,KAAK,EAAE,eAAe,EAAe,eAAe,EAAE,MAAM,qBAAqB,CAAC;AAGzF,UAAU,gBAAiB,SAAQ,eAAe;IAChD,IAAI,EAAE,eAAe,CAAC;CACvB;AA8DD,MAAM,CAAC,OAAO,UAAU,WAAW,CAAC,EAClC,MAAM,EACN,IAAI,EACJ,OAAO,EACP,KAAK,EACL,SAAS,GACV,EAAE,gBAAgB,+BA6DlB"}

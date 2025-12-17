@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   CreditCard,
@@ -49,13 +50,39 @@ interface Invoice {
   hosted_url: string | null;
 }
 
-interface Usage {
-  users: { used: number; limit: number; percentage: number };
-  modules: { used: number; limit: number; percentage: number };
-  risks: { used: number; limit: number; percentage: number };
+interface UsageItem {
+  used: number;
+  limit: number;
+  percentage: number;
+  unlimited?: boolean;
 }
 
+interface Usage {
+  plan: { id: string; name: string };
+  users: UsageItem;
+  modules: UsageItem;
+  risks: UsageItem;
+  companies?: UsageItem;
+  features?: {
+    apiAccess: boolean;
+    aiAssistant: string;
+    support: string;
+  };
+  canAddUser?: boolean;
+  canAddModule?: boolean;
+}
+
+// Map plan IDs from landing to API plan IDs
+const PLAN_ID_MAP: Record<string, string> = {
+  starter: 'essential',
+  essential: 'essential',
+  business: 'professional',
+  professional: 'professional',
+  enterprise: 'enterprise',
+};
+
 export default function Billing() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -64,43 +91,91 @@ export default function Billing() {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [isUpgrading, setIsUpgrading] = useState(false);
   const [isOpeningPortal, setIsOpeningPortal] = useState(false);
+  const upgradeProcessedRef = useRef(false);
+
+  // Check for upgrade parameters from landing page
+  const upgradePlanParam = searchParams.get('upgrade');
+  const billingParam = searchParams.get('billing');
 
   useEffect(() => {
     loadBillingData();
   }, []);
 
+  // Handle upgrade from landing page
+  useEffect(() => {
+    if (upgradePlanParam && !isLoading && plans.length > 0 && !upgradeProcessedRef.current) {
+      upgradeProcessedRef.current = true;
+
+      // Map the plan ID from landing to API plan ID
+      const mappedPlanId = PLAN_ID_MAP[upgradePlanParam.toLowerCase()] || upgradePlanParam;
+
+      // Set billing cycle from URL if provided
+      if (billingParam === 'yearly' || billingParam === 'monthly') {
+        setBillingCycle(billingParam);
+      }
+
+      // Find the plan
+      const planToUpgrade = plans.find(p => p.id === mappedPlanId);
+
+      if (planToUpgrade) {
+        // Clear the URL parameters
+        setSearchParams({});
+
+        // Show toast and trigger upgrade
+        toast.loading('Redirigiendo al checkout...', { id: 'upgrade-redirect' });
+
+        // Small delay to ensure state is updated
+        setTimeout(() => {
+          handleUpgrade(mappedPlanId, billingParam === 'yearly' ? 'yearly' : billingParam === 'monthly' ? 'monthly' : billingCycle);
+        }, 500);
+      } else {
+        toast.error(`Plan "${upgradePlanParam}" no encontrado`);
+        setSearchParams({});
+      }
+    }
+  }, [upgradePlanParam, billingParam, isLoading, plans]);
+
   const loadBillingData = async () => {
     setIsLoading(true);
     try {
-      const [plansRes, subRes, invoicesRes, usageRes] = await Promise.all([
-        billingApi.getPlans(),
-        billingApi.getSubscription(),
-        billingApi.getInvoices(10),
-        billingApi.getUsage(),
-      ]);
+      // Load plans first (public endpoint)
+      const plansRes = await billingApi.getPlans();
+      setPlans(plansRes.data.data || []);
 
-      setPlans(plansRes.data.data);
-      setSubscription(subRes.data);
-      setInvoices(invoicesRes.data.data);
-      setUsage(usageRes.data);
+      // Load authenticated data separately
+      try {
+        const [subRes, invoicesRes, usageRes] = await Promise.all([
+          billingApi.getSubscription(),
+          billingApi.getInvoices(10),
+          billingApi.getUsage(),
+        ]);
 
-      if (subRes.data.billing_cycle) {
-        setBillingCycle(subRes.data.billing_cycle as 'monthly' | 'yearly');
+        setSubscription(subRes.data);
+        setInvoices(invoicesRes.data.data || []);
+        setUsage(usageRes.data);
+
+        if (subRes.data?.billing_cycle) {
+          setBillingCycle(subRes.data.billing_cycle as 'monthly' | 'yearly');
+        }
+      } catch (authError) {
+        console.error('Error loading authenticated data:', authError);
+        // Don't show error toast - user might not be subscribed yet
       }
     } catch (error) {
-      console.error('Error loading billing data:', error);
-      toast.error('Error al cargar datos de facturación');
+      console.error('Error loading plans:', error);
+      toast.error('Error al cargar planes');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleUpgrade = async (planId: string) => {
+  const handleUpgrade = async (planId: string, overrideBillingCycle?: 'monthly' | 'yearly') => {
     setIsUpgrading(true);
+    toast.dismiss('upgrade-redirect');
     try {
       const response = await billingApi.createSubscription({
         plan_id: planId,
-        billing_cycle: billingCycle,
+        billing_cycle: overrideBillingCycle || billingCycle,
       });
 
       if (response.data.checkout_url) {
@@ -330,7 +405,14 @@ export default function Billing() {
           transition={{ delay: 0.1 }}
           className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6"
         >
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">Uso actual</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Uso actual</h2>
+            {usage.plan && (
+              <span className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 text-sm font-medium rounded-full">
+                Plan {usage.plan.name}
+              </span>
+            )}
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <div className="flex items-center justify-between mb-2">
@@ -339,51 +421,85 @@ export default function Billing() {
                   <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Usuarios</span>
                 </div>
                 <span className="text-sm text-slate-500 dark:text-slate-400">
-                  {usage.users.used} / {usage.users.limit}
+                  {usage.users.used} / {usage.users.unlimited ? '∞' : usage.users.limit}
                 </span>
               </div>
               <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-blue-500 rounded-full transition-all"
-                  style={{ width: `${usage.users.percentage}%` }}
+                  className={`h-full rounded-full transition-all ${
+                    usage.users.unlimited ? 'bg-gradient-to-r from-blue-400 to-blue-600' : 'bg-blue-500'
+                  }`}
+                  style={{ width: usage.users.unlimited ? '100%' : `${usage.users.percentage}%` }}
                 />
               </div>
+              {!usage.canAddUser && !usage.users.unlimited && (
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">Límite alcanzado</p>
+              )}
             </div>
             <div>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Box className="w-4 h-4 text-purple-500" />
-                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Módulos</span>
+                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Módulos activos</span>
                 </div>
                 <span className="text-sm text-slate-500 dark:text-slate-400">
-                  {usage.modules.used} / {usage.modules.limit}
+                  {usage.modules.used} / {usage.modules.unlimited ? '∞' : usage.modules.limit}
                 </span>
               </div>
               <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-purple-500 rounded-full transition-all"
-                  style={{ width: `${usage.modules.percentage}%` }}
+                  className={`h-full rounded-full transition-all ${
+                    usage.modules.unlimited ? 'bg-gradient-to-r from-purple-400 to-purple-600' : 'bg-purple-500'
+                  }`}
+                  style={{ width: usage.modules.unlimited ? '100%' : `${usage.modules.percentage}%` }}
                 />
               </div>
+              {!usage.canAddModule && !usage.modules.unlimited && (
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">Límite alcanzado - Actualiza tu plan</p>
+              )}
             </div>
             <div>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Zap className="w-4 h-4 text-teal-500" />
-                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Riesgos detectados</span>
+                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Detectores de riesgo</span>
                 </div>
                 <span className="text-sm text-slate-500 dark:text-slate-400">
-                  {usage.risks.used} / {usage.risks.limit}
+                  {usage.risks.used} / {usage.risks.unlimited ? '∞' : usage.risks.limit}
                 </span>
               </div>
               <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-teal-500 rounded-full transition-all"
-                  style={{ width: `${Math.min(usage.risks.percentage, 100)}%` }}
+                  className={`h-full rounded-full transition-all ${
+                    usage.risks.unlimited ? 'bg-gradient-to-r from-teal-400 to-teal-600' : 'bg-teal-500'
+                  }`}
+                  style={{ width: usage.risks.unlimited ? '100%' : `${Math.min(usage.risks.percentage, 100)}%` }}
                 />
               </div>
             </div>
           </div>
+
+          {/* Features section */}
+          {usage.features && (
+            <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+              <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Características del plan</h3>
+              <div className="flex flex-wrap gap-3">
+                <span className={`px-3 py-1.5 rounded-lg text-sm ${
+                  usage.features.apiAccess
+                    ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                    : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                }`}>
+                  API {usage.features.apiAccess ? 'Habilitada' : 'No disponible'}
+                </span>
+                <span className="px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-lg text-sm">
+                  IA: {usage.features.aiAssistant === 'full' ? 'Completa' : usage.features.aiAssistant === 'advanced' ? 'Avanzada' : 'Básica'}
+                </span>
+                <span className="px-3 py-1.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-lg text-sm">
+                  Soporte: {usage.features.support === 'dedicated' ? 'Dedicado' : usage.features.support === 'priority' ? 'Prioritario' : 'Email'}
+                </span>
+              </div>
+            </div>
+          )}
         </motion.div>
       )}
 
@@ -431,7 +547,7 @@ export default function Billing() {
               <motion.div
                 key={plan.id}
                 whileHover={{ y: -4 }}
-                className={`bg-white dark:bg-slate-800 rounded-2xl border-2 p-6 transition-all ${
+                className={`bg-white dark:bg-slate-800 rounded-2xl border-2 p-6 transition-all flex flex-col ${
                   isCurrentPlan
                     ? 'border-primary-500 shadow-lg shadow-primary-500/20'
                     : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
@@ -452,8 +568,8 @@ export default function Billing() {
                   <span className="text-slate-500 dark:text-slate-400">/mes</span>
                 </div>
 
-                <ul className="space-y-3 mb-6">
-                  {plan.features.slice(0, 5).map((feature) => (
+                <ul className="space-y-3 mb-6 flex-grow">
+                  {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
                       <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
                       {feature}

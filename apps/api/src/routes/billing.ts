@@ -9,8 +9,8 @@ import { z } from 'zod';
 import express from 'express';
 import { requirePermission, authMiddleware } from '../middleware/auth.js';
 import { db } from '../db/index.js';
-import { tenants } from '../db/schema.js';
-import { eq } from 'drizzle-orm';
+import { tenants, users, tenantModules, risks } from '../db/schema.js';
+import { eq, count, and, isNull } from 'drizzle-orm';
 import { logger } from '../utils/logger.js';
 import {
   ensureStripeProducts,
@@ -25,7 +25,11 @@ import {
   constructWebhookEvent,
   extractSubscriptionData,
   NEXLIFY_PLANS,
+  PLAN_LIMITS,
   PlanId,
+  getPlanLimits,
+  getUsagePercentage,
+  isWithinLimit,
 } from '../services/stripe.js';
 import { config } from '../config.js';
 
@@ -546,7 +550,7 @@ billingRoutes.post(
 
 /**
  * GET /api/billing/usage
- * Get current usage (placeholder for future metering)
+ * Get current usage based on actual data and plan limits
  */
 billingRoutes.get(
   '/usage',
@@ -556,23 +560,200 @@ billingRoutes.get(
     try {
       const tenantId = req.user!.tenant_id;
 
-      // TODO: Implement actual usage tracking
-      // For now, return placeholder data
+      // Get tenant to know their plan
+      const [tenant] = await db
+        .select()
+        .from(tenants)
+        .where(eq(tenants.id, tenantId))
+        .limit(1);
+
+      if (!tenant) {
+        return res.status(404).json({ error: 'Tenant not found' });
+      }
+
+      const planId = (tenant.plan || 'essential') as PlanId;
+      const limits = getPlanLimits(planId);
+
+      // Count active users for this tenant
+      const [userCount] = await db
+        .select({ count: count() })
+        .from(users)
+        .where(
+          and(
+            eq(users.tenant_id, tenantId),
+            isNull(users.deleted_at),
+            eq(users.status, 'active')
+          )
+        );
+
+      // Count active modules for this tenant
+      const [moduleCount] = await db
+        .select({ count: count() })
+        .from(tenantModules)
+        .where(
+          and(
+            eq(tenantModules.tenant_id, tenantId),
+            eq(tenantModules.status, 'active')
+          )
+        );
+
+      // Count total risks detected for this tenant
+      const [riskCount] = await db
+        .select({ count: count() })
+        .from(risks)
+        .where(
+          and(
+            eq(risks.tenant_id, tenantId),
+            isNull(risks.deleted_at)
+          )
+        );
+
+      const usersUsed = userCount?.count || 0;
+      const modulesUsed = moduleCount?.count || 0;
+      const risksUsed = riskCount?.count || 0;
+
       res.json({
+        plan: {
+          id: planId,
+          name: NEXLIFY_PLANS[planId]?.name || 'Starter',
+        },
         users: {
-          used: 5,
-          limit: 10,
-          percentage: 50,
+          used: usersUsed,
+          limit: limits.users,
+          percentage: getUsagePercentage(usersUsed, limits.users),
+          unlimited: limits.users === -1,
         },
         modules: {
-          used: 2,
-          limit: 3,
-          percentage: 67,
+          used: modulesUsed,
+          limit: limits.modules,
+          percentage: getUsagePercentage(modulesUsed, limits.modules),
+          unlimited: limits.modules === -1,
         },
         risks: {
-          used: 45,
-          limit: 1000,
-          percentage: 4.5,
+          used: risksUsed,
+          limit: limits.detectors,
+          percentage: getUsagePercentage(risksUsed, limits.detectors),
+          unlimited: false, // detectors are never unlimited
+        },
+        companies: {
+          used: 1, // For now, always 1 (main tenant)
+          limit: limits.companies,
+          percentage: getUsagePercentage(1, limits.companies),
+          unlimited: limits.companies === -1,
+        },
+        features: {
+          apiAccess: limits.apiAccess,
+          aiAssistant: limits.aiAssistant,
+          support: limits.support,
+        },
+        canAddUser: isWithinLimit(usersUsed, limits.users),
+        canAddModule: isWithinLimit(modulesUsed, limits.modules),
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
+ * GET /api/billing/can-install-module
+ * Check if the tenant can install a new module based on their plan
+ */
+billingRoutes.get(
+  '/can-install-module',
+  authMiddleware,
+  requirePermission('modules.read'),
+  async (req, res, next) => {
+    try {
+      const tenantId = req.user!.tenant_id;
+
+      // Get tenant to know their plan
+      const [tenant] = await db
+        .select()
+        .from(tenants)
+        .where(eq(tenants.id, tenantId))
+        .limit(1);
+
+      if (!tenant) {
+        return res.status(404).json({ error: 'Tenant not found' });
+      }
+
+      const planId = (tenant.plan || 'essential') as PlanId;
+      const limits = getPlanLimits(planId);
+
+      // Count active modules for this tenant
+      const [moduleCount] = await db
+        .select({ count: count() })
+        .from(tenantModules)
+        .where(
+          and(
+            eq(tenantModules.tenant_id, tenantId),
+            eq(tenantModules.status, 'active')
+          )
+        );
+
+      const modulesUsed = moduleCount?.count || 0;
+      const canInstall = isWithinLimit(modulesUsed, limits.modules);
+
+      res.json({
+        can_install: canInstall,
+        modules_used: modulesUsed,
+        modules_limit: limits.modules,
+        unlimited: limits.modules === -1,
+        upgrade_needed: !canInstall,
+        suggested_plan: !canInstall
+          ? planId === 'essential'
+            ? 'professional'
+            : planId === 'professional'
+            ? 'enterprise'
+            : null
+          : null,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
+ * GET /api/billing/limits
+ * Get the limits for the current plan
+ */
+billingRoutes.get(
+  '/limits',
+  authMiddleware,
+  requirePermission('billing.read'),
+  async (req, res, next) => {
+    try {
+      const tenantId = req.user!.tenant_id;
+
+      const [tenant] = await db
+        .select()
+        .from(tenants)
+        .where(eq(tenants.id, tenantId))
+        .limit(1);
+
+      if (!tenant) {
+        return res.status(404).json({ error: 'Tenant not found' });
+      }
+
+      const planId = (tenant.plan || 'essential') as PlanId;
+      const limits = getPlanLimits(planId);
+      const plan = NEXLIFY_PLANS[planId];
+
+      res.json({
+        plan_id: planId,
+        plan_name: plan?.name || 'Starter',
+        limits: {
+          users: limits.users === -1 ? 'unlimited' : limits.users,
+          modules: limits.modules === -1 ? 'unlimited' : limits.modules,
+          detectors: limits.detectors, // detectors are never unlimited
+          companies: limits.companies === -1 ? 'unlimited' : limits.companies,
+        },
+        features: {
+          api_access: limits.apiAccess,
+          ai_assistant: limits.aiAssistant,
+          support: limits.support,
         },
       });
     } catch (error) {

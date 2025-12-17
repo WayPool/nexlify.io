@@ -67,7 +67,7 @@ exports.billingRoutes.post('/create-checkout', async (req, res, next) => {
         const customer = await (0, stripe_js_1.getOrCreateCustomer)('pending_' + Date.now(), // Temporary tenant ID, will be updated after checkout
         email, tenant_name);
         const baseUrl = config_js_1.config.cors.origins[0] || 'https://nexlify.io';
-        const session = await (0, stripe_js_1.createCheckoutSession)(customer.id, priceId, customer.metadata.tenant_id || '', `${baseUrl}/app/register?session_id={CHECKOUT_SESSION_ID}&plan=${plan_id}&billing=${billing_cycle}`, `${baseUrl}/#pricing`);
+        const session = await (0, stripe_js_1.createCheckoutSession)(customer.id, priceId, customer.metadata.tenant_id || '', `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}&plan=${plan_id}&billing=${billing_cycle}`, `${baseUrl}/#precios`);
         res.json({
             checkout_url: session.url,
             session_id: session.id,
@@ -292,7 +292,7 @@ exports.billingRoutes.post('/subscription', auth_js_1.authMiddleware, (0, auth_j
         }
         // Create checkout session
         const baseUrl = config_js_1.config.cors.origins[0] || 'https://nexlify.io';
-        const session = await (0, stripe_js_1.createCheckoutSession)(customer.id, priceId, tenantId, `${baseUrl}/app/billing?success=true`, `${baseUrl}/app/billing?canceled=true`);
+        const session = await (0, stripe_js_1.createCheckoutSession)(customer.id, priceId, tenantId, `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`, `${baseUrl}/billing?canceled=true`);
         res.json({
             checkout_url: session.url,
             session_id: session.id,
@@ -417,28 +417,157 @@ exports.billingRoutes.post('/portal', auth_js_1.authMiddleware, (0, auth_js_1.re
 });
 /**
  * GET /api/billing/usage
- * Get current usage (placeholder for future metering)
+ * Get current usage based on actual data and plan limits
  */
 exports.billingRoutes.get('/usage', auth_js_1.authMiddleware, (0, auth_js_1.requirePermission)('billing.read'), async (req, res, next) => {
     try {
         const tenantId = req.user.tenant_id;
-        // TODO: Implement actual usage tracking
-        // For now, return placeholder data
+        // Get tenant to know their plan
+        const [tenant] = await index_js_1.db
+            .select()
+            .from(schema_js_1.tenants)
+            .where((0, drizzle_orm_1.eq)(schema_js_1.tenants.id, tenantId))
+            .limit(1);
+        if (!tenant) {
+            return res.status(404).json({ error: 'Tenant not found' });
+        }
+        const planId = (tenant.plan || 'essential');
+        const limits = (0, stripe_js_1.getPlanLimits)(planId);
+        // Count active users for this tenant
+        const [userCount] = await index_js_1.db
+            .select({ count: (0, drizzle_orm_1.count)() })
+            .from(schema_js_1.users)
+            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema_js_1.users.tenant_id, tenantId), (0, drizzle_orm_1.isNull)(schema_js_1.users.deleted_at), (0, drizzle_orm_1.eq)(schema_js_1.users.status, 'active')));
+        // Count active modules for this tenant
+        const [moduleCount] = await index_js_1.db
+            .select({ count: (0, drizzle_orm_1.count)() })
+            .from(schema_js_1.tenantModules)
+            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema_js_1.tenantModules.tenant_id, tenantId), (0, drizzle_orm_1.eq)(schema_js_1.tenantModules.status, 'active')));
+        // Count total risks detected for this tenant
+        const [riskCount] = await index_js_1.db
+            .select({ count: (0, drizzle_orm_1.count)() })
+            .from(schema_js_1.risks)
+            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema_js_1.risks.tenant_id, tenantId), (0, drizzle_orm_1.isNull)(schema_js_1.risks.deleted_at)));
+        const usersUsed = userCount?.count || 0;
+        const modulesUsed = moduleCount?.count || 0;
+        const risksUsed = riskCount?.count || 0;
         res.json({
+            plan: {
+                id: planId,
+                name: stripe_js_1.NEXLIFY_PLANS[planId]?.name || 'Starter',
+            },
             users: {
-                used: 5,
-                limit: 10,
-                percentage: 50,
+                used: usersUsed,
+                limit: limits.users,
+                percentage: (0, stripe_js_1.getUsagePercentage)(usersUsed, limits.users),
+                unlimited: limits.users === -1,
             },
             modules: {
-                used: 2,
-                limit: 3,
-                percentage: 67,
+                used: modulesUsed,
+                limit: limits.modules,
+                percentage: (0, stripe_js_1.getUsagePercentage)(modulesUsed, limits.modules),
+                unlimited: limits.modules === -1,
             },
             risks: {
-                used: 45,
-                limit: 1000,
-                percentage: 4.5,
+                used: risksUsed,
+                limit: limits.detectors,
+                percentage: (0, stripe_js_1.getUsagePercentage)(risksUsed, limits.detectors),
+                unlimited: limits.detectors === -1,
+            },
+            companies: {
+                used: 1, // For now, always 1 (main tenant)
+                limit: limits.companies,
+                percentage: (0, stripe_js_1.getUsagePercentage)(1, limits.companies),
+                unlimited: limits.companies === -1,
+            },
+            features: {
+                apiAccess: limits.apiAccess,
+                aiAssistant: limits.aiAssistant,
+                support: limits.support,
+            },
+            canAddUser: (0, stripe_js_1.isWithinLimit)(usersUsed, limits.users),
+            canAddModule: (0, stripe_js_1.isWithinLimit)(modulesUsed, limits.modules),
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+/**
+ * GET /api/billing/can-install-module
+ * Check if the tenant can install a new module based on their plan
+ */
+exports.billingRoutes.get('/can-install-module', auth_js_1.authMiddleware, (0, auth_js_1.requirePermission)('modules.read'), async (req, res, next) => {
+    try {
+        const tenantId = req.user.tenant_id;
+        // Get tenant to know their plan
+        const [tenant] = await index_js_1.db
+            .select()
+            .from(schema_js_1.tenants)
+            .where((0, drizzle_orm_1.eq)(schema_js_1.tenants.id, tenantId))
+            .limit(1);
+        if (!tenant) {
+            return res.status(404).json({ error: 'Tenant not found' });
+        }
+        const planId = (tenant.plan || 'essential');
+        const limits = (0, stripe_js_1.getPlanLimits)(planId);
+        // Count active modules for this tenant
+        const [moduleCount] = await index_js_1.db
+            .select({ count: (0, drizzle_orm_1.count)() })
+            .from(schema_js_1.tenantModules)
+            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema_js_1.tenantModules.tenant_id, tenantId), (0, drizzle_orm_1.eq)(schema_js_1.tenantModules.status, 'active')));
+        const modulesUsed = moduleCount?.count || 0;
+        const canInstall = (0, stripe_js_1.isWithinLimit)(modulesUsed, limits.modules);
+        res.json({
+            can_install: canInstall,
+            modules_used: modulesUsed,
+            modules_limit: limits.modules,
+            unlimited: limits.modules === -1,
+            upgrade_needed: !canInstall,
+            suggested_plan: !canInstall
+                ? planId === 'essential'
+                    ? 'professional'
+                    : planId === 'professional'
+                        ? 'enterprise'
+                        : null
+                : null,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+/**
+ * GET /api/billing/limits
+ * Get the limits for the current plan
+ */
+exports.billingRoutes.get('/limits', auth_js_1.authMiddleware, (0, auth_js_1.requirePermission)('billing.read'), async (req, res, next) => {
+    try {
+        const tenantId = req.user.tenant_id;
+        const [tenant] = await index_js_1.db
+            .select()
+            .from(schema_js_1.tenants)
+            .where((0, drizzle_orm_1.eq)(schema_js_1.tenants.id, tenantId))
+            .limit(1);
+        if (!tenant) {
+            return res.status(404).json({ error: 'Tenant not found' });
+        }
+        const planId = (tenant.plan || 'essential');
+        const limits = (0, stripe_js_1.getPlanLimits)(planId);
+        const plan = stripe_js_1.NEXLIFY_PLANS[planId];
+        res.json({
+            plan_id: planId,
+            plan_name: plan?.name || 'Starter',
+            limits: {
+                users: limits.users === -1 ? 'unlimited' : limits.users,
+                modules: limits.modules === -1 ? 'unlimited' : limits.modules,
+                detectors: limits.detectors === -1 ? 'unlimited' : limits.detectors,
+                companies: limits.companies === -1 ? 'unlimited' : limits.companies,
+            },
+            features: {
+                api_access: limits.apiAccess,
+                ai_assistant: limits.aiAssistant,
+                support: limits.support,
             },
         });
     }

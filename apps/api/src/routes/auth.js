@@ -11,7 +11,11 @@ const express_1 = require("express");
 const zod_1 = require("zod");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const uuid_1 = require("uuid");
+const drizzle_orm_1 = require("drizzle-orm");
 const auth_js_1 = require("../middleware/auth.js");
+const error_handler_js_1 = require("../middleware/error-handler.js");
+const index_js_1 = require("../db/index.js");
+const schema_js_1 = require("../db/schema.js");
 exports.authRoutes = (0, express_1.Router)();
 // Validation schemas
 const loginSchema = zod_1.z.object({
@@ -34,34 +38,73 @@ const refreshSchema = zod_1.z.object({
 exports.authRoutes.post('/login', async (req, res, next) => {
     try {
         const { email, password } = loginSchema.parse(req.body);
-        // TODO: Look up user in database
-        // For demo, accept any password with 8+ chars
-        const userId = (0, uuid_1.v4)();
-        const tenantId = (0, uuid_1.v4)();
+        // Look up user in database
+        const [user] = await index_js_1.db
+            .select()
+            .from(schema_js_1.users)
+            .where((0, drizzle_orm_1.eq)(schema_js_1.users.email, email))
+            .limit(1);
+        if (!user) {
+            throw error_handler_js_1.errors.unauthorized('Email o contraseña incorrectos');
+        }
+        // Verify password
+        if (!user.password_hash) {
+            throw error_handler_js_1.errors.unauthorized('Esta cuenta requiere inicio de sesión con Google');
+        }
+        const isValidPassword = await bcryptjs_1.default.compare(password, user.password_hash);
+        if (!isValidPassword) {
+            throw error_handler_js_1.errors.unauthorized('Email o contraseña incorrectos');
+        }
+        // Check user status
+        if (user.status !== 'active') {
+            throw error_handler_js_1.errors.forbidden('Tu cuenta está desactivada. Contacta al administrador.');
+        }
+        // Get tenant info
+        const [tenant] = await index_js_1.db
+            .select()
+            .from(schema_js_1.tenants)
+            .where((0, drizzle_orm_1.eq)(schema_js_1.tenants.id, user.tenant_id))
+            .limit(1);
+        if (!tenant || tenant.status !== 'active') {
+            throw error_handler_js_1.errors.forbidden('Tu organización está desactivada.');
+        }
+        // Get user permissions
+        const permissionsResult = await index_js_1.db
+            .select({ permission: schema_js_1.userPermissions.permission })
+            .from(schema_js_1.userPermissions)
+            .where((0, drizzle_orm_1.eq)(schema_js_1.userPermissions.user_id, user.id));
+        const permissions = permissionsResult.map(p => p.permission);
+        // Update last login
+        await index_js_1.db
+            .update(schema_js_1.users)
+            .set({ last_login: new Date() })
+            .where((0, drizzle_orm_1.eq)(schema_js_1.users.id, user.id));
         // Generate tokens
         const token = (0, auth_js_1.generateToken)({
-            id: userId,
-            email,
-            tenant_id: tenantId,
-            roles: ['admin'],
-            permissions: ['*'],
+            id: user.id,
+            email: user.email,
+            tenant_id: user.tenant_id,
+            roles: [user.role],
+            permissions,
         });
-        const refreshToken = (0, auth_js_1.generateRefreshToken)(userId);
-        // Extract name from email for demo
-        const namePart = email.split('@')[0];
-        const firstName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+        const refreshToken = (0, auth_js_1.generateRefreshToken)(user.id);
+        // Parse name
+        const nameParts = user.name.split(' ');
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.slice(1).join(' ') || '';
         res.json({
             token,
             refresh_token: refreshToken,
             user: {
-                id: userId,
-                email,
+                id: user.id,
+                email: user.email,
                 firstName,
-                lastName: 'Usuario',
-                role: 'admin',
-                tenantId,
-                tenantName: 'Demo Company',
-                permissions: ['*'],
+                lastName,
+                role: user.role,
+                tenantId: user.tenant_id,
+                tenantName: tenant.name,
+                tenantPlan: tenant.plan,
+                permissions,
             },
         });
     }
@@ -75,18 +118,67 @@ exports.authRoutes.post('/login', async (req, res, next) => {
 exports.authRoutes.post('/register', async (req, res, next) => {
     try {
         const { email, password, firstName, lastName, companyName } = registerSchema.parse(req.body);
-        // TODO: Check if user exists in DB
-        // TODO: Create tenant and user in DB
+        // Check if user already exists
+        const [existingUser] = await index_js_1.db
+            .select()
+            .from(schema_js_1.users)
+            .where((0, drizzle_orm_1.eq)(schema_js_1.users.email, email))
+            .limit(1);
+        if (existingUser) {
+            throw error_handler_js_1.errors.conflict('El email ya está registrado');
+        }
         const passwordHash = await bcryptjs_1.default.hash(password, 10);
         const userId = (0, uuid_1.v4)();
         const tenantId = (0, uuid_1.v4)();
+        // Create slug from company name
+        const slug = companyName
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '')
+            .substring(0, 50) + '-' + Date.now().toString(36);
+        // Create tenant in DB
+        await index_js_1.db.insert(schema_js_1.tenants).values({
+            id: tenantId,
+            name: companyName,
+            slug,
+            plan: 'essential',
+            status: 'active',
+        });
+        // Create user in DB
+        await index_js_1.db.insert(schema_js_1.users).values({
+            id: userId,
+            tenant_id: tenantId,
+            email,
+            password_hash: passwordHash,
+            name: `${firstName} ${lastName}`,
+            role: 'admin',
+            status: 'active',
+        });
+        // Grant all permissions to admin user
+        const adminPermissions = [
+            'users.read', 'users.write', 'users.delete',
+            'modules.read', 'modules.configure', 'modules.manage',
+            'risks.read', 'risks.update', 'risks.acknowledge', 'risks.resolve', 'risks.escalate',
+            'audit.read', 'audit.export',
+            'billing.read', 'billing.manage',
+            'settings.read', 'settings.write',
+        ];
+        for (const permission of adminPermissions) {
+            await index_js_1.db.insert(schema_js_1.userPermissions).values({
+                id: (0, uuid_1.v4)(),
+                user_id: userId,
+                permission,
+            });
+        }
         // Generate token for auto-login after registration
         const token = (0, auth_js_1.generateToken)({
             id: userId,
             email,
             tenant_id: tenantId,
             roles: ['admin'],
-            permissions: ['*'],
+            permissions: adminPermissions,
         });
         const refreshToken = (0, auth_js_1.generateRefreshToken)(userId);
         res.status(201).json({
@@ -100,7 +192,7 @@ exports.authRoutes.post('/register', async (req, res, next) => {
                 role: 'admin',
                 tenantId,
                 tenantName: companyName,
-                permissions: ['*'],
+                permissions: adminPermissions,
             },
         });
     }

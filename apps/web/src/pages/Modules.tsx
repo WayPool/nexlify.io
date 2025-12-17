@@ -577,6 +577,19 @@ const PLATFORM_MODULES: Module[] = [
     priority: 'high',
     tier: 'government',
   },
+  {
+    id: 'national-cyberdefense',
+    name: 'Ciberdefensa Nacional',
+    description: 'Defensa contra ciberataques de estados-nación, APTs y amenazas a infraestructuras críticas',
+    longDescription: 'Sistema de defensa cibernética de grado militar para proteger infraestructuras críticas nacionales contra ciberataques de estados-nación, grupos APT (Advanced Persistent Threats) y operaciones de cyber warfare. Incluye detección en tiempo real con IA militar, respuesta automatizada a incidentes, threat hunting avanzado e integración completa con SOCs gubernamentales, CCN-CERT y centros de ciberdefensa OTAN.',
+    icon: ShieldCheck,
+    status: 'coming_soon',
+    category: 'Defensa & Seguridad Nacional',
+    plannedDetectors: 85,
+    features: ['Detección APT tiempo real', 'Protección infraestructuras críticas', 'Threat hunting IA militar', 'Integración SOC/CCN-CERT/OTAN'],
+    priority: 'high',
+    tier: 'government',
+  },
 ];
 
 const CATEGORIES = [

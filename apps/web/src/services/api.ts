@@ -7,6 +7,8 @@ export const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
   },
 });
 
@@ -108,4 +110,6 @@ export const billingApi = {
   getInvoices: (limit?: number) => api.get('/billing/invoices', { params: { limit } }),
   createPortalSession: () => api.post('/billing/portal'),
   getUsage: () => api.get('/billing/usage'),
+  canInstallModule: () => api.get('/billing/can-install-module'),
+  getLimits: () => api.get('/billing/limits'),
 };

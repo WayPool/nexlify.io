@@ -9,7 +9,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NEXLIFY_PLANS = exports.stripe = void 0;
+exports.NEXLIFY_PLANS = exports.stripe = exports.PLAN_LIMITS = void 0;
+exports.getPlanLimits = getPlanLimits;
+exports.isWithinLimit = isWithinLimit;
+exports.getUsagePercentage = getUsagePercentage;
 exports.ensureStripeProducts = ensureStripeProducts;
 exports.getOrCreateCustomer = getOrCreateCustomer;
 exports.createCheckoutSession = createCheckoutSession;
@@ -26,7 +29,7 @@ const config_js_1 = require("../config.js");
 const logger_js_1 = require("../utils/logger.js");
 // Initialize Stripe with the secret key
 const stripe = new stripe_1.default(config_js_1.config.stripe.secret_key, {
-    apiVersion: '2024-04-10',
+    apiVersion: '2023-10-16',
 });
 exports.stripe = stripe;
 // Cache for price IDs
@@ -36,57 +39,109 @@ let cachedPrices = null;
 // =============================================================================
 const NEXLIFY_PLANS = {
     essential: {
-        name: 'Nexlify Essential',
-        description: 'Para equipos pequeños que comienzan con la gestión de riesgos',
-        monthlyPrice: 37500, // 375€ in cents
-        yearlyPrice: 375000, // 3750€ in cents (10 months = 2 months free)
+        name: 'Nexlify Starter',
+        description: 'Ideal para pequeñas empresas y autónomos',
+        monthlyPrice: 39500, // 395€ in cents
+        yearlyPrice: 394800, // 329€ x 12 = 3.948€ in cents (2 meses gratis)
         features: [
-            'Hasta 10 usuarios',
-            '3 módulos incluidos',
-            'Motor de riesgos',
-            'Dashboard completo',
-            'Anclaje blockchain estándar',
-            'Soporte por email',
+            'Hasta 2 usuarios',
+            '3 Módulos activos',
+            '50 detectores de riesgo',
+            'Expediente inspección',
+            'Auditorías IA',
+            'Soporte email',
         ],
     },
     professional: {
-        name: 'Nexlify Professional',
-        description: 'Para organizaciones en crecimiento con necesidades avanzadas',
-        monthlyPrice: 235000, // 2350€ in cents
-        yearlyPrice: 2350000, // 23500€ in cents (10 months = 2 months free)
+        name: 'Nexlify Business',
+        description: 'Para empresas en crecimiento',
+        monthlyPrice: 235000, // 2.350€ in cents
+        yearlyPrice: 2349600, // 1.958€ x 12 = 23.496€ in cents (2 meses gratis)
         features: [
-            'Hasta 50 usuarios',
-            '10 módulos incluidos',
-            'Motor de riesgos',
-            'Dashboard completo',
-            'Anclaje blockchain avanzado',
-            'Asistente IA',
-            'API completa',
-            'SSO / SAML',
+            'Hasta 25 usuarios',
+            '15 Módulos activos',
+            '150 detectores de riesgo',
+            'Todo lo de Starter',
+            'Multi-Empresas (3)',
             'Soporte prioritario',
         ],
     },
     enterprise: {
         name: 'Nexlify Enterprise',
-        description: 'Para grandes empresas con requisitos de seguridad máxima',
-        monthlyPrice: 750000, // 7500€ in cents
-        yearlyPrice: 7500000, // 75000€ in cents (10 months = 2 months free)
+        description: 'Solución completa para grandes corporaciones',
+        monthlyPrice: 795000, // 7.950€ in cents
+        yearlyPrice: 7950000, // 6.625€ x 12 = 79.500€ in cents (2 meses gratis)
         features: [
             'Usuarios ilimitados',
-            'Todos los módulos',
-            'Motor de riesgos',
-            'Dashboard completo',
-            'Anclaje blockchain dedicado',
+            'Todos los Módulos',
+            '395+ detectores de riesgo',
+            'Todo lo de Business',
+            'Multi-Empresas ilimitado',
             'Asistente IA avanzado',
-            'Integraciones personalizadas',
-            'SLA personalizado',
-            'Account manager dedicado',
-            'Soporte 24/7',
-            'On-premise disponible',
+            'API completa',
+            'Account Manager dedicado',
         ],
     },
 };
 exports.NEXLIFY_PLANS = NEXLIFY_PLANS;
+// =============================================================================
+// Plan Limits Configuration
+// =============================================================================
+exports.PLAN_LIMITS = {
+    essential: {
+        users: 2,
+        modules: 3,
+        detectors: 50,
+        companies: 1,
+        apiAccess: false,
+        aiAssistant: 'basic',
+        support: 'email',
+    },
+    professional: {
+        users: 25,
+        modules: 15,
+        detectors: 150,
+        companies: 3,
+        apiAccess: false,
+        aiAssistant: 'advanced',
+        support: 'priority',
+    },
+    enterprise: {
+        users: -1, // -1 means unlimited
+        modules: -1,
+        detectors: 395,
+        companies: -1,
+        apiAccess: true,
+        aiAssistant: 'full',
+        support: 'dedicated',
+    },
+};
+/**
+ * Gets the limits for a specific plan.
+ */
+function getPlanLimits(planId) {
+    return exports.PLAN_LIMITS[planId] || exports.PLAN_LIMITS.essential;
+}
+/**
+ * Checks if a value exceeds the plan limit.
+ * Returns true if within limit, false if exceeded.
+ * -1 means unlimited.
+ */
+function isWithinLimit(current, limit) {
+    if (limit === -1)
+        return true; // Unlimited
+    return current < limit;
+}
+/**
+ * Gets usage percentage (capped at 100 for unlimited).
+ */
+function getUsagePercentage(used, limit) {
+    if (limit === -1)
+        return 0; // Show 0% for unlimited
+    if (limit === 0)
+        return 100;
+    return Math.round((used / limit) * 100);
+}
 // =============================================================================
 // Product & Price Management
 // =============================================================================
@@ -241,6 +296,10 @@ async function createCheckoutSession(customerId, priceId, tenantId, successUrl, 
         allow_promotion_codes: true,
         billing_address_collection: 'required',
         tax_id_collection: { enabled: true },
+        customer_update: {
+            name: 'auto',
+            address: 'auto',
+        },
         locale: 'es',
     });
     logger_js_1.logger.info(`Created checkout session ${session.id} for tenant ${tenantId}`);

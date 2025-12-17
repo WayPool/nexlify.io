@@ -11,7 +11,7 @@ import { logger } from '../utils/logger.js';
 
 // Initialize Stripe with the secret key
 const stripe = new Stripe(config.stripe.secret_key, {
-  apiVersion: '2024-04-10',
+  apiVersion: '2023-10-16',
 });
 
 // =============================================================================
@@ -33,58 +33,114 @@ let cachedPrices: PlanPrices | null = null;
 
 const NEXLIFY_PLANS = {
   essential: {
-    name: 'Nexlify Essential',
-    description: 'Para equipos pequeños que comienzan con la gestión de riesgos',
-    monthlyPrice: 37500, // 375€ in cents
-    yearlyPrice: 375000, // 3750€ in cents (10 months = 2 months free)
+    name: 'Nexlify Starter',
+    description: 'Ideal para pequeñas empresas y autónomos',
+    monthlyPrice: 39500, // 395€ in cents
+    yearlyPrice: 394800, // 329€ x 12 = 3.948€ in cents (2 meses gratis)
     features: [
-      'Hasta 10 usuarios',
-      '3 módulos incluidos',
-      'Motor de riesgos',
-      'Dashboard completo',
-      'Anclaje blockchain estándar',
-      'Soporte por email',
+      'Hasta 2 usuarios',
+      '3 Módulos activos',
+      '50 detectores de riesgo',
+      'Expediente inspección',
+      'Auditorías IA',
+      'Soporte email',
     ],
   },
   professional: {
-    name: 'Nexlify Professional',
-    description: 'Para organizaciones en crecimiento con necesidades avanzadas',
-    monthlyPrice: 235000, // 2350€ in cents
-    yearlyPrice: 2350000, // 23500€ in cents (10 months = 2 months free)
+    name: 'Nexlify Business',
+    description: 'Para empresas en crecimiento',
+    monthlyPrice: 235000, // 2.350€ in cents
+    yearlyPrice: 2349600, // 1.958€ x 12 = 23.496€ in cents (2 meses gratis)
     features: [
-      'Hasta 50 usuarios',
-      '10 módulos incluidos',
-      'Motor de riesgos',
-      'Dashboard completo',
-      'Anclaje blockchain avanzado',
-      'Asistente IA',
-      'API completa',
-      'SSO / SAML',
+      'Hasta 25 usuarios',
+      '15 Módulos activos',
+      '150 detectores de riesgo',
+      'Todo lo de Starter',
+      'Multi-Empresas (3)',
       'Soporte prioritario',
     ],
   },
   enterprise: {
     name: 'Nexlify Enterprise',
-    description: 'Para grandes empresas con requisitos de seguridad máxima',
-    monthlyPrice: 750000, // 7500€ in cents
-    yearlyPrice: 7500000, // 75000€ in cents (10 months = 2 months free)
+    description: 'Solución completa para grandes corporaciones',
+    monthlyPrice: 795000, // 7.950€ in cents
+    yearlyPrice: 7950000, // 6.625€ x 12 = 79.500€ in cents (2 meses gratis)
     features: [
       'Usuarios ilimitados',
-      'Todos los módulos',
-      'Motor de riesgos',
-      'Dashboard completo',
-      'Anclaje blockchain dedicado',
+      'Todos los Módulos',
+      '395+ detectores de riesgo',
+      'Todo lo de Business',
+      'Multi-Empresas ilimitado',
       'Asistente IA avanzado',
-      'Integraciones personalizadas',
-      'SLA personalizado',
-      'Account manager dedicado',
-      'Soporte 24/7',
-      'On-premise disponible',
+      'API completa',
+      'Account Manager dedicado',
     ],
   },
 } as const;
 
 export type PlanId = keyof typeof NEXLIFY_PLANS;
+
+// =============================================================================
+// Plan Limits Configuration
+// =============================================================================
+
+export const PLAN_LIMITS = {
+  essential: {
+    users: 2,
+    modules: 3,
+    detectors: 50,
+    companies: 1,
+    apiAccess: false,
+    aiAssistant: 'basic',
+    support: 'email',
+  },
+  professional: {
+    users: 25,
+    modules: 15,
+    detectors: 150,
+    companies: 3,
+    apiAccess: false,
+    aiAssistant: 'advanced',
+    support: 'priority',
+  },
+  enterprise: {
+    users: -1, // -1 means unlimited
+    modules: -1,
+    detectors: 395,
+    companies: -1,
+    apiAccess: true,
+    aiAssistant: 'full',
+    support: 'dedicated',
+  },
+} as const;
+
+export type PlanLimits = typeof PLAN_LIMITS[PlanId];
+
+/**
+ * Gets the limits for a specific plan.
+ */
+export function getPlanLimits(planId: PlanId): PlanLimits {
+  return PLAN_LIMITS[planId] || PLAN_LIMITS.essential;
+}
+
+/**
+ * Checks if a value exceeds the plan limit.
+ * Returns true if within limit, false if exceeded.
+ * -1 means unlimited.
+ */
+export function isWithinLimit(current: number, limit: number): boolean {
+  if (limit === -1) return true; // Unlimited
+  return current < limit;
+}
+
+/**
+ * Gets usage percentage (capped at 100 for unlimited).
+ */
+export function getUsagePercentage(used: number, limit: number): number {
+  if (limit === -1) return 0; // Show 0% for unlimited
+  if (limit === 0) return 100;
+  return Math.round((used / limit) * 100);
+}
 
 // =============================================================================
 // Product & Price Management

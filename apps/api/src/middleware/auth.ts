@@ -124,7 +124,7 @@ export function generateToken(user: AuthUser): string {
   };
 
   return jwt.sign(payload, config.jwt.secret, {
-    expiresIn: config.jwt.expires_in,
+    expiresIn: config.jwt.expires_in as jwt.SignOptions['expiresIn'],
   });
 }
 
@@ -133,6 +133,6 @@ export function generateToken(user: AuthUser): string {
  */
 export function generateRefreshToken(userId: string): string {
   return jwt.sign({ sub: userId, type: 'refresh' }, config.jwt.secret, {
-    expiresIn: config.jwt.refresh_expires_in,
+    expiresIn: config.jwt.refresh_expires_in as jwt.SignOptions['expiresIn'],
   });
 }

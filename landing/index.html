@@ -83,6 +83,16 @@
             scroll-behavior: smooth;
         }
 
+        /* Hide scrollbars globally but keep functionality */
+        * {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+
+        *::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
@@ -659,14 +669,14 @@
                 </h1>
 
                 <p class="hero-description">
-                    Transformamos datos laborales y financieros dispersos en decisiones
+                    Transformamos datos de empresa, laborales y financieros dispersos en decisiones
                     accionables, auditables y legalmente defendibles. El sistema operativo
                     de datos que necesita tu empresa.
                 </p>
 
                 <div class="hero-cta">
                     <a href="#precios" class="btn btn-hero-primary">
-                        Solicitar demo
+                        Ver planes
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M5 12h14M12 5l7 7-7 7"/>
                         </svg>
@@ -1284,6 +1294,13 @@
                         <span class="entity-desc">Proteccion Datos</span>
                     </div>
                 </div>
+                <!-- Button to view all modules -->
+                <a href="modules.html" class="btn-view-modules">
+                    <span>Ver todos los módulos</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
             </div>
         </div>
     </section>
@@ -1603,6 +1620,40 @@
             text-align: center;
         }
 
+        .btn-view-modules {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 2.5rem;
+            padding: 1.25rem 2.5rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 14px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-view-modules:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.2));
+            border-color: rgba(255, 255, 255, 0.7);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-view-modules svg {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-view-modules:hover svg {
+            transform: translateX(4px);
+        }
+
         .gov-entities-label {
             color: rgba(255, 255, 255, 0.7);
             font-size: 0.9rem;
@@ -1805,6 +1856,16 @@
                     <span class="feature-badge">Nuevo</span>
                 </div>
             </div>
+
+            <!-- Button to view all modules -->
+            <div class="features-cta">
+                <a href="modules.html" class="btn-see-all-modules">
+                    <span>Ver los 36 módulos</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
         </div>
     </section>
 
@@ -1858,6 +1919,39 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
+        }
+
+        .features-cta {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .btn-see-all-modules {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--gradient-teal);
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(8, 145, 178, 0.3);
+        }
+
+        .btn-see-all-modules:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(8, 145, 178, 0.4);
+        }
+
+        .btn-see-all-modules svg {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-see-all-modules:hover svg {
+            transform: translateX(4px);
         }
 
         .feature-card {
@@ -2666,6 +2760,2085 @@
     </style>
 
     <!-- ========================================
+         AI NEURAL NETWORK SECTION - THE CORE
+         ======================================== -->
+    <section class="ai-section" id="inteligencia-artificial">
+        <!-- Neural Network Background Canvas -->
+        <canvas id="neuralCanvas" class="neural-canvas"></canvas>
+
+        <!-- Gradient Overlay -->
+        <div class="ai-gradient-overlay"></div>
+
+        <div class="ai-container">
+            <!-- Main Content -->
+            <div class="ai-content">
+                <!-- Badge -->
+                <div class="ai-badge">
+                    <div class="ai-badge-pulse"></div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 22l-.75-12.07A4.001 4.001 0 0 1 12 2z"/>
+                        <path d="M9 6.5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0z"/>
+                        <path d="M20 6.5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0z"/>
+                        <path d="M12 2v2"/>
+                        <path d="M4.5 9L6 11"/>
+                        <path d="M19.5 9L18 11"/>
+                    </svg>
+                    <span>INTELIGENCIA ARTIFICIAL PROPIETARIA</span>
+                </div>
+
+                <!-- Headline -->
+                <h2 class="ai-headline">
+                    <span class="headline-word">Cada</span>
+                    <span class="headline-word">módulo.</span>
+                    <span class="headline-word">Una</span>
+                    <span class="headline-highlight">IA especializada.</span>
+                </h2>
+
+                <p class="ai-subheadline">
+                    No usamos IA genérica. <strong>Cada uno de nuestros 37 módulos</strong> está potenciado por un modelo de inteligencia artificial
+                    <span class="text-gradient">entrenado específicamente</span> para resolver su problema concreto.
+                </p>
+
+                <!-- Key Value Proposition -->
+                <div class="ai-value-grid">
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                            </svg>
+                        </div>
+                        <h4>Precisión del 99.7%</h4>
+                        <p>Detectores entrenados con millones de casos reales del sector español y europeo</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                            </svg>
+                        </div>
+                        <h4>Respuesta en <50ms</h4>
+                        <p>Detección y alertas en tiempo real antes de que el problema escale</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <h4>Aprendizaje continuo</h4>
+                        <p>Cada interacción mejora el sistema. Tu IA evoluciona contigo</p>
+                    </div>
+                </div>
+
+                <!-- Central Brain Visualization -->
+                <div class="ai-brain-visual">
+                    <div class="brain-container">
+                        <div class="brain-glow"></div>
+                        <div class="brain-core">
+                            <svg class="brain-svg" viewBox="0 0 200 200">
+                                <!-- Brain silhouette -->
+                                <path class="brain-path" d="M100 20 C60 20 30 50 30 90 C30 130 60 160 80 170 C85 172 90 180 100 180 C110 180 115 172 120 170 C140 160 170 130 170 90 C170 50 140 20 100 20" fill="none" stroke="url(#brainGradient)" stroke-width="2"/>
+                                <defs>
+                                    <linearGradient id="brainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#3b82f6"/>
+                                        <stop offset="50%" style="stop-color:#8b5cf6"/>
+                                        <stop offset="100%" style="stop-color:#06b6d4"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="brain-pulse"></div>
+                        </div>
+
+                        <!-- Orbiting modules -->
+                        <div class="orbit orbit-1">
+                            <div class="orbit-item" data-label="Compliance">📋</div>
+                        </div>
+                        <div class="orbit orbit-2">
+                            <div class="orbit-item" data-label="Finanzas">💰</div>
+                        </div>
+                        <div class="orbit orbit-3">
+                            <div class="orbit-item" data-label="Ciberseguridad">🔐</div>
+                        </div>
+                        <div class="orbit orbit-4">
+                            <div class="orbit-item" data-label="RRHH">👥</div>
+                        </div>
+                        <div class="orbit orbit-5">
+                            <div class="orbit-item" data-label="Operaciones">⚙️</div>
+                        </div>
+                        <div class="orbit orbit-6">
+                            <div class="orbit-item" data-label="Defensa">🛡️</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- The Why Section -->
+                <div class="ai-why-section">
+                    <div class="why-header">
+                        <div class="why-line"></div>
+                        <span>¿Por qué esto importa?</span>
+                        <div class="why-line"></div>
+                    </div>
+
+                    <div class="why-content">
+                        <div class="why-problem">
+                            <div class="why-icon problem">✗</div>
+                            <div class="why-text">
+                                <h4>El problema actual</h4>
+                                <p>Las empresas gestionan riesgos con Excel, emails dispersos y herramientas que no se comunican. <strong>Cuando llega una inspección, es el caos.</strong></p>
+                            </div>
+                        </div>
+                        <div class="why-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                        <div class="why-solution">
+                            <div class="why-icon solution">✓</div>
+                            <div class="why-text">
+                                <h4>Con Nexlify + IA</h4>
+                                <p>Un sistema que <strong>anticipa problemas</strong>, genera evidencia automática y te avisa antes de que sea tarde. <strong>La inspección llega y tú ya estás preparado.</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Row -->
+                <div class="ai-stats-row">
+                    <div class="ai-stat">
+                        <div class="stat-number">480+</div>
+                        <div class="stat-text">Detectores IA activos</div>
+                    </div>
+                    <div class="ai-stat">
+                        <div class="stat-number">37</div>
+                        <div class="stat-text">Módulos especializados</div>
+                    </div>
+                    <div class="ai-stat">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-text">Vigilancia autónoma</div>
+                    </div>
+                    <div class="ai-stat">
+                        <div class="stat-number">0</div>
+                        <div class="stat-text">Configuración manual</div>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="ai-cta">
+                    <a href="#precios" class="ai-cta-button primary">
+                        <span>Empieza con IA</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <a href="#modulos" class="ai-cta-button secondary">
+                        <span>Ver módulos IA</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* ========================================
+           AI NEURAL SECTION STYLES
+           ======================================== */
+        .ai-section {
+            position: relative;
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
+            overflow: hidden;
+            min-height: 100vh;
+        }
+
+        .neural-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .ai-gradient-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 70%);
+            z-index: 2;
+        }
+
+        .ai-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .ai-content {
+            text-align: center;
+        }
+
+        /* Badge */
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: white;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+        }
+
+        .ai-badge svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .ai-badge-pulse {
+            position: absolute;
+            left: 12px;
+            width: 8px;
+            height: 8px;
+            background: #3b82f6;
+            border-radius: 50%;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+        }
+
+        /* Headline */
+        .ai-headline {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+        }
+
+        .headline-word {
+            display: inline-block;
+            margin-right: 0.3em;
+        }
+
+        .headline-highlight {
+            display: block;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 8s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .ai-subheadline {
+            font-size: 1.25rem;
+            color: #475569;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .text-gradient {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        /* Value Grid */
+        .ai-value-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .value-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .value-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .value-icon svg {
+            width: 28px;
+            height: 28px;
+            color: #3b82f6;
+        }
+
+        .value-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .value-card p {
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* Brain Visual */
+        .ai-brain-visual {
+            margin: 4rem 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .brain-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        .brain-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: brainGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes brainGlow {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        .brain-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+        }
+
+        .brain-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .brain-path {
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
+            animation: drawBrain 3s ease forwards, pulseBrain 2s ease-in-out infinite 3s;
+        }
+
+        @keyframes drawBrain {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes pulseBrain {
+            0%, 100% { stroke-width: 2; }
+            50% { stroke-width: 3; }
+        }
+
+        .brain-pulse {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            animation: corePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes corePulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0; }
+        }
+
+        /* Orbits */
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 1px dashed rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            animation: orbitSpin 20s linear infinite;
+        }
+
+        .orbit-1 { width: 180px; height: 180px; margin: -90px 0 0 -90px; animation-duration: 15s; }
+        .orbit-2 { width: 220px; height: 220px; margin: -110px 0 0 -110px; animation-duration: 18s; animation-direction: reverse; }
+        .orbit-3 { width: 260px; height: 260px; margin: -130px 0 0 -130px; animation-duration: 22s; }
+        .orbit-4 { width: 300px; height: 300px; margin: -150px 0 0 -150px; animation-duration: 25s; animation-direction: reverse; }
+        .orbit-5 { width: 340px; height: 340px; margin: -170px 0 0 -170px; animation-duration: 28s; }
+        .orbit-6 { width: 380px; height: 380px; margin: -190px 0 0 -190px; animation-duration: 32s; animation-direction: reverse; }
+
+        @keyframes orbitSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .orbit-item {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: counterSpin 20s linear infinite;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .orbit-1 .orbit-item { animation-duration: 15s; }
+        .orbit-2 .orbit-item { animation-duration: 18s; animation-direction: reverse; }
+        .orbit-3 .orbit-item { animation-duration: 22s; }
+        .orbit-4 .orbit-item { animation-duration: 25s; animation-direction: reverse; }
+        .orbit-5 .orbit-item { animation-duration: 28s; }
+        .orbit-6 .orbit-item { animation-duration: 32s; animation-direction: reverse; }
+
+        @keyframes counterSpin {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(-360deg); }
+        }
+
+        .orbit-item:hover {
+            transform: translateX(-50%) scale(1.2);
+            z-index: 100;
+        }
+
+        /* Why Section */
+        .ai-why-section {
+            margin: 4rem 0;
+            padding: 3rem;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .why-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .why-header span {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .why-line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #cbd5e1, transparent);
+        }
+
+        .why-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .why-problem, .why-solution {
+            flex: 1;
+            min-width: 280px;
+            max-width: 400px;
+            display: flex;
+            gap: 1rem;
+            text-align: left;
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+
+        .why-problem {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+
+        .why-solution {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+        }
+
+        .why-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .why-icon.problem {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .why-icon.solution {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .why-text h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .why-text p {
+            font-size: 0.9rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        .why-arrow {
+            color: #3b82f6;
+        }
+
+        .why-arrow svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Stats Row */
+        .ai-stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #1e3a8a, #3730a3);
+            border-radius: 20px;
+        }
+
+        .ai-stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            line-height: 1;
+        }
+
+        .stat-text {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 0.5rem;
+        }
+
+        /* CTA */
+        .ai-cta {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .ai-cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .ai-cta-button.primary {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .ai-cta-button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
+        }
+
+        .ai-cta-button.secondary {
+            background: white;
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+        }
+
+        .ai-cta-button.secondary:hover {
+            background: #eff6ff;
+        }
+
+        .ai-cta-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .ai-value-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .brain-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            .orbit-1 { width: 140px; height: 140px; margin: -70px 0 0 -70px; }
+            .orbit-2 { width: 170px; height: 170px; margin: -85px 0 0 -85px; }
+            .orbit-3 { width: 200px; height: 200px; margin: -100px 0 0 -100px; }
+            .orbit-4 { width: 230px; height: 230px; margin: -115px 0 0 -115px; }
+            .orbit-5 { width: 260px; height: 260px; margin: -130px 0 0 -130px; }
+            .orbit-6 { width: 290px; height: 290px; margin: -145px 0 0 -145px; }
+        }
+
+        @media (max-width: 768px) {
+            .ai-section {
+                padding: 4rem 1rem;
+            }
+
+            .ai-headline {
+                font-size: 2rem;
+            }
+
+            .ai-subheadline {
+                font-size: 1rem;
+            }
+
+            .why-content {
+                flex-direction: column;
+            }
+
+            .why-arrow {
+                transform: rotate(90deg);
+            }
+
+            .ai-stats-row {
+                gap: 2rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .orbit-5, .orbit-6 {
+                display: none;
+            }
+        }
+    </style>
+
+    <script>
+        // Neural Network Animation
+        (function() {
+            const canvas = document.getElementById('neuralCanvas');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            let nodes = [];
+            let connections = [];
+            let animationId;
+
+            function resize() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                initNodes();
+            }
+
+            function initNodes() {
+                nodes = [];
+                connections = [];
+                const nodeCount = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000));
+
+                for (let i = 0; i < nodeCount; i++) {
+                    nodes.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        radius: Math.random() * 3 + 2,
+                        pulsePhase: Math.random() * Math.PI * 2,
+                        connected: false
+                    });
+                }
+            }
+
+            function drawNode(node, time) {
+                const pulse = Math.sin(time / 1000 + node.pulsePhase) * 0.3 + 0.7;
+                const radius = node.radius * pulse;
+
+                // Node glow
+                const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, radius * 3);
+                gradient.addColorStop(0, 'rgba(59, 130, 246, 0.3)');
+                gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, radius * 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Node core
+                ctx.fillStyle = node.connected ? 'rgba(139, 92, 246, 0.9)' : 'rgba(59, 130, 246, 0.7)';
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            function drawConnection(n1, n2, distance, time) {
+                const maxDist = 150;
+                const opacity = (1 - distance / maxDist) * 0.5;
+
+                // Pulse effect along connection
+                const pulsePos = (Math.sin(time / 500) + 1) / 2;
+                const midX = n1.x + (n2.x - n1.x) * pulsePos;
+                const midY = n1.y + (n2.y - n1.y) * pulsePos;
+
+                ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(n1.x, n1.y);
+                ctx.lineTo(n2.x, n2.y);
+                ctx.stroke();
+
+                // Spark at pulse position
+                if (Math.random() > 0.99) {
+                    ctx.fillStyle = 'rgba(139, 92, 246, 0.8)';
+                    ctx.beginPath();
+                    ctx.arc(midX, midY, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    n1.connected = true;
+                    n2.connected = true;
+                    setTimeout(() => {
+                        n1.connected = false;
+                        n2.connected = false;
+                    }, 200);
+                }
+            }
+
+            function update() {
+                nodes.forEach(node => {
+                    node.x += node.vx;
+                    node.y += node.vy;
+
+                    if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+                    if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+                });
+            }
+
+            function draw(time) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw connections
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const dx = nodes[i].x - nodes[j].x;
+                        const dy = nodes[i].y - nodes[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < 150) {
+                            drawConnection(nodes[i], nodes[j], distance, time);
+                        }
+                    }
+                }
+
+                // Draw nodes
+                nodes.forEach(node => drawNode(node, time));
+            }
+
+            function animate(time) {
+                update();
+                draw(time);
+                animationId = requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+            animate(0);
+        })();
+    </script>
+
+    <!-- ========================================
+         DEFENSE & NATIONAL SECURITY SECTION
+         ======================================== -->
+    <section class="defense-section" id="defensa">
+        <!-- Animated Background Elements -->
+        <div class="defense-bg-elements">
+            <div class="radar-sweep"></div>
+            <div class="grid-overlay"></div>
+            <div class="scan-line"></div>
+            <div class="particle particle-1"></div>
+            <div class="particle particle-2"></div>
+            <div class="particle particle-3"></div>
+        </div>
+
+        <div class="defense-container">
+            <!-- Top Security Banner -->
+            <div class="security-banner">
+                <div class="banner-pulse"></div>
+                <span class="banner-text">NIVEL DE CLASIFICACIÓN: RESTRINGIDO</span>
+                <div class="banner-pulse"></div>
+            </div>
+
+            <!-- Classified Header -->
+            <div class="defense-header">
+                <div class="classified-badge">
+                    <div class="badge-glow"></div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span>DEFENSA & SEGURIDAD NACIONAL</span>
+                </div>
+                <h2 class="defense-title">
+                    <span class="title-line">Inteligencia Artificial</span>
+                    <span class="title-highlight">para Seguridad Nacional</span>
+                </h2>
+                <p class="defense-subtitle">
+                    Soluciones de IA de nivel militar exclusivas para gobiernos, fuerzas armadas y agencias de seguridad.<br>
+                    <strong>Donde los datos se convierten en ventaja estratégica.</strong>
+                </p>
+
+                <!-- Stats Bar -->
+                <div class="defense-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" data-value="847K">847K+</div>
+                        <div class="stat-label">Señales/hora procesadas</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-value" data-value="99.97">99.97%</div>
+                        <div class="stat-label">Precisión de detección</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-value" data-value="<50">&lt;50ms</div>
+                        <div class="stat-label">Tiempo de respuesta</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-value" data-value="24/7">24/7/365</div>
+                        <div class="stat-label">Operación continua</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="defense-grid">
+                <!-- Left: Capabilities -->
+                <div class="defense-capabilities">
+                    <div class="capability-card" data-aos="fade-up">
+                        <div class="card-glow military"></div>
+                        <div class="capability-header">
+                            <div class="capability-icon military">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                    <path d="M2 17l10 5 10-5"/>
+                                    <path d="M2 12l10 5 10-5"/>
+                                </svg>
+                            </div>
+                            <div class="capability-badge">MILITAR</div>
+                        </div>
+                        <div class="capability-content">
+                            <h3>Defensa Militar</h3>
+                            <p>Análisis predictivo de amenazas, gestión de operaciones y logística militar con modelos de IA propietarios.</p>
+                            <ul class="capability-features">
+                                <li><span class="feature-icon"></span>Análisis SIGINT/HUMINT/OSINT</li>
+                                <li><span class="feature-icon"></span>Predicción de amenazas geopolíticas</li>
+                                <li><span class="feature-icon"></span>Optimización logística de despliegues</li>
+                                <li><span class="feature-icon"></span>Simulación de escenarios tácticos</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="capability-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="card-glow intel"></div>
+                        <div class="capability-header">
+                            <div class="capability-icon intel">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="12" cy="12" r="3"/>
+                                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                                </svg>
+                            </div>
+                            <div class="capability-badge">INTELIGENCIA</div>
+                        </div>
+                        <div class="capability-content">
+                            <h3>Inteligencia Nacional</h3>
+                            <p>Procesamiento masivo de datos para agencias de inteligencia y operaciones de contrainteligencia.</p>
+                            <ul class="capability-features">
+                                <li><span class="feature-icon"></span>Análisis de redes criminales</li>
+                                <li><span class="feature-icon"></span>Detección de amenazas internas</li>
+                                <li><span class="feature-icon"></span>Fusión de datos multi-fuente</li>
+                                <li><span class="feature-icon"></span>Perfilado predictivo de actores</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="capability-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="card-glow cyber"></div>
+                        <div class="capability-header">
+                            <div class="capability-icon cyber">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                    <line x1="8" y1="21" x2="16" y2="21"/>
+                                    <line x1="12" y1="17" x2="12" y2="21"/>
+                                    <path d="M7 8h.01M12 8h.01M17 8h.01"/>
+                                </svg>
+                            </div>
+                            <div class="capability-badge">CIBER</div>
+                        </div>
+                        <div class="capability-content">
+                            <h3>Ciberdefensa Avanzada</h3>
+                            <p>Protección de infraestructuras críticas nacionales y respuesta ante ciberataques estatales.</p>
+                            <ul class="capability-features">
+                                <li><span class="feature-icon"></span>Detección de APTs en tiempo real</li>
+                                <li><span class="feature-icon"></span>Análisis forense automatizado</li>
+                                <li><span class="feature-icon"></span>Protección infraestructura crítica</li>
+                                <li><span class="feature-icon"></span>Respuesta automatizada a incidentes</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="capability-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="card-glow border"></div>
+                        <div class="capability-header">
+                            <div class="capability-icon border">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                            </div>
+                            <div class="capability-badge">FRONTERA</div>
+                        </div>
+                        <div class="capability-content">
+                            <h3>Control Fronterizo</h3>
+                            <p>Vigilancia inteligente de fronteras terrestres, marítimas y aéreas con detección automática.</p>
+                            <ul class="capability-features">
+                                <li><span class="feature-icon"></span>Análisis de patrones migratorios</li>
+                                <li><span class="feature-icon"></span>Detección de tráfico ilegal</li>
+                                <li><span class="feature-icon"></span>Integración biométrica avanzada</li>
+                                <li><span class="feature-icon"></span>Vigilancia drone con IA</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Command Center Visual -->
+                <div class="defense-visual">
+                    <!-- Live Command Center -->
+                    <div class="command-center">
+                        <div class="cc-header">
+                            <div class="cc-status">
+                                <span class="status-dot active"></span>
+                                <span>NEXLIFY COMMAND CENTER</span>
+                            </div>
+                            <div class="cc-badges">
+                                <span class="cc-badge live">LIVE</span>
+                                <span class="cc-badge classified">CLASIFICADO</span>
+                            </div>
+                        </div>
+
+                        <!-- Threat Map -->
+                        <div class="threat-map">
+                            <div class="map-grid">
+                                <svg viewBox="0 0 400 200" class="map-svg">
+                                    <!-- World map outline simplified -->
+                                    <path class="map-path" d="M50,100 Q100,80 150,90 T250,85 T350,95" fill="none" stroke="rgba(59,130,246,0.3)" stroke-width="1"/>
+                                    <path class="map-path" d="M60,120 Q120,110 180,115 T280,110 T360,120" fill="none" stroke="rgba(59,130,246,0.2)" stroke-width="1"/>
+                                    <!-- Threat points -->
+                                    <circle class="threat-point pulse-1" cx="120" cy="85" r="4" fill="#ef4444"/>
+                                    <circle class="threat-point pulse-2" cx="280" cy="95" r="3" fill="#f59e0b"/>
+                                    <circle class="threat-point pulse-3" cx="200" cy="110" r="5" fill="#ef4444"/>
+                                    <circle class="threat-point pulse-1" cx="340" cy="100" r="3" fill="#22c55e"/>
+                                    <!-- Connection lines -->
+                                    <line class="connection-line" x1="120" y1="85" x2="200" y2="110" stroke="rgba(239,68,68,0.4)" stroke-width="1" stroke-dasharray="4"/>
+                                    <line class="connection-line" x1="200" y1="110" x2="280" y2="95" stroke="rgba(245,158,11,0.4)" stroke-width="1" stroke-dasharray="4"/>
+                                </svg>
+                                <div class="map-overlay-text">
+                                    <span class="threats-count">3</span> amenazas activas
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Live Feed -->
+                        <div class="live-feed">
+                            <div class="feed-line" style="--delay: 0s">
+                                <span class="feed-time">14:32:07</span>
+                                <span class="feed-type alert">ALERTA</span>
+                                <span class="feed-msg">Patrón anómalo detectado - Sector ALPHA-7</span>
+                            </div>
+                            <div class="feed-line" style="--delay: 0.5s">
+                                <span class="feed-time">14:32:04</span>
+                                <span class="feed-type success">IA</span>
+                                <span class="feed-msg">Análisis completado - Correlación 94.7%</span>
+                            </div>
+                            <div class="feed-line" style="--delay: 1s">
+                                <span class="feed-time">14:31:58</span>
+                                <span class="feed-type info">SIGINT</span>
+                                <span class="feed-msg">847,293 señales procesadas esta hora</span>
+                            </div>
+                            <div class="feed-line" style="--delay: 1.5s">
+                                <span class="feed-time">14:31:52</span>
+                                <span class="feed-type warning">SCAN</span>
+                                <span class="feed-msg">Escaneando perímetro fronterizo norte...</span>
+                            </div>
+                            <div class="feed-line" style="--delay: 2s">
+                                <span class="feed-time">14:31:45</span>
+                                <span class="feed-type success">VERIFY</span>
+                                <span class="feed-msg">Identidad verificada - Acceso autorizado</span>
+                            </div>
+                        </div>
+
+                        <!-- AI Status -->
+                        <div class="ai-status">
+                            <div class="ai-indicator">
+                                <div class="ai-ring"></div>
+                                <div class="ai-core">IA</div>
+                            </div>
+                            <div class="ai-info">
+                                <span class="ai-label">Motor de IA Nexlify</span>
+                                <div class="ai-metrics">
+                                    <span class="metric">CPU: 23%</span>
+                                    <span class="metric">GPU: 67%</span>
+                                    <span class="metric">RAM: 45%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Certifications -->
+                    <div class="defense-certs">
+                        <div class="cert-item">
+                            <div class="cert-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <span>NATO STANAG</span>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                            </div>
+                            <span>ENS Alto</span>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 6v6l4 2"/>
+                                </svg>
+                            </div>
+                            <span>SOC 24/7</span>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                                </svg>
+                            </div>
+                            <span>Air-Gap</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Government Only Notice -->
+            <div class="gov-notice">
+                <div class="notice-border"></div>
+                <div class="notice-content-wrapper">
+                    <div class="notice-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                    </div>
+                    <div class="notice-content">
+                        <h4>
+                            <span class="restricted-icon">⬡</span>
+                            Acceso Exclusivo para Gobiernos
+                        </h4>
+                        <p>Estas soluciones están disponibles <strong>exclusivamente</strong> para organismos gubernamentales, ministerios de defensa, fuerzas armadas y agencias de seguridad nacional debidamente acreditados. Se requiere verificación de credenciales gubernamentales y firma de acuerdos de confidencialidad nivel SECRETO.</p>
+                    </div>
+                    <a href="mailto:defensa@nexlify.io" class="gov-contact-btn">
+                        <span class="btn-glow"></span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                        Contactar División Defensa
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* ========================================
+           DEFENSE & NATIONAL SECURITY SECTION
+           Premium Military-Grade UI/UX
+           ======================================== */
+        .defense-section {
+            background: linear-gradient(180deg, #030712 0%, #0a1628 30%, #0f172a 70%, #030712 100%);
+            padding: 6rem 2rem 8rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated Background Elements */
+        .defense-bg-elements {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .radar-sweep {
+            position: absolute;
+            top: 10%;
+            right: 10%;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0deg, rgba(59, 130, 246, 0.1) 30deg, transparent 60deg);
+            animation: radar 4s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes radar {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+        }
+
+        .scan-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+            animation: scanLine 8s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes scanLine {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(59, 130, 246, 0.6);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        .particle-1 { left: 10%; top: 20%; animation-delay: 0s; }
+        .particle-2 { left: 80%; top: 60%; animation-delay: 5s; }
+        .particle-3 { left: 50%; top: 80%; animation-delay: 10s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            25% { transform: translate(50px, -30px) scale(1.5); opacity: 0.3; }
+            50% { transform: translate(100px, 20px) scale(1); opacity: 0.6; }
+            75% { transform: translate(50px, 50px) scale(0.8); opacity: 0.4; }
+        }
+
+        .defense-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Security Banner */
+        .security-banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .banner-pulse {
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: bannerPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes bannerPulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            50% { opacity: 0.7; box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+
+        .banner-text {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            color: #fca5a5;
+            text-transform: uppercase;
+        }
+
+        /* Header */
+        .defense-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .classified-badge {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(185, 28, 28, 0.1));
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .badge-glow {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.2), transparent);
+            animation: badgeGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes badgeGlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .classified-badge svg {
+            width: 18px;
+            height: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .classified-badge span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .defense-title {
+            margin-bottom: 1.5rem;
+        }
+
+        .defense-title .title-line {
+            display: block;
+            font-size: clamp(2rem, 4.5vw, 3rem);
+            font-weight: 700;
+            color: #e5e7eb;
+            line-height: 1.2;
+            margin-bottom: 0.25rem;
+        }
+
+        .defense-title .title-highlight {
+            display: block;
+            font-size: clamp(2.5rem, 5.5vw, 4rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 30%, #93c5fd 60%, #3b82f6 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientFlow 5s ease infinite;
+            line-height: 1.1;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .defense-subtitle {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            max-width: 750px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .defense-subtitle strong {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+
+        /* Stats Bar */
+        .defense-stats {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.4), rgba(15, 23, 42, 0.6));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-item {
+            flex: 1;
+            text-align: center;
+            padding: 0 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #60a5fa;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-divider {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(180deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+        }
+
+        /* Main Grid */
+        .defense-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Capability Cards */
+        .defense-capabilities {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+
+        .capability-card {
+            position: relative;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.7));
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .card-glow {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .card-glow.military { background: radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, transparent 50%); }
+        .card-glow.intel { background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 50%); }
+        .card-glow.cyber { background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 50%); }
+        .card-glow.border { background: radial-gradient(circle, rgba(251, 146, 60, 0.1) 0%, transparent 50%); }
+
+        .capability-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 40px rgba(59, 130, 246, 0.1);
+        }
+
+        .capability-card:hover .card-glow {
+            opacity: 1;
+        }
+
+        .capability-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .capability-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .capability-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .capability-icon.military {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.1));
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #4ade80;
+        }
+
+        .capability-icon.intel {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+        }
+
+        .capability-icon.cyber {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #c084fc;
+        }
+
+        .capability-icon.border {
+            background: linear-gradient(135deg, rgba(251, 146, 60, 0.2), rgba(249, 115, 22, 0.1));
+            border: 1px solid rgba(251, 146, 60, 0.3);
+            color: #fb923c;
+        }
+
+        .capability-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: #6b7280;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .capability-content h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .capability-content > p {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            line-height: 1.5;
+            margin-bottom: 0.875rem;
+        }
+
+        .capability-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .capability-features li {
+            font-size: 0.75rem;
+            color: #6b7280;
+            padding: 0.3rem 0;
+            padding-left: 1rem;
+            position: relative;
+            transition: color 0.2s ease;
+        }
+
+        .capability-card:hover .capability-features li {
+            color: #9ca3af;
+        }
+
+        .feature-icon {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 5px;
+            background: #3b82f6;
+            border-radius: 50%;
+        }
+
+        /* Command Center Visual */
+        .defense-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .command-center {
+            background: linear-gradient(135deg, #0c1629 0%, #0f172a 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 1px rgba(59, 130, 246, 0.1),
+                0 30px 60px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        .cc-header {
+            background: linear-gradient(90deg, rgba(30, 58, 95, 0.6), rgba(15, 23, 42, 0.8));
+            padding: 0.875rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+        }
+
+        .cc-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #4ade80;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: statusPulse 2s infinite;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.9); }
+        }
+
+        .cc-badges {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .cc-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            letter-spacing: 0.05em;
+        }
+
+        .cc-badge.live {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            animation: liveBlink 2s infinite;
+        }
+
+        @keyframes liveBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .cc-badge.classified {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fcd34d;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        /* Threat Map */
+        .threat-map {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .map-grid {
+            position: relative;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.5), rgba(30, 41, 59, 0.3));
+            border-radius: 8px;
+            padding: 1rem;
+            height: 140px;
+            overflow: hidden;
+        }
+
+        .map-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .threat-point {
+            animation: threatPulse 2s infinite;
+        }
+
+        .pulse-1 { animation-delay: 0s; }
+        .pulse-2 { animation-delay: 0.5s; }
+        .pulse-3 { animation-delay: 1s; }
+
+        @keyframes threatPulse {
+            0%, 100% { opacity: 1; r: 4; }
+            50% { opacity: 0.5; r: 6; }
+        }
+
+        .connection-line {
+            animation: lineDash 3s linear infinite;
+        }
+
+        @keyframes lineDash {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: 20; }
+        }
+
+        .map-overlay-text {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.75rem;
+            font-size: 0.7rem;
+            color: #6b7280;
+        }
+
+        .threats-count {
+            color: #ef4444;
+            font-weight: 700;
+        }
+
+        /* Live Feed */
+        .live-feed {
+            padding: 0.75rem 1rem;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.7rem;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+            max-height: 150px;
+            overflow: hidden;
+        }
+
+        .feed-line {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.3rem 0;
+            opacity: 0;
+            animation: feedIn 0.5s ease forwards;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes feedIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .feed-time {
+            color: #4b5563;
+            min-width: 55px;
+        }
+
+        .feed-type {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            min-width: 45px;
+            text-align: center;
+        }
+
+        .feed-type.alert { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+        .feed-type.success { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+        .feed-type.info { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+        .feed-type.warning { background: rgba(251, 191, 36, 0.2); color: #fde047; }
+
+        .feed-msg {
+            color: #9ca3af;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* AI Status */
+        .ai-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.05), transparent);
+        }
+
+        .ai-indicator {
+            position: relative;
+            width: 48px;
+            height: 48px;
+        }
+
+        .ai-ring {
+            position: absolute;
+            inset: 0;
+            border: 2px solid transparent;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: aiSpin 2s linear infinite;
+        }
+
+        @keyframes aiSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .ai-core {
+            position: absolute;
+            inset: 6px;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .ai-info {
+            flex: 1;
+        }
+
+        .ai-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #e5e7eb;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .ai-metrics {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .ai-metrics .metric {
+            font-size: 0.65rem;
+            color: #6b7280;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Defense Certifications */
+        .defense-certs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+
+        .cert-item {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.5));
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 10px;
+            padding: 0.875rem 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .cert-item:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.4), rgba(15, 23, 42, 0.6));
+        }
+
+        .cert-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cert-icon svg {
+            width: 18px;
+            height: 18px;
+            color: #60a5fa;
+        }
+
+        .cert-item span {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        /* Government Notice */
+        .gov-notice {
+            position: relative;
+            background: linear-gradient(135deg, rgba(127, 29, 29, 0.12), rgba(153, 27, 27, 0.08));
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .notice-border {
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.4), rgba(239, 68, 68, 0.1), rgba(59, 130, 246, 0.2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        .notice-content-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 2rem 2.5rem;
+        }
+
+        .notice-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            animation: noticeGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes noticeGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.4); }
+        }
+
+        .notice-icon svg {
+            width: 28px;
+            height: 28px;
+            color: #f87171;
+        }
+
+        .notice-content {
+            flex: 1;
+        }
+
+        .notice-content h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fca5a5;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .restricted-icon {
+            font-size: 0.9rem;
+            color: #ef4444;
+        }
+
+        .notice-content p {
+            font-size: 0.875rem;
+            color: #9ca3af;
+            line-height: 1.7;
+        }
+
+        .notice-content p strong {
+            color: #fca5a5;
+        }
+
+        .gov-contact-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, #1e40af, #1d4ed8);
+            color: white;
+            padding: 1.1rem 2rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .btn-glow {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .gov-contact-btn:hover .btn-glow {
+            transform: translateX(100%);
+        }
+
+        .gov-contact-btn:hover {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.4);
+        }
+
+        .gov-contact-btn svg {
+            width: 18px;
+            height: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .defense-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .defense-capabilities {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .defense-stats {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .stat-divider {
+                display: none;
+            }
+
+            .stat-item {
+                flex: 0 0 45%;
+            }
+
+            .notice-content-wrapper {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .defense-section {
+                padding: 4rem 1rem 6rem;
+            }
+
+            .defense-capabilities {
+                grid-template-columns: 1fr;
+            }
+
+            .defense-certs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .defense-stats {
+                padding: 1rem;
+            }
+
+            .stat-value {
+                font-size: 1.25rem;
+            }
+
+            .notice-content-wrapper {
+                padding: 1.5rem;
+            }
+
+            .gov-contact-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .live-feed {
+                max-height: 120px;
+            }
+
+            .radar-sweep {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    </style>
+
+    <!-- ========================================
          PRECIOS SECTION (NomiPro Style)
          ======================================== -->
     <section class="pricing" id="precios">
@@ -2689,7 +4862,7 @@
                     </label>
                     <span class="billing-option" id="annualLabel">
                         Anual
-                        <span class="billing-discount">2 meses gratis</span>
+                        <span class="billing-discount">Ahorra 2 meses</span>
                     </span>
                 </div>
             </div>
@@ -2704,24 +4877,25 @@
                     <div class="pricing-card-price">
                         <span class="price-currency">EUR</span>
                         <span class="price-amount monthly-price">395</span>
-                        <span class="price-amount annual-price" style="display: none;">329</span>
-                        <span class="price-period">/mes</span>
+                        <span class="price-amount annual-price" style="display: none;">3.948</span>
+                        <span class="price-period monthly-period">/mes</span>
+                        <span class="price-period annual-period" style="display: none;">/año</span>
                     </div>
                     <div class="annual-savings" style="display: none;">
-                        <span>Ahorras 790 EUR/ano</span>
+                        <span>329€/mes · Ahorras 792€</span>
                     </div>
                     <ul class="pricing-features">
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            Hasta 25 empleados
+                            Hasta 2 usuarios
                         </li>
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            Control horario basico
+                            3 Módulos activos
                         </li>
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2733,7 +4907,13 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            Expediente inspeccion
+                            Expediente inspección
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Auditorías IA
                         </li>
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2760,48 +4940,43 @@
                     <div class="pricing-card-price">
                         <span class="price-currency">EUR</span>
                         <span class="price-amount monthly-price">2.350</span>
-                        <span class="price-amount annual-price" style="display: none;">1.958</span>
-                        <span class="price-period">/mes</span>
+                        <span class="price-amount annual-price" style="display: none;">23.496</span>
+                        <span class="price-period monthly-period">/mes</span>
+                        <span class="price-period annual-period" style="display: none;">/año</span>
                     </div>
                     <div class="annual-savings" style="display: none;">
-                        <span>Ahorras 4.700 EUR/ano</span>
+                        <span>1.958€/mes · Ahorras 4.704€</span>
                     </div>
                     <ul class="pricing-features">
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            Hasta 150 empleados
+                            Hasta 25 usuarios
                         </li>
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            Control horario avanzado
+                            15 Módulos activos
                         </li>
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            200 detectores de riesgo
+                            150 detectores de riesgo
                         </li>
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            Integraciones AEAT, TGSS
+                            Todo lo de Starter
                         </li>
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            Multi-empresa (3)
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12"/>
-                            </svg>
-                            Asistente IA basico
+                            Multi-Empresas (3)
                         </li>
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2827,24 +5002,25 @@
                     <div class="pricing-card-price">
                         <span class="price-currency">EUR</span>
                         <span class="price-amount monthly-price">7.950</span>
-                        <span class="price-amount annual-price" style="display: none;">6.625</span>
-                        <span class="price-period">/mes</span>
+                        <span class="price-amount annual-price" style="display: none;">79.500</span>
+                        <span class="price-period monthly-period">/mes</span>
+                        <span class="price-period annual-period" style="display: none;">/año</span>
                     </div>
                     <div class="annual-savings" style="display: none;">
-                        <span>Ahorras 15.900 EUR/ano</span>
+                        <span>6.625€/mes · Ahorras 15.900€</span>
                     </div>
                     <ul class="pricing-features">
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            Empleados ilimitados
+                            Usuarios ilimitados
                         </li>
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            Todos los modulos
+                            Todos los Módulos
                         </li>
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2856,13 +5032,13 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            Todas las integraciones
+                            Todo lo de Business
                         </li>
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            Multi-empresa ilimitado
+                            Multi-Empresas ilimitado
                         </li>
                         <li>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2884,10 +5060,10 @@
                         </li>
                     </ul>
                     <button onclick="startCheckout('enterprise', 'monthly')" class="btn-pricing monthly-link">
-                        Contactar ventas
+                        Empezar ahora
                     </button>
                     <button onclick="startCheckout('enterprise', 'yearly')" class="btn-pricing annual-link" style="display: none;">
-                        Contactar ventas
+                        Empezar ahora
                     </button>
                 </div>
             </div>
@@ -3049,6 +5225,8 @@
             border: 1px solid var(--border-color);
             position: relative;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .pricing-card:hover {
@@ -3141,6 +5319,7 @@
         .pricing-features {
             list-style: none;
             margin-bottom: 2rem;
+            flex-grow: 1;
         }
 
         .pricing-features li {
@@ -3181,15 +5360,16 @@
             font-weight: 600;
             text-decoration: none;
             transition: all 0.2s ease;
-            background: var(--gray-100);
-            color: var(--text-primary);
+            background: var(--gradient-teal);
+            color: white;
             border: none;
             cursor: pointer;
             font-family: inherit;
+            margin-top: auto;
         }
 
         .btn-pricing:hover {
-            background: var(--gray-200);
+            opacity: 0.9;
         }
 
         .pricing-card.popular .btn-pricing {
@@ -3199,15 +5379,6 @@
 
         .pricing-card.popular .btn-pricing:hover {
             background: var(--gray-100);
-        }
-
-        .pricing-card.enterprise .btn-pricing {
-            background: var(--gradient-teal);
-            color: white;
-        }
-
-        .pricing-card.enterprise .btn-pricing:hover {
-            opacity: 0.9;
         }
 
         /* Guarantee */
@@ -3326,6 +5497,8 @@
         const annualLabel = document.getElementById('annualLabel');
         const monthlyPrices = document.querySelectorAll('.monthly-price');
         const annualPrices = document.querySelectorAll('.annual-price');
+        const monthlyPeriods = document.querySelectorAll('.monthly-period');
+        const annualPeriods = document.querySelectorAll('.annual-period');
         const monthlyLinks = document.querySelectorAll('.monthly-link');
         const annualLinks = document.querySelectorAll('.annual-link');
         const annualSavings = document.querySelectorAll('.annual-savings');
@@ -3338,6 +5511,8 @@
 
             monthlyPrices.forEach(el => el.style.display = isAnnual ? 'none' : 'inline');
             annualPrices.forEach(el => el.style.display = isAnnual ? 'inline' : 'none');
+            monthlyPeriods.forEach(el => el.style.display = isAnnual ? 'none' : 'inline');
+            annualPeriods.forEach(el => el.style.display = isAnnual ? 'inline' : 'none');
             monthlyLinks.forEach(el => el.style.display = isAnnual ? 'none' : 'block');
             annualLinks.forEach(el => el.style.display = isAnnual ? 'block' : 'none');
             annualSavings.forEach(el => el.style.display = isAnnual ? 'inline-block' : 'none');
@@ -3378,11 +5553,27 @@
         // Run on page load
         checkAuthStatus();
 
-        // Checkout function - redirect to register with plan info
+        // Checkout function - redirect based on auth status
         function startCheckout(planId, billingCycle) {
-            // Redirect to register page with plan parameters
-            // The app will handle the checkout flow after registration
-            window.location.href = `/register?plan=${planId}&billing=${billingCycle}`;
+            // Check if user is logged in using zustand persisted state
+            let isLoggedIn = false;
+            try {
+                const authStorage = localStorage.getItem('auth-storage');
+                if (authStorage) {
+                    const authState = JSON.parse(authStorage);
+                    isLoggedIn = authState.state && authState.state.isAuthenticated && authState.state.token;
+                }
+            } catch (e) {
+                console.error('Error checking auth status:', e);
+            }
+
+            if (isLoggedIn) {
+                // User is logged in - redirect to billing page with upgrade parameters
+                window.location.href = `/app/billing?upgrade=${planId}&billing=${billingCycle}`;
+            } else {
+                // User is not logged in - redirect to register page with plan parameters
+                window.location.href = `/app/register?plan=${planId}&billing=${billingCycle}`;
+            }
         }
     </script>
 
@@ -3405,11 +5596,11 @@
                 </h2>
                 <p class="cta-description">
                     Unete a mas de 500 empresas que ya confian en Nexlify para
-                    proteger su negocio. Demo gratuita sin compromiso.
+                    proteger su negocio. Elige el plan que mejor se adapte a ti.
                 </p>
                 <div class="cta-buttons">
                     <a href="#precios" class="btn-cta-primary">
-                        Solicitar demo gratuita
+                        Comenzar ahora
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M5 12h14M12 5l7 7-7 7"/>
                         </svg>

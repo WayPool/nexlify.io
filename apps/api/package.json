@@ -1,6 +1,7 @@
 {
   "name": "@platform/api",
   "version": "0.1.0",
+  "type": "module",
   "description": "Platform API backend",
   "main": "dist/index.js",
   "scripts": {

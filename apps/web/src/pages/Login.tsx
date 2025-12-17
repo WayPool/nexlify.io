@@ -35,8 +35,12 @@ export default function Login() {
       toast.success('Bienvenido de nuevo');
       navigate('/dashboard');
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { message?: string } } };
-      setError(error.response?.data?.message || 'Error al iniciar sesión');
+      console.error('Login error:', err);
+      const error = err as { response?: { data?: { message?: string; error?: string }; status?: number } };
+      console.error('Error response:', error.response);
+      const errorMessage = error.response?.data?.message || error.response?.data?.error || 'Error al iniciar sesión';
+      setError(errorMessage);
+      toast.error(errorMessage); // También mostrar como toast para que sea más visible
     } finally {
       setIsLoading(false);
     }

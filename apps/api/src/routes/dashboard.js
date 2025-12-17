@@ -649,9 +649,8 @@ function generateWidgetData(widgetId, moduleId) {
  * Returns dashboard configuration including active modules and their widgets
  */
 exports.dashboardRoutes.get('/config', async (req, res) => {
-    // TODO: Get active modules from tenant configuration in DB
-    // For now, return all modules as active
-    const activeModules = ['banking', 'payroll', 'gdpr', 'fiscal'];
+    // No modules are currently active - all are in development
+    const activeModules = [];
     const widgets = activeModules.flatMap((moduleId) => {
         const moduleConfig = MODULE_WIDGETS[moduleId];
         if (!moduleConfig)
@@ -674,8 +673,8 @@ exports.dashboardRoutes.get('/config', async (req, res) => {
  * Returns all widgets with their data for the current tenant
  */
 exports.dashboardRoutes.get('/widgets', async (req, res) => {
-    // TODO: Get active modules from tenant configuration in DB
-    const activeModules = ['banking', 'payroll', 'gdpr', 'fiscal'];
+    // No modules are currently active - all are in development
+    const activeModules = [];
     const widgetsWithData = activeModules.flatMap((moduleId) => {
         const moduleConfig = MODULE_WIDGETS[moduleId];
         if (!moduleConfig)

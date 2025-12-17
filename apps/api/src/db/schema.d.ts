@@ -47,7 +47,7 @@ export declare const tenants: import("drizzle-orm/mysql-core").MySqlTableWithCol
             tableName: "tenants";
             dataType: "string";
             columnType: "MySqlEnumColumn";
-            data: "professional" | "essential" | "enterprise";
+            data: "essential" | "professional" | "enterprise";
             driverParam: string;
             notNull: true;
             hasDefault: true;
@@ -222,7 +222,7 @@ export declare const users: import("drizzle-orm/mysql-core").MySqlTableWithColum
             tableName: "users";
             dataType: "string";
             columnType: "MySqlEnumColumn";
-            data: "active" | "inactive" | "pending";
+            data: "active" | "pending" | "inactive";
             driverParam: string;
             notNull: true;
             hasDefault: true;
@@ -706,7 +706,7 @@ export declare const risks: import("drizzle-orm/mysql-core").MySqlTableWithColum
             tableName: "risks";
             dataType: "string";
             columnType: "MySqlEnumColumn";
-            data: "payroll" | "legal" | "security" | "ops" | "finance" | "compliance";
+            data: "legal" | "payroll" | "security" | "ops" | "finance" | "compliance";
             driverParam: string;
             notNull: true;
             hasDefault: false;

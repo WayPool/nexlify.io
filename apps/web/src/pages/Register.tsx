@@ -24,9 +24,16 @@ interface Plan {
 }
 
 const PLAN_NAMES: Record<string, string> = {
-  essential: 'Essential',
-  professional: 'Professional',
+  essential: 'Starter',
+  professional: 'Business',
   enterprise: 'Enterprise',
+};
+
+// Precios actualizados (sincronizados con landing y Stripe)
+const PLAN_PRICES: Record<string, { monthly: number; yearly: number; monthlyEquivalent: number }> = {
+  essential: { monthly: 395, yearly: 3948, monthlyEquivalent: 329 },
+  professional: { monthly: 2350, yearly: 23496, monthlyEquivalent: 1958 },
+  enterprise: { monthly: 7950, yearly: 79500, monthlyEquivalent: 6625 },
 };
 
 export default function Register() {
@@ -37,11 +44,18 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirectingToCheckout, setIsRedirectingToCheckout] = useState(false);
   const [error, setError] = useState('');
-  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+  const [_selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
 
   // Get plan info from URL params
   const planId = searchParams.get('plan');
   const billingCycle = searchParams.get('billing') || 'monthly';
+
+  // Redirect to pricing page if no plan selected
+  useEffect(() => {
+    if (!planId || !PLAN_PRICES[planId]) {
+      window.location.href = 'https://nexlify.io/#precios';
+    }
+  }, [planId]);
 
   const {
     register,
@@ -83,7 +97,7 @@ export default function Register() {
       toast.success('¡Cuenta creada exitosamente!');
 
       // Step 3: If there's a plan selected, redirect to Stripe checkout
-      if (planId && selectedPlan) {
+      if (planId) {
         setIsRedirectingToCheckout(true);
         try {
           // Use authenticated endpoint - token is already set via login()
@@ -99,6 +113,9 @@ export default function Register() {
               window.location.href = checkoutResponse.data.checkout_url;
             }, 1000);
             return;
+          } else {
+            // No checkout URL, go to billing
+            navigate('/billing');
           }
         } catch (checkoutError) {
           console.error('Checkout error:', checkoutError);
@@ -106,8 +123,8 @@ export default function Register() {
           navigate('/billing');
         }
       } else {
-        // No plan selected, go directly to dashboard
-        navigate('/dashboard');
+        // No plan selected - should not happen due to redirect, but fallback to pricing
+        window.location.href = 'https://nexlify.io/#precios';
       }
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
@@ -127,10 +144,14 @@ export default function Register() {
   ];
 
   const getPlanPrice = () => {
-    if (!selectedPlan) return null;
-    return billingCycle === 'yearly'
-      ? selectedPlan.price_yearly_eur / 12
-      : selectedPlan.price_monthly_eur;
+    if (!planId || !PLAN_PRICES[planId]) return null;
+    const prices = PLAN_PRICES[planId];
+    return billingCycle === 'yearly' ? prices.yearly : prices.monthly;
+  };
+
+  const getMonthlyEquivalent = () => {
+    if (!planId || !PLAN_PRICES[planId]) return null;
+    return PLAN_PRICES[planId].monthlyEquivalent;
   };
 
   return (
@@ -180,7 +201,7 @@ export default function Register() {
             </div>
 
             {/* Selected Plan Info */}
-            {selectedPlan && (
+            {planId && PLAN_PRICES[planId] && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -192,25 +213,25 @@ export default function Register() {
                     <CreditCard className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <div className="font-semibold text-lg">Plan {selectedPlan.name}</div>
+                    <div className="font-semibold text-lg">Plan {PLAN_NAMES[planId]}</div>
                     <div className="text-sm text-white/70">
-                      {billingCycle === 'yearly' ? 'Facturación anual' : 'Facturación mensual'}
+                      {billingCycle === 'yearly' ? 'Pago único anual' : 'Facturación mensual'}
                     </div>
                   </div>
                 </div>
                 <div className="flex items-baseline gap-1 mb-2">
                   <span className="text-3xl font-bold">{getPlanPrice()?.toLocaleString('es-ES')}€</span>
-                  <span className="text-white/70">/mes</span>
+                  <span className="text-white/70">{billingCycle === 'yearly' ? '/año' : '/mes'}</span>
                 </div>
                 {billingCycle === 'yearly' && (
                   <div className="inline-block px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm font-medium">
-                    Ahorras 2 meses al año
+                    {getMonthlyEquivalent()?.toLocaleString('es-ES')}€/mes · Ahorras 2 meses
                   </div>
                 )}
               </motion.div>
             )}
 
-            {!selectedPlan && (
+            {!(planId && PLAN_PRICES[planId]) && (
               <div className="mt-12 p-6 bg-white/10 backdrop-blur-xl rounded-2xl">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
@@ -262,14 +283,14 @@ export default function Register() {
             Crear Cuenta
           </h1>
           <p className="text-slate-500 dark:text-slate-400 mb-8">
-            {selectedPlan
-              ? `Regístrate para comenzar con el plan ${PLAN_NAMES[planId || ''] || selectedPlan.name}`
-              : 'Comienza tu prueba gratuita de 14 días'
+            {planId && PLAN_PRICES[planId]
+              ? `Regístrate para comenzar con el plan ${PLAN_NAMES[planId]}`
+              : 'Selecciona un plan para comenzar'
             }
           </p>
 
           {/* Plan Badge */}
-          {selectedPlan && (
+          {planId && PLAN_PRICES[planId] && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -280,20 +301,20 @@ export default function Register() {
                   <CreditCard className="w-5 h-5 text-primary-500" />
                   <div>
                     <div className="font-medium text-slate-900 dark:text-white">
-                      Plan {PLAN_NAMES[planId || ''] || selectedPlan.name}
+                      Plan {PLAN_NAMES[planId]}
                     </div>
                     <div className="text-sm text-slate-500 dark:text-slate-400">
-                      {getPlanPrice()?.toLocaleString('es-ES')}€/mes
-                      {billingCycle === 'yearly' && ' (facturación anual)'}
+                      {getPlanPrice()?.toLocaleString('es-ES')}€{billingCycle === 'yearly' ? '/año' : '/mes'}
+                      {billingCycle === 'yearly' && ` (${getMonthlyEquivalent()?.toLocaleString('es-ES')}€/mes)`}
                     </div>
                   </div>
                 </div>
-                <Link
-                  to="/#precios"
+                <a
+                  href="https://nexlify.io/#precios"
                   className="text-sm text-primary-500 hover:text-primary-600 font-medium"
                 >
-                  Cambiar
-                </Link>
+                  Cambiar plan
+                </a>
               </div>
             </motion.div>
           )}
@@ -470,7 +491,7 @@ export default function Register() {
                 </>
               ) : (
                 <>
-                  {selectedPlan ? 'Crear Cuenta y Pagar' : 'Crear Cuenta'}
+                  {planId && PLAN_PRICES[planId] ? 'Crear Cuenta y Pagar' : 'Crear Cuenta'}
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}

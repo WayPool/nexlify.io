@@ -3,11 +3,14 @@
  */
 
 import { readFileSync, readdirSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import mysql from 'mysql2/promise';
 import { config } from '../config.js';
 
-const MIGRATIONS_DIR = join(import.meta.dirname, 'migrations');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const MIGRATIONS_DIR = join(__dirname, 'migrations');
 
 interface MigrationRecord {
   id: number;

@@ -243,15 +243,15 @@ export declare const ModuleManifestSchema: z.ZodObject<{
             permission?: string | undefined;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
-        widgets?: {
-            id: string;
-            component: string;
-            slots: string[];
-        }[] | undefined;
         routes?: {
             path: string;
             component: string;
             permission?: string | undefined;
+        }[] | undefined;
+        widgets?: {
+            id: string;
+            component: string;
+            slots: string[];
         }[] | undefined;
         menu_items?: {
             path: string;
@@ -260,15 +260,15 @@ export declare const ModuleManifestSchema: z.ZodObject<{
             permission?: string | undefined;
         }[] | undefined;
     }, {
-        widgets?: {
-            id: string;
-            component: string;
-            slots: string[];
-        }[] | undefined;
         routes?: {
             path: string;
             component: string;
             permission?: string | undefined;
+        }[] | undefined;
+        widgets?: {
+            id: string;
+            component: string;
+            slots: string[];
         }[] | undefined;
         menu_items?: {
             path: string;
@@ -292,15 +292,15 @@ export declare const ModuleManifestSchema: z.ZodObject<{
     db_migrations_path: string;
     risk_providers: string[];
     ui_extensions: {
-        widgets?: {
-            id: string;
-            component: string;
-            slots: string[];
-        }[] | undefined;
         routes?: {
             path: string;
             component: string;
             permission?: string | undefined;
+        }[] | undefined;
+        widgets?: {
+            id: string;
+            component: string;
+            slots: string[];
         }[] | undefined;
         menu_items?: {
             path: string;
@@ -327,15 +327,15 @@ export declare const ModuleManifestSchema: z.ZodObject<{
     db_migrations_path: string;
     risk_providers: string[];
     ui_extensions: {
-        widgets?: {
-            id: string;
-            component: string;
-            slots: string[];
-        }[] | undefined;
         routes?: {
             path: string;
             component: string;
             permission?: string | undefined;
+        }[] | undefined;
+        widgets?: {
+            id: string;
+            component: string;
+            slots: string[];
         }[] | undefined;
         menu_items?: {
             path: string;
