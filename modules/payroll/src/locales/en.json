@@ -1,0 +1,79 @@
+{
+  "payroll": {
+    "name": "Payroll Compliance",
+    "description": "Monitor payroll compliance risks including overtime violations, contract issues, and salary anomalies",
+    "menu": {
+      "dashboard": "Payroll Dashboard",
+      "employees": "Employees",
+      "contracts": "Contracts"
+    },
+    "detectors": {
+      "overtime": {
+        "name": "Overtime Detector"
+      },
+      "contract_expiry": {
+        "name": "Contract Expiry Detector"
+      },
+      "salary_anomaly": {
+        "name": "Salary Anomaly Detector"
+      }
+    },
+    "risks": {
+      "overtime_violation": {
+        "title": "Overtime Violation Detected",
+        "description": "Employee has exceeded the legal overtime threshold. This may result in labor law violations and potential fines.",
+        "actions": "1. Review employee workload and redistribute tasks\n2. Approve compensatory time off\n3. Document business justification if overtime is necessary\n4. Review team capacity and consider hiring"
+      },
+      "contract_expiry": {
+        "title": "Contract Expiring Soon",
+        "description": "Employment contract is about to expire without a renewal in place. This may result in legal obligations or loss of talent.",
+        "actions": "1. Review employee performance and decide on renewal\n2. Prepare contract renewal or termination documentation\n3. If not renewing, ensure proper notice period\n4. Plan for knowledge transfer if applicable"
+      },
+      "salary_below_average": {
+        "title": "Salary Below Average",
+        "description": "Employee salary is significantly below the department average for their role. This may indicate pay equity issues.",
+        "actions": "1. Review employee's performance history\n2. Compare with market rates\n3. Consider salary adjustment if warranted\n4. Document justification for any pay difference"
+      },
+      "large_salary_change": {
+        "title": "Large Salary Change Detected",
+        "description": "A significant salary change was detected that may require additional review and approval.",
+        "actions": "1. Verify the change was properly authorized\n2. Document business justification\n3. Ensure budget approval was obtained\n4. Update relevant records"
+      },
+      "gender_pay_gap": {
+        "title": "Gender Pay Gap Detected",
+        "description": "A significant pay gap between genders was detected for the same role. This may violate equal pay regulations.",
+        "actions": "1. Conduct detailed pay equity analysis\n2. Review job grading and salary bands\n3. Develop remediation plan\n4. Document findings and actions for compliance"
+      }
+    },
+    "dashboard": {
+      "title": "Payroll Dashboard",
+      "total_employees": "Total Employees",
+      "active_contracts": "Active Contracts",
+      "expiring_contracts": "Expiring Soon",
+      "active_risks": "Active Risks"
+    },
+    "employees": {
+      "title": "Employees",
+      "add": "Add Employee",
+      "search": "Search employees...",
+      "name": "Name",
+      "email": "Email",
+      "department": "Department",
+      "role": "Role",
+      "salary": "Salary",
+      "status": "Status"
+    },
+    "contracts": {
+      "title": "Contracts",
+      "type": "Type",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "status": "Status",
+      "types": {
+        "permanent": "Permanent",
+        "temporary": "Temporary",
+        "contractor": "Contractor"
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@platform/blockchain",
+  "version": "0.1.0",
+  "description": "Blockchain anchoring for immutable audit trails",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@platform/core": "workspace:*",
+    "ethers": "^6.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}

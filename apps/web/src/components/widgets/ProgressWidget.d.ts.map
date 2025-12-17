@@ -1,0 +1,1 @@
+{"version":3,"file":"ProgressWidget.d.ts","sourceRoot":"","sources":["ProgressWidget.tsx"],"names":[],"mappings":"AAAA;;;;GAIG;AAGH,OAAO,KAAK,EAAE,kBAAkB,EAAE,eAAe,EAAE,MAAM,qBAAqB,CAAC;AAG/E,UAAU,mBAAoB,SAAQ,eAAe;IACnD,IAAI,EAAE,kBAAkB,CAAC;CAC1B;AAWD,MAAM,CAAC,OAAO,UAAU,cAAc,CAAC,EACrC,MAAM,EACN,IAAI,EACJ,OAAO,EACP,KAAK,EACL,SAAS,GACV,EAAE,mBAAmB,+BA6CrB"}

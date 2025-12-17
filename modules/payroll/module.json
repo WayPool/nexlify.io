@@ -1,0 +1,115 @@
+{
+  "id": "payroll",
+  "version": "1.0.0",
+  "name_i18n_key": "payroll.name",
+  "description_i18n_key": "payroll.description",
+  "author": "Platform Team",
+  "license": "MIT",
+  "permissions": [
+    "payroll.read",
+    "payroll.write",
+    "payroll.employees.read",
+    "payroll.employees.write",
+    "payroll.contracts.read",
+    "payroll.contracts.write",
+    "payroll.risks.detect"
+  ],
+  "policies": [
+    {
+      "name": "payroll_access",
+      "type": "rbac",
+      "rules": {
+        "admin": ["*"],
+        "manager": ["payroll.read", "payroll.write", "payroll.employees.read", "payroll.employees.write"],
+        "auditor": ["payroll.read", "payroll.employees.read", "payroll.contracts.read"],
+        "viewer": ["payroll.read"]
+      }
+    }
+  ],
+  "db_migrations_path": "./migrations",
+  "risk_providers": [
+    "overtime_detector",
+    "contract_expiry_detector",
+    "salary_anomaly_detector"
+  ],
+  "ui_extensions": {
+    "routes": [
+      {
+        "path": "/payroll",
+        "component": "PayrollDashboard",
+        "permission": "payroll.read"
+      },
+      {
+        "path": "/payroll/employees",
+        "component": "EmployeeList",
+        "permission": "payroll.employees.read"
+      },
+      {
+        "path": "/payroll/employees/:id",
+        "component": "EmployeeDetail",
+        "permission": "payroll.employees.read"
+      },
+      {
+        "path": "/payroll/contracts",
+        "component": "ContractList",
+        "permission": "payroll.contracts.read"
+      }
+    ],
+    "widgets": [
+      {
+        "id": "payroll_summary",
+        "component": "PayrollSummaryWidget",
+        "slots": ["dashboard"]
+      },
+      {
+        "id": "payroll_risks",
+        "component": "PayrollRisksWidget",
+        "slots": ["dashboard", "risks"]
+      }
+    ],
+    "menu_items": [
+      {
+        "label_i18n_key": "payroll.menu.dashboard",
+        "icon": "users",
+        "path": "/payroll",
+        "permission": "payroll.read"
+      },
+      {
+        "label_i18n_key": "payroll.menu.employees",
+        "icon": "user",
+        "path": "/payroll/employees",
+        "permission": "payroll.employees.read"
+      },
+      {
+        "label_i18n_key": "payroll.menu.contracts",
+        "icon": "file-text",
+        "path": "/payroll/contracts",
+        "permission": "payroll.contracts.read"
+      }
+    ]
+  },
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "overtime_threshold_hours": {
+        "type": "number",
+        "default": 40,
+        "description": "Weekly hours threshold for overtime detection"
+      },
+      "contract_expiry_warning_days": {
+        "type": "number",
+        "default": 30,
+        "description": "Days before contract expiry to trigger warning"
+      },
+      "salary_anomaly_threshold_percent": {
+        "type": "number",
+        "default": 15,
+        "description": "Percentage deviation to flag as salary anomaly"
+      }
+    }
+  },
+  "dependencies": {
+    "@platform/core": "^0.1.0",
+    "@platform/sdk": "^0.1.0"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "payroll": {
+    "name": "Cumplimiento de Nominas",
+    "description": "Monitorea riesgos de cumplimiento de nominas incluyendo violaciones de horas extras, problemas de contratos y anomalias salariales",
+    "menu": {
+      "dashboard": "Panel de Nominas",
+      "employees": "Empleados",
+      "contracts": "Contratos"
+    },
+    "detectors": {
+      "overtime": {
+        "name": "Detector de Horas Extra"
+      },
+      "contract_expiry": {
+        "name": "Detector de Vencimiento de Contratos"
+      },
+      "salary_anomaly": {
+        "name": "Detector de Anomalias Salariales"
+      }
+    },
+    "risks": {
+      "overtime_violation": {
+        "title": "Violacion de Horas Extra Detectada",
+        "description": "El empleado ha excedido el umbral legal de horas extra. Esto puede resultar en violaciones de la ley laboral y posibles multas.",
+        "actions": "1. Revisar la carga de trabajo del empleado y redistribuir tareas\n2. Aprobar tiempo compensatorio\n3. Documentar justificacion del negocio si las horas extra son necesarias\n4. Revisar capacidad del equipo y considerar contratacion"
+      },
+      "contract_expiry": {
+        "title": "Contrato Proximo a Vencer",
+        "description": "El contrato de trabajo esta a punto de vencer sin una renovacion en proceso. Esto puede resultar en obligaciones legales o perdida de talento.",
+        "actions": "1. Revisar el desempeno del empleado y decidir sobre renovacion\n2. Preparar documentacion de renovacion o terminacion\n3. Si no se renueva, asegurar el periodo de aviso adecuado\n4. Planificar transferencia de conocimiento si aplica"
+      },
+      "salary_below_average": {
+        "title": "Salario Por Debajo del Promedio",
+        "description": "El salario del empleado esta significativamente por debajo del promedio del departamento para su rol. Esto puede indicar problemas de equidad salarial.",
+        "actions": "1. Revisar el historial de desempeno del empleado\n2. Comparar con tasas de mercado\n3. Considerar ajuste salarial si es justificado\n4. Documentar justificacion de cualquier diferencia salarial"
+      },
+      "large_salary_change": {
+        "title": "Cambio Salarial Grande Detectado",
+        "description": "Se detecto un cambio salarial significativo que puede requerir revision y aprobacion adicional.",
+        "actions": "1. Verificar que el cambio fue debidamente autorizado\n2. Documentar justificacion del negocio\n3. Asegurar que se obtuvo aprobacion presupuestaria\n4. Actualizar registros relevantes"
+      },
+      "gender_pay_gap": {
+        "title": "Brecha Salarial de Genero Detectada",
+        "description": "Se detecto una brecha salarial significativa entre generos para el mismo rol. Esto puede violar las regulaciones de igualdad salarial.",
+        "actions": "1. Realizar analisis detallado de equidad salarial\n2. Revisar clasificacion de puestos y bandas salariales\n3. Desarrollar plan de remediacion\n4. Documentar hallazgos y acciones para cumplimiento"
+      }
+    },
+    "dashboard": {
+      "title": "Panel de Nominas",
+      "total_employees": "Total de Empleados",
+      "active_contracts": "Contratos Activos",
+      "expiring_contracts": "Proximos a Vencer",
+      "active_risks": "Riesgos Activos"
+    },
+    "employees": {
+      "title": "Empleados",
+      "add": "Agregar Empleado",
+      "search": "Buscar empleados...",
+      "name": "Nombre",
+      "email": "Email",
+      "department": "Departamento",
+      "role": "Rol",
+      "salary": "Salario",
+      "status": "Estado"
+    },
+    "contracts": {
+      "title": "Contratos",
+      "type": "Tipo",
+      "start_date": "Fecha de Inicio",
+      "end_date": "Fecha de Fin",
+      "status": "Estado",
+      "types": {
+        "permanent": "Indefinido",
+        "temporary": "Temporal",
+        "contractor": "Contratista"
+      }
+    }
+  }
+}

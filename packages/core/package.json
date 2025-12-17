@@ -1,0 +1,33 @@
+{
+  "name": "@platform/core",
+  "version": "0.1.0",
+  "description": "Core libraries for the platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/uuid": "^9.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./types": "./dist/types/index.js",
+    "./constants": "./dist/constants/index.js",
+    "./events": "./dist/events/index.js",
+    "./risk-engine": "./dist/risk-engine/index.js",
+    "./security": "./dist/security/index.js",
+    "./utils": "./dist/utils/index.js"
+  }
+}

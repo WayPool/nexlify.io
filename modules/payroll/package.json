@@ -1,0 +1,26 @@
+{
+  "name": "@platform/module-payroll",
+  "version": "1.0.0",
+  "description": "Payroll compliance module for the platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@platform/core": "workspace:*",
+    "@platform/sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}

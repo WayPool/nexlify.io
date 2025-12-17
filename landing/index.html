@@ -1,0 +1,3987 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexlify - Plataforma de Gestion de Riesgos y Cumplimiento</title>
+    <meta name="description" content="Transformamos datos dispersos en decisiones accionables, auditables y legalmente defendibles. Plataforma enterprise de gestion de riesgos.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ========================================
+           RESET & BASE
+           ======================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Primary Colors - Teal/Cyan gradient like NomiPro */
+            --primary-50: #ecfeff;
+            --primary-100: #cffafe;
+            --primary-200: #a5f3fc;
+            --primary-300: #67e8f9;
+            --primary-400: #22d3ee;
+            --primary-500: #06b6d4;
+            --primary-600: #0891b2;
+            --primary-700: #0e7490;
+            --primary-800: #155e75;
+            --primary-900: #164e63;
+
+            /* Accent - Purple */
+            --accent-400: #a78bfa;
+            --accent-500: #8b5cf6;
+            --accent-600: #7c3aed;
+
+            /* Success - Green */
+            --success-50: #ecfdf5;
+            --success-100: #d1fae5;
+            --success-400: #34d399;
+            --success-500: #10b981;
+            --success-600: #059669;
+
+            /* Warning - Orange */
+            --warning-50: #fff7ed;
+            --warning-400: #fb923c;
+            --warning-500: #f97316;
+
+            /* Danger - Red */
+            --danger-50: #fef2f2;
+            --danger-400: #f87171;
+            --danger-500: #ef4444;
+
+            /* Neutrals */
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+
+            /* Semantic */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-muted: #9ca3af;
+            --border-color: #e5e7eb;
+
+            /* Gradients */
+            --gradient-hero: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #7c3aed 100%);
+            --gradient-teal: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ========================================
+           NAVBAR
+           ======================================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar.scrolled .nav-link {
+            color: var(--text-primary);
+        }
+
+        .navbar.scrolled .logo-text {
+            color: var(--text-primary);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar.scrolled .logo-icon {
+            background: var(--gradient-teal);
+        }
+
+        .logo-icon svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .navbar.scrolled .nav-link:hover {
+            color: var(--primary-600);
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #loggedOutButtons,
+        #loggedInButtons {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .navbar.scrolled .btn-ghost {
+            color: var(--text-primary);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar.scrolled .btn-ghost:hover {
+            background: var(--gray-100);
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary-700);
+        }
+
+        .btn-primary:hover {
+            background: var(--gray-100);
+            transform: translateY(-1px);
+        }
+
+        .navbar.scrolled .btn-primary {
+            background: var(--gradient-teal);
+            color: white;
+        }
+
+        .navbar.scrolled .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        /* ========================================
+           HERO SECTION
+           ======================================== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            background: var(--gradient-hero);
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem 6rem;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-bg-element {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .hero-bg-element:nth-child(1) {
+            width: 600px;
+            height: 600px;
+            background: #22d3ee;
+            top: -200px;
+            right: -200px;
+        }
+
+        .hero-bg-element:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            background: #8b5cf6;
+            bottom: -100px;
+            left: -100px;
+            animation-delay: -5s;
+        }
+
+        .hero-bg-element:nth-child(3) {
+            width: 300px;
+            height: 300px;
+            background: #14b8a6;
+            top: 50%;
+            left: 50%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(20px, 10px) scale(1.02); }
+        }
+
+        .hero-container {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .hero-content {
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #34d399;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title-highlight {
+            background: linear-gradient(90deg, #fef3c7, #fde68a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            line-height: 1.7;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 540px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .btn-hero-primary {
+            background: white;
+            color: var(--primary-700);
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-hero-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-hero-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-hero-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .hero-stat {
+            text-align: left;
+        }
+
+        .hero-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .hero-stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        /* Hero Dashboard Visual */
+        .hero-visual {
+            position: relative;
+        }
+
+        .hero-dashboard {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dashboard-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dashboard-dot.red { background: #ef4444; }
+        .dashboard-dot.yellow { background: #f59e0b; }
+        .dashboard-dot.green { background: #22c55e; }
+
+        .dashboard-content {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .dashboard-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .dashboard-card-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .dashboard-card-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dashboard-card-icon.green { background: var(--success-100); color: var(--success-600); }
+        .dashboard-card-icon.orange { background: var(--warning-50); color: var(--warning-500); }
+        .dashboard-card-icon.red { background: var(--danger-50); color: var(--danger-500); }
+        .dashboard-card-icon.blue { background: var(--primary-100); color: var(--primary-600); }
+
+        .dashboard-card-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .dashboard-card-change {
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .dashboard-card-change.positive { color: var(--success-600); }
+        .dashboard-card-change.negative { color: var(--danger-500); }
+
+        .dashboard-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .risk-meter {
+            background: var(--gray-100);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .risk-meter-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .risk-meter-fill.low { background: var(--success-500); width: 25%; }
+        .risk-meter-fill.medium { background: var(--warning-500); width: 55%; }
+        .risk-meter-fill.high { background: var(--danger-500); width: 85%; }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled .mobile-menu-btn span {
+            background: var(--text-primary);
+        }
+
+        /* ========================================
+           RESPONSIVE HERO
+           ======================================== */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content { order: 1; }
+            .hero-visual { order: 2; max-width: 500px; margin: 0 auto; }
+            .hero-description { margin: 0 auto 2rem; }
+            .hero-cta { justify-content: center; }
+            .hero-stats { justify-content: center; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links, .nav-buttons { display: none; }
+            .mobile-menu-btn { display: block; }
+            .hero { padding: 7rem 1rem 4rem; }
+            .hero-title { font-size: 2rem; }
+            .hero-description { font-size: 1rem; }
+            .hero-cta { flex-direction: column; }
+            .hero-stats { flex-direction: column; gap: 1.5rem; }
+            .dashboard-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <span class="logo-text">Nexlify</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="#funcionalidades" class="nav-link">Funcionalidades</a>
+                <a href="#modulos" class="nav-link">Modulos</a>
+                <a href="#seguridad" class="nav-link">Seguridad</a>
+                <a href="#precios" class="nav-link">Precios</a>
+            </div>
+
+            <div class="nav-buttons" id="navButtons">
+                <!-- Botones para usuarios NO logueados -->
+                <div id="loggedOutButtons">
+                    <a href="/login" class="btn btn-ghost">Iniciar sesion</a>
+                    <a href="/register" class="btn btn-primary">Registrarse</a>
+                </div>
+                <!-- Boton para usuarios logueados -->
+                <div id="loggedInButtons" style="display: none;">
+                    <a href="/dashboard" class="btn btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"/>
+                            <rect x="14" y="3" width="7" height="7"/>
+                            <rect x="14" y="14" width="7" height="7"/>
+                            <rect x="3" y="14" width="7" height="7"/>
+                        </svg>
+                        Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-element"></div>
+        <div class="hero-bg-element"></div>
+        <div class="hero-bg-element"></div>
+
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    Plataforma Enterprise de Gestion de Riesgos
+                </div>
+
+                <h1 class="hero-title">
+                    Anticipa riesgos.<br>
+                    <span class="hero-title-highlight">Evita sanciones.</span><br>
+                    Protege tu empresa.
+                </h1>
+
+                <p class="hero-description">
+                    Transformamos datos laborales y financieros dispersos en decisiones
+                    accionables, auditables y legalmente defendibles. El sistema operativo
+                    de datos que necesita tu empresa.
+                </p>
+
+                <div class="hero-cta">
+                    <a href="#precios" class="btn btn-hero-primary">
+                        Solicitar demo
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <a href="#funcionalidades" class="btn btn-hero-secondary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                        </svg>
+                        Ver como funciona
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">+500</div>
+                        <div class="hero-stat-label">Empresas protegidas</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">98%</div>
+                        <div class="hero-stat-label">Riesgos detectados</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">24/7</div>
+                        <div class="hero-stat-label">Monitorizacion activa</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="hero-dashboard">
+                    <div class="dashboard-header">
+                        <div class="dashboard-dot red"></div>
+                        <div class="dashboard-dot yellow"></div>
+                        <div class="dashboard-dot green"></div>
+                    </div>
+                    <div class="dashboard-content">
+                        <div class="dashboard-card">
+                            <div class="dashboard-card-header">
+                                <span class="dashboard-card-title">Indice de Riesgo Global</span>
+                                <div class="dashboard-card-icon green">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="dashboard-card-value">Bajo</div>
+                            <div class="risk-meter">
+                                <div class="risk-meter-fill low"></div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-row">
+                            <div class="dashboard-card">
+                                <div class="dashboard-card-header">
+                                    <span class="dashboard-card-title">Alertas Activas</span>
+                                    <div class="dashboard-card-icon orange">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                            <line x1="12" y1="9" x2="12" y2="13"/>
+                                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="dashboard-card-value">3</div>
+                                <div class="dashboard-card-change negative">-2 esta semana</div>
+                            </div>
+
+                            <div class="dashboard-card">
+                                <div class="dashboard-card-header">
+                                    <span class="dashboard-card-title">Cumplimiento</span>
+                                    <div class="dashboard-card-icon blue">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9 11 12 14 22 4"/>
+                                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="dashboard-card-value">94%</div>
+                                <div class="dashboard-card-change positive">+5% este mes</div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="dashboard-card-header">
+                                <span class="dashboard-card-title">Detectores Activos</span>
+                                <div class="dashboard-card-icon green">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <polyline points="12 6 12 12 16 14"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="dashboard-card-value">127 / 150</div>
+                            <div class="risk-meter">
+                                <div class="risk-meter-fill" style="background: var(--primary-500); width: 85%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         PAIN POINTS SECTION
+         ======================================== -->
+    <section class="pain-points" id="problemas">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge">El problema</span>
+                <h2 class="section-title">
+                    Las empresas tienen datos,<br>
+                    pero no <span class="text-gradient">control ni confianza</span> en ellos
+                </h2>
+                <p class="section-description">
+                    Sabemos que algo esta mal... pero no sabemos que, cuando ni cuanto nos puede costar.
+                </p>
+            </div>
+
+            <div class="pain-grid">
+                <div class="pain-card">
+                    <div class="pain-icon red">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                    </div>
+                    <h3 class="pain-title">Inspecciones inesperadas</h3>
+                    <p class="pain-description">
+                        Una inspeccion laboral puede llegar manana. ¿Tienes toda la documentacion lista y las evidencias trazables?
+                    </p>
+                    <div class="pain-stat">
+                        <span class="pain-stat-value">67%</span>
+                        <span class="pain-stat-label">de empresas no pasan la primera inspeccion</span>
+                    </div>
+                </div>
+
+                <div class="pain-card">
+                    <div class="pain-icon orange">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                    </div>
+                    <h3 class="pain-title">Datos dispersos</h3>
+                    <p class="pain-description">
+                        ERP, CRM, bancos, hojas de calculo... Los datos estan en silos que no se comunican entre si.
+                    </p>
+                    <div class="pain-stat">
+                        <span class="pain-stat-value">5+</span>
+                        <span class="pain-stat-label">sistemas diferentes de media por empresa</span>
+                    </div>
+                </div>
+
+                <div class="pain-card">
+                    <div class="pain-icon purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                    </div>
+                    <h3 class="pain-title">Riesgos ocultos</h3>
+                    <p class="pain-description">
+                        Contratos mal ajustados, jornadas incoherentes, IRPF incorrecto. Los problemas se descubren demasiado tarde.
+                    </p>
+                    <div class="pain-stat">
+                        <span class="pain-stat-value">45K EUR</span>
+                        <span class="pain-stat-label">multa media por incumplimiento laboral</span>
+                    </div>
+                </div>
+
+                <div class="pain-card">
+                    <div class="pain-icon blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
+                    <h3 class="pain-title">Sin trazabilidad legal</h3>
+                    <p class="pain-description">
+                        ¿Quien aprobo que? ¿Cuando se modifico? Sin logs inmutables, no hay defensa legal posible.
+                    </p>
+                    <div class="pain-stat">
+                        <span class="pain-stat-value">82%</span>
+                        <span class="pain-stat-label">de sanciones por falta de documentacion</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pain-cta">
+                <div class="pain-cta-content">
+                    <div class="pain-cta-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                    </div>
+                    <div class="pain-cta-text">
+                        <h4>La solucion existe</h4>
+                        <p>Nexlify transforma estos problemas en ventajas competitivas</p>
+                    </div>
+                </div>
+                <a href="#funcionalidades" class="btn btn-gradient">
+                    Descubre como
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* ========================================
+           PAIN POINTS SECTION
+           ======================================== */
+        .pain-points {
+            padding: 8rem 2rem;
+            background: var(--bg-secondary);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--danger-50), #fef2f2);
+            color: var(--danger-500);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .text-gradient {
+            background: var(--gradient-teal);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-description {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .pain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .pain-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .pain-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border-color: transparent;
+        }
+
+        .pain-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pain-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .pain-icon.red {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            color: var(--danger-500);
+        }
+
+        .pain-icon.orange {
+            background: linear-gradient(135deg, #fff7ed, #ffedd5);
+            color: var(--warning-500);
+        }
+
+        .pain-icon.purple {
+            background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+            color: var(--accent-500);
+        }
+
+        .pain-icon.blue {
+            background: linear-gradient(135deg, var(--primary-50), var(--primary-100));
+            color: var(--primary-600);
+        }
+
+        .pain-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .pain-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .pain-stat {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .pain-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .pain-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        .pain-cta {
+            background: linear-gradient(135deg, var(--primary-50), #ecfdf5);
+            border-radius: 24px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            border: 1px solid rgba(20, 184, 166, 0.2);
+        }
+
+        .pain-cta-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .pain-cta-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-teal);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .pain-cta-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .pain-cta-text h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .pain-cta-text p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .btn-gradient {
+            background: var(--gradient-teal);
+            color: white;
+            padding: 1rem 2rem;
+            white-space: nowrap;
+        }
+
+        .btn-gradient:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .pain-points {
+                padding: 4rem 1rem;
+            }
+
+            .pain-cta {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .pain-cta-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+
+    <!-- ========================================
+         MODULOS GUBERNAMENTALES SECTION
+         ======================================== -->
+    <section class="gov-modules" id="modulos">
+        <div class="gov-container">
+            <div class="gov-header">
+                <span class="gov-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 21h18M3 7v1a3 3 0 0 0 6 0V7m0 1a3 3 0 0 0 6 0V7m0 1a3 3 0 0 0 6 0V7H3l2-4h14l2 4M4 21V10.5M20 21V10.5"/>
+                    </svg>
+                    Cumplimiento Normativo
+                </span>
+                <h2 class="gov-title">
+                    Preparado para cualquier<br>
+                    <span>inspeccion gubernamental</span>
+                </h2>
+                <p class="gov-description">
+                    Conecta con las principales entidades reguladoras espanolas y europeas.
+                    Genera expedientes completos, evidencias trazables y documentacion legal
+                    en segundos, no en dias.
+                </p>
+            </div>
+
+            <div class="gov-showcase">
+                <div class="gov-visual">
+                    <div class="gov-screen">
+                        <div class="gov-screen-header">
+                            <div class="gov-screen-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <span class="gov-screen-title">Inspeccion Ready</span>
+                            <span class="gov-screen-status">
+                                <span class="status-dot"></span>
+                                SNE-256
+                            </span>
+                        </div>
+                        <div class="gov-screen-content">
+                            <div class="gov-checklist">
+                                <div class="gov-check-item complete">
+                                    <div class="check-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                            <polyline points="20 6 9 17 4 12"/>
+                                        </svg>
+                                    </div>
+                                    <div class="check-content">
+                                        <span class="check-label">01. REGISTRO_HORARIO</span>
+                                        <span class="check-status">Validado</span>
+                                    </div>
+                                </div>
+                                <div class="gov-check-item complete">
+                                    <div class="check-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                            <polyline points="20 6 9 17 4 12"/>
+                                        </svg>
+                                    </div>
+                                    <div class="check-content">
+                                        <span class="check-label">02. CONTRATOS_TC</span>
+                                        <span class="check-status">Sin alertas</span>
+                                    </div>
+                                </div>
+                                <div class="gov-check-item warning">
+                                    <div class="check-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <line x1="12" y1="8" x2="12" y2="12"/>
+                                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                                        </svg>
+                                    </div>
+                                    <div class="check-content">
+                                        <span class="check-label">03. AUDITORIA</span>
+                                        <span class="check-status">Revision requerida</span>
+                                    </div>
+                                </div>
+                                <div class="gov-check-item pending">
+                                    <div class="check-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <polyline points="12 6 12 12 16 14"/>
+                                        </svg>
+                                    </div>
+                                    <div class="check-content">
+                                        <span class="check-label">04. RD_8/2019</span>
+                                        <span class="check-status">En proceso</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gov-progress">
+                                <div class="progress-header">
+                                    <span>Cumplimiento global</span>
+                                    <span class="progress-value">87.5%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 87.5%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gov-features">
+                    <div class="gov-feature">
+                        <div class="gov-feature-icon blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="12" y1="18" x2="12" y2="12"/>
+                                <line x1="9" y1="15" x2="15" y2="15"/>
+                            </svg>
+                        </div>
+                        <div class="gov-feature-content">
+                            <h4>Expediente ZIP Completo</h4>
+                            <p>Genera un paquete con todos los documentos necesarios para cualquier inspeccion en un solo clic.</p>
+                        </div>
+                    </div>
+
+                    <div class="gov-feature">
+                        <div class="gov-feature-icon green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </div>
+                        <div class="gov-feature-content">
+                            <h4>Cumplimiento RD 8/2019</h4>
+                            <p>Validacion automatica del registro horario segun Real Decreto, con alertas de incumplimiento.</p>
+                        </div>
+                    </div>
+
+                    <div class="gov-feature">
+                        <div class="gov-feature-icon purple">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <div class="gov-feature-content">
+                            <h4>Integridad Garantizada</h4>
+                            <p>Logs inmutables con hash SHA-256 y firma digital para validez legal ante cualquier tribunal.</p>
+                        </div>
+                    </div>
+
+                    <div class="gov-feature">
+                        <div class="gov-feature-icon orange">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <div class="gov-feature-content">
+                            <h4>Alertas Proactivas</h4>
+                            <p>Detectamos riesgos antes de que se conviertan en sanciones. Prevencion, no reaccion.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gov-entities">
+                <p class="gov-entities-label">Integraciones con entidades oficiales</p>
+                <div class="gov-entities-grid">
+                    <div class="gov-entity">
+                        <span class="entity-name">AEAT</span>
+                        <span class="entity-desc">Agencia Tributaria</span>
+                    </div>
+                    <div class="gov-entity">
+                        <span class="entity-name">SEPE</span>
+                        <span class="entity-desc">Servicio Empleo</span>
+                    </div>
+                    <div class="gov-entity">
+                        <span class="entity-name">TGSS</span>
+                        <span class="entity-desc">Seguridad Social</span>
+                    </div>
+                    <div class="gov-entity">
+                        <span class="entity-name">SILTRA</span>
+                        <span class="entity-desc">Sistema RED</span>
+                    </div>
+                    <div class="gov-entity">
+                        <span class="entity-name">SEPBLAC</span>
+                        <span class="entity-desc">Blanqueo Capitales</span>
+                    </div>
+                    <div class="gov-entity">
+                        <span class="entity-name">AEPD</span>
+                        <span class="entity-desc">Proteccion Datos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* ========================================
+           GOV MODULES SECTION
+           ======================================== */
+        .gov-modules {
+            padding: 8rem 2rem;
+            background: var(--gradient-hero);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gov-modules::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .gov-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .gov-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            color: white;
+        }
+
+        .gov-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .gov-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .gov-title span {
+            background: linear-gradient(90deg, #fef3c7, #fde68a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gov-description {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .gov-showcase {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .gov-screen {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .gov-screen-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gov-screen-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .gov-screen-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .gov-screen-dots span:nth-child(1) { background: #ef4444; }
+        .gov-screen-dots span:nth-child(2) { background: #f59e0b; }
+        .gov-screen-dots span:nth-child(3) { background: #22c55e; }
+
+        .gov-screen-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        .gov-screen-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .gov-screen-content {
+            padding: 1.5rem;
+        }
+
+        .gov-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .gov-check-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            color: var(--text-primary);
+        }
+
+        .check-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .check-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .gov-check-item.complete .check-icon {
+            background: var(--success-100);
+            color: var(--success-600);
+        }
+
+        .gov-check-item.warning .check-icon {
+            background: var(--warning-50);
+            color: var(--warning-500);
+        }
+
+        .gov-check-item.pending .check-icon {
+            background: var(--gray-100);
+            color: var(--gray-500);
+        }
+
+        .check-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex: 1;
+        }
+
+        .check-label {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .check-status {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .gov-check-item.complete .check-status {
+            background: var(--success-100);
+            color: var(--success-600);
+        }
+
+        .gov-check-item.warning .check-status {
+            background: var(--warning-50);
+            color: var(--warning-500);
+        }
+
+        .gov-check-item.pending .check-status {
+            background: var(--gray-100);
+            color: var(--gray-500);
+        }
+
+        .gov-progress {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-value {
+            font-weight: 700;
+            color: var(--success-600);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-teal);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .gov-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .gov-feature {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .gov-feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .gov-feature-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .gov-feature-icon.blue {
+            background: rgba(14, 165, 233, 0.2);
+            color: #7dd3fc;
+        }
+
+        .gov-feature-icon.green {
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+        }
+
+        .gov-feature-icon.purple {
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+        }
+
+        .gov-feature-icon.orange {
+            background: rgba(249, 115, 22, 0.2);
+            color: #fdba74;
+        }
+
+        .gov-feature-content h4 {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .gov-feature-content p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .gov-entities {
+            text-align: center;
+        }
+
+        .gov-entities-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .gov-entities-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .gov-entity {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 140px;
+        }
+
+        .entity-name {
+            display: block;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .entity-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 1024px) {
+            .gov-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .gov-features {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gov-modules {
+                padding: 4rem 1rem;
+            }
+
+            .gov-features {
+                grid-template-columns: 1fr;
+            }
+
+            .gov-entities-grid {
+                gap: 0.75rem;
+            }
+
+            .gov-entity {
+                min-width: 120px;
+                padding: 0.75rem 1rem;
+            }
+        }
+    </style>
+
+    <!-- ========================================
+         FUNCIONALIDADES SECTION (NomiPro Style)
+         ======================================== -->
+    <section class="features" id="funcionalidades">
+        <div class="features-container">
+            <div class="features-header">
+                <span class="features-badge">Funcionalidades de Nivel Empresarial</span>
+                <h2 class="features-title">
+                    Todo lo que necesitas para<br>
+                    <span class="text-gradient">gestionar riesgos</span> como un experto
+                </h2>
+                <p class="features-description">
+                    Mas de 40 modulos y 395+ detectores inteligentes trabajando 24/7
+                    para proteger tu empresa.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <!-- Card 1 - Control Horario -->
+                <div class="feature-card blue">
+                    <div class="feature-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <h3>Control Horario</h3>
+                    <p>Fichaje digital geolocalizacion, cumplimiento RD 8/2019, alertas de horas extra y acceso biometrico.</p>
+                </div>
+
+                <!-- Card 2 - Gestion Empleados -->
+                <div class="feature-card green">
+                    <div class="feature-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <h3>Gestion de Empleados</h3>
+                    <p>Expedientes digitales completos, contratos, nominas, documentos y datos centralizados.</p>
+                </div>
+
+                <!-- Card 3 - Vacaciones -->
+                <div class="feature-card purple">
+                    <div class="feature-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+                    <h3>Vacaciones y Ausencias</h3>
+                    <p>Solicitudes online, aprobaciones, calendario de equipo, bajas y gestion automatizada.</p>
+                </div>
+
+                <!-- Card 4 - Analytics -->
+                <div class="feature-card orange">
+                    <div class="feature-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="20" x2="18" y2="10"/>
+                            <line x1="12" y1="20" x2="12" y2="4"/>
+                            <line x1="6" y1="20" x2="6" y2="14"/>
+                        </svg>
+                    </div>
+                    <h3>Analytics y Reportes</h3>
+                    <p>Dashboards en tiempo real, KPIs, costes laborales, tendencias y exportacion avanzada.</p>
+                </div>
+
+                <!-- Card 5 - Contratos -->
+                <div class="feature-card teal">
+                    <div class="feature-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+                    <h3>Contratos y Documentacion</h3>
+                    <p>Generacion automatica, firma digital, versionado, almacenamiento seguro y plantillas.</p>
+                </div>
+
+                <!-- Card 6 - Cumplimiento -->
+                <div class="feature-card red">
+                    <div class="feature-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <polyline points="9 12 12 15 16 10"/>
+                        </svg>
+                    </div>
+                    <h3>Cumplimiento Legal</h3>
+                    <p>GDPR, LOPD, prevencion riesgos, igualdad, canal denuncias y auditorias automaticas.</p>
+                </div>
+
+                <!-- Card 7 - Multi-Empresa -->
+                <div class="feature-card indigo">
+                    <div class="feature-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 21h18M3 7v1a3 3 0 0 0 6 0V7m0 1a3 3 0 0 0 6 0V7m0 1a3 3 0 0 0 6 0V7H3l2-4h14l2 4"/>
+                            <path d="M5 21V10.5M19 21V10.5"/>
+                        </svg>
+                    </div>
+                    <h3>Multi-Empresa</h3>
+                    <p>Gestiona multiples sociedades desde un unico panel con datos consolidados y permisos.</p>
+                </div>
+
+                <!-- Card 8 - Acceso Universal -->
+                <div class="feature-card pink">
+                    <div class="feature-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                            <line x1="12" y1="18" x2="12.01" y2="18"/>
+                        </svg>
+                    </div>
+                    <h3>Acceso Universal</h3>
+                    <p>App movil, portal empleado, notificaciones push, acceso offline y sincronizacion.</p>
+                </div>
+
+                <!-- Card 9 - IA Asistente -->
+                <div class="feature-card gradient">
+                    <div class="feature-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a10 10 0 1 0 10 10H12V2z"/>
+                            <path d="M12 2a10 10 0 0 1 10 10"/>
+                            <circle cx="12" cy="12" r="4"/>
+                        </svg>
+                    </div>
+                    <h3>Asistente IA</h3>
+                    <p>Copiloto inteligente que responde preguntas, detecta anomalias y sugiere acciones preventivas.</p>
+                    <span class="feature-badge">Nuevo</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* ========================================
+           FEATURES SECTION (NomiPro Style)
+           ======================================== */
+        .features {
+            padding: 8rem 2rem;
+            background: var(--bg-primary);
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .features-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-50), var(--primary-100));
+            color: var(--primary-700);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(8, 145, 178, 0.2);
+        }
+
+        .features-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .features-description {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            position: relative;
+            padding: 2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            opacity: 0.1;
+            transform: translate(30%, -30%);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .feature-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: white;
+            color: var(--accent-600);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Card Colors */
+        .feature-card.blue {
+            background: linear-gradient(135deg, #dbeafe, #eff6ff);
+            color: #1e40af;
+        }
+        .feature-card.blue .feature-card-icon {
+            background: #3b82f6;
+            color: white;
+        }
+        .feature-card.blue::before { background: #3b82f6; }
+
+        .feature-card.green {
+            background: linear-gradient(135deg, #dcfce7, #f0fdf4);
+            color: #166534;
+        }
+        .feature-card.green .feature-card-icon {
+            background: #22c55e;
+            color: white;
+        }
+        .feature-card.green::before { background: #22c55e; }
+
+        .feature-card.purple {
+            background: linear-gradient(135deg, #f3e8ff, #faf5ff);
+            color: #6b21a8;
+        }
+        .feature-card.purple .feature-card-icon {
+            background: #a855f7;
+            color: white;
+        }
+        .feature-card.purple::before { background: #a855f7; }
+
+        .feature-card.orange {
+            background: linear-gradient(135deg, #ffedd5, #fff7ed);
+            color: #9a3412;
+        }
+        .feature-card.orange .feature-card-icon {
+            background: #f97316;
+            color: white;
+        }
+        .feature-card.orange::before { background: #f97316; }
+
+        .feature-card.teal {
+            background: linear-gradient(135deg, #ccfbf1, #f0fdfa);
+            color: #115e59;
+        }
+        .feature-card.teal .feature-card-icon {
+            background: #14b8a6;
+            color: white;
+        }
+        .feature-card.teal::before { background: #14b8a6; }
+
+        .feature-card.red {
+            background: linear-gradient(135deg, #fee2e2, #fef2f2);
+            color: #991b1b;
+        }
+        .feature-card.red .feature-card-icon {
+            background: #ef4444;
+            color: white;
+        }
+        .feature-card.red::before { background: #ef4444; }
+
+        .feature-card.indigo {
+            background: linear-gradient(135deg, #e0e7ff, #eef2ff);
+            color: #3730a3;
+        }
+        .feature-card.indigo .feature-card-icon {
+            background: #6366f1;
+            color: white;
+        }
+        .feature-card.indigo::before { background: #6366f1; }
+
+        .feature-card.pink {
+            background: linear-gradient(135deg, #fce7f3, #fdf2f8);
+            color: #9d174d;
+        }
+        .feature-card.pink .feature-card-icon {
+            background: #ec4899;
+            color: white;
+        }
+        .feature-card.pink::before { background: #ec4899; }
+
+        .feature-card.gradient {
+            background: linear-gradient(135deg, #0d9488, #0891b2, #7c3aed);
+            color: white;
+        }
+        .feature-card.gradient .feature-card-icon {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .feature-card.gradient::before { background: white; }
+        .feature-card.gradient .feature-badge {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .features {
+                padding: 4rem 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <!-- ========================================
+         SEGURIDAD Y AUDITORIA SECTION
+         ======================================== -->
+    <section class="security" id="seguridad">
+        <div class="security-container">
+            <div class="security-grid">
+                <div class="security-content">
+                    <span class="security-badge">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        Seguridad Enterprise
+                    </span>
+                    <h2 class="security-title">
+                        Cada accion queda<br>
+                        <span>grabada para siempre</span>
+                    </h2>
+                    <p class="security-description">
+                        En una inspeccion laboral o auditoria fiscal, la pregunta no es
+                        <strong>"¿que paso?"</strong> sino <strong>"¿puedes demostrarlo?"</strong>
+                        Con Nexlify, la respuesta siempre es si.
+                    </p>
+
+                    <div class="security-features">
+                        <div class="security-feature">
+                            <div class="security-feature-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                            </div>
+                            <div class="security-feature-text">
+                                <h4>Logs Inmutables</h4>
+                                <p>Registro de cada accion con timestamp, usuario, IP y contexto. Imposible de modificar o eliminar.</p>
+                            </div>
+                        </div>
+
+                        <div class="security-feature">
+                            <div class="security-feature-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <div class="security-feature-text">
+                                <h4>Hash SHA-256</h4>
+                                <p>Cada documento firmado digitalmente con hash criptografico. Validez legal garantizada.</p>
+                            </div>
+                        </div>
+
+                        <div class="security-feature">
+                            <div class="security-feature-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                            </div>
+                            <div class="security-feature-text">
+                                <h4>Control de Acceso RBAC</h4>
+                                <p>Permisos granulares por rol, departamento y empresa. Quien puede ver y hacer que.</p>
+                            </div>
+                        </div>
+
+                        <div class="security-feature">
+                            <div class="security-feature-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                </svg>
+                            </div>
+                            <div class="security-feature-text">
+                                <h4>Evidencia Legal</h4>
+                                <p>Genera expedientes completos con cadena de custodia para cualquier procedimiento.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="security-visual">
+                    <div class="audit-terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <span class="terminal-title">Audit Trail</span>
+                            <span class="terminal-live">
+                                <span class="live-dot"></span>
+                                LIVE
+                            </span>
+                        </div>
+                        <div class="terminal-content">
+                            <div class="audit-entry">
+                                <span class="audit-time">14:32:18</span>
+                                <span class="audit-type success">CREATE</span>
+                                <span class="audit-msg">Contrato generado - EMP-2024-0847</span>
+                            </div>
+                            <div class="audit-entry">
+                                <span class="audit-time">14:32:19</span>
+                                <span class="audit-type info">HASH</span>
+                                <span class="audit-msg">SHA256: 7f83b1657ff1fc53...</span>
+                            </div>
+                            <div class="audit-entry">
+                                <span class="audit-time">14:32:20</span>
+                                <span class="audit-type success">SIGN</span>
+                                <span class="audit-msg">Firma digital aplicada</span>
+                            </div>
+                            <div class="audit-entry">
+                                <span class="audit-time">14:35:42</span>
+                                <span class="audit-type warning">ALERT</span>
+                                <span class="audit-msg">Jornada excede 40h - ID:1847</span>
+                            </div>
+                            <div class="audit-entry">
+                                <span class="audit-time">14:36:01</span>
+                                <span class="audit-type info">NOTIFY</span>
+                                <span class="audit-msg">Email enviado a RRHH</span>
+                            </div>
+                            <div class="audit-entry">
+                                <span class="audit-time">14:38:15</span>
+                                <span class="audit-type success">APPROVE</span>
+                                <span class="audit-msg">Vacaciones aprobadas - USR:M.Garcia</span>
+                            </div>
+                            <div class="audit-entry">
+                                <span class="audit-time">14:40:33</span>
+                                <span class="audit-type info">SYNC</span>
+                                <span class="audit-msg">Datos sincronizados con TGSS</span>
+                            </div>
+                            <div class="audit-entry typing">
+                                <span class="audit-time">14:42:07</span>
+                                <span class="audit-type">...</span>
+                                <span class="audit-msg">Esperando eventos<span class="cursor">|</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="security-stats">
+                        <div class="security-stat">
+                            <div class="stat-icon green">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value">99.97%</span>
+                                <span class="stat-label">Uptime garantizado</span>
+                            </div>
+                        </div>
+                        <div class="security-stat">
+                            <div class="stat-icon blue">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                </svg>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value">ISO 27001</span>
+                                <span class="stat-label">Certificacion seguridad</span>
+                            </div>
+                        </div>
+                        <div class="security-stat">
+                            <div class="stat-icon purple">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value">AES-256</span>
+                                <span class="stat-label">Cifrado en reposo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="compliance-badges">
+                <div class="compliance-item">
+                    <span class="compliance-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="3" y1="9" x2="21" y2="9"/>
+                            <line x1="9" y1="21" x2="9" y2="9"/>
+                        </svg>
+                    </span>
+                    <span>GDPR</span>
+                </div>
+                <div class="compliance-item">
+                    <span class="compliance-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </span>
+                    <span>LOPD-GDD</span>
+                </div>
+                <div class="compliance-item">
+                    <span class="compliance-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                    </span>
+                    <span>ENS</span>
+                </div>
+                <div class="compliance-item">
+                    <span class="compliance-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </span>
+                    <span>RD 8/2019</span>
+                </div>
+                <div class="compliance-item">
+                    <span class="compliance-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <line x1="19" y1="8" x2="19" y2="14"/>
+                            <line x1="22" y1="11" x2="16" y2="11"/>
+                        </svg>
+                    </span>
+                    <span>Ley Igualdad</span>
+                </div>
+                <div class="compliance-item">
+                    <span class="compliance-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                    </span>
+                    <span>Canal Denuncias</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* ========================================
+           SECURITY SECTION
+           ======================================== */
+        .security {
+            padding: 8rem 2rem;
+            background: var(--gray-900);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .security::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(8, 145, 178, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+        }
+
+        .security-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .security-content {
+            color: white;
+        }
+
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .security-title {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .security-title span {
+            background: linear-gradient(90deg, #22d3ee, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .security-description {
+            font-size: 1.1rem;
+            color: var(--gray-400);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .security-description strong {
+            color: white;
+        }
+
+        .security-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .security-feature {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .security-feature-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--primary-400);
+        }
+
+        .security-feature-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .security-feature-text h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: white;
+        }
+
+        .security-feature-text p {
+            font-size: 0.875rem;
+            color: var(--gray-400);
+            line-height: 1.5;
+        }
+
+        /* Audit Terminal */
+        .security-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .audit-terminal {
+            background: #0f172a;
+            border-radius: 16px;
+            border: 1px solid var(--gray-700);
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            background: #1e293b;
+            border-bottom: 1px solid var(--gray-700);
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .terminal-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .terminal-dots span:nth-child(1) { background: #ef4444; }
+        .terminal-dots span:nth-child(2) { background: #f59e0b; }
+        .terminal-dots span:nth-child(3) { background: #22c55e; }
+
+        .terminal-title {
+            font-size: 0.8rem;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        .terminal-live {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .terminal-content {
+            padding: 1rem;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.75rem;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .audit-entry {
+            display: flex;
+            gap: 0.75rem;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .audit-entry:last-child {
+            border-bottom: none;
+        }
+
+        .audit-time {
+            color: var(--gray-500);
+            flex-shrink: 0;
+        }
+
+        .audit-type {
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            flex-shrink: 0;
+            min-width: 55px;
+            text-align: center;
+        }
+
+        .audit-type.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+        }
+
+        .audit-type.warning {
+            background: rgba(249, 115, 22, 0.2);
+            color: #fdba74;
+        }
+
+        .audit-type.info {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+        }
+
+        .audit-msg {
+            color: var(--gray-300);
+        }
+
+        .audit-entry.typing .audit-msg {
+            color: var(--gray-500);
+        }
+
+        .cursor {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Security Stats */
+        .security-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .security-stat {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--gray-700);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .stat-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .stat-icon.green {
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+        }
+
+        .stat-icon.blue {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+        }
+
+        .stat-icon.purple {
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+        }
+
+        .stat-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--gray-400);
+        }
+
+        /* Compliance Badges */
+        .compliance-badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--gray-700);
+        }
+
+        .compliance-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--gray-700);
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            color: var(--gray-300);
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .compliance-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-500);
+            color: white;
+        }
+
+        .compliance-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-400);
+        }
+
+        .compliance-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        @media (max-width: 1024px) {
+            .security-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .security-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .security {
+                padding: 4rem 1rem;
+            }
+
+            .security-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .compliance-badges {
+                gap: 0.75rem;
+            }
+
+            .compliance-item {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+
+    <!-- ========================================
+         PRECIOS SECTION (NomiPro Style)
+         ======================================== -->
+    <section class="pricing" id="precios">
+        <div class="pricing-container">
+            <div class="pricing-header">
+                <span class="pricing-badge">Planes y Precios</span>
+                <h2 class="pricing-title">
+                    Elige el plan perfecto<br>
+                    <span class="text-gradient">para tu empresa</span>
+                </h2>
+                <p class="pricing-description">
+                    Sin compromisos. Cancela cuando quieras. Todos los planes incluyen soporte prioritario.
+                </p>
+
+                <!-- Billing Toggle -->
+                <div class="billing-toggle">
+                    <span class="billing-option" id="monthlyLabel">Mensual</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="billingToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="billing-option" id="annualLabel">
+                        Anual
+                        <span class="billing-discount">2 meses gratis</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Plan Starter -->
+                <div class="pricing-card">
+                    <div class="pricing-card-header">
+                        <span class="plan-name">Starter</span>
+                        <p class="plan-description">Ideal para pequenas empresas y autonomos</p>
+                    </div>
+                    <div class="pricing-card-price">
+                        <span class="price-currency">EUR</span>
+                        <span class="price-amount monthly-price">395</span>
+                        <span class="price-amount annual-price" style="display: none;">329</span>
+                        <span class="price-period">/mes</span>
+                    </div>
+                    <div class="annual-savings" style="display: none;">
+                        <span>Ahorras 790 EUR/ano</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Hasta 25 empleados
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Control horario basico
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            50 detectores de riesgo
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Expediente inspeccion
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Soporte email
+                        </li>
+                    </ul>
+                    <button onclick="startCheckout('essential', 'monthly')" class="btn-pricing monthly-link">
+                        Empezar ahora
+                    </button>
+                    <button onclick="startCheckout('essential', 'yearly')" class="btn-pricing annual-link" style="display: none;">
+                        Empezar ahora
+                    </button>
+                </div>
+
+                <!-- Plan Business (Popular) -->
+                <div class="pricing-card popular">
+                    <div class="popular-badge">Mas popular</div>
+                    <div class="pricing-card-header">
+                        <span class="plan-name">Business</span>
+                        <p class="plan-description">Para empresas en crecimiento</p>
+                    </div>
+                    <div class="pricing-card-price">
+                        <span class="price-currency">EUR</span>
+                        <span class="price-amount monthly-price">2.350</span>
+                        <span class="price-amount annual-price" style="display: none;">1.958</span>
+                        <span class="price-period">/mes</span>
+                    </div>
+                    <div class="annual-savings" style="display: none;">
+                        <span>Ahorras 4.700 EUR/ano</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Hasta 150 empleados
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Control horario avanzado
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            200 detectores de riesgo
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Integraciones AEAT, TGSS
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Multi-empresa (3)
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Asistente IA basico
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Soporte prioritario
+                        </li>
+                    </ul>
+                    <button onclick="startCheckout('professional', 'monthly')" class="btn-pricing monthly-link">
+                        Empezar ahora
+                    </button>
+                    <button onclick="startCheckout('professional', 'yearly')" class="btn-pricing annual-link" style="display: none;">
+                        Empezar ahora
+                    </button>
+                </div>
+
+                <!-- Plan Enterprise -->
+                <div class="pricing-card enterprise">
+                    <div class="pricing-card-header">
+                        <span class="plan-name">Enterprise</span>
+                        <p class="plan-description">Solucion completa para grandes corporaciones</p>
+                    </div>
+                    <div class="pricing-card-price">
+                        <span class="price-currency">EUR</span>
+                        <span class="price-amount monthly-price">7.950</span>
+                        <span class="price-amount annual-price" style="display: none;">6.625</span>
+                        <span class="price-period">/mes</span>
+                    </div>
+                    <div class="annual-savings" style="display: none;">
+                        <span>Ahorras 15.900 EUR/ano</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Empleados ilimitados
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Todos los modulos
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            395+ detectores de riesgo
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Todas las integraciones
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Multi-empresa ilimitado
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Asistente IA avanzado
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            API completa
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Account Manager dedicado
+                        </li>
+                    </ul>
+                    <button onclick="startCheckout('enterprise', 'monthly')" class="btn-pricing monthly-link">
+                        Contactar ventas
+                    </button>
+                    <button onclick="startCheckout('enterprise', 'yearly')" class="btn-pricing annual-link" style="display: none;">
+                        Contactar ventas
+                    </button>
+                </div>
+            </div>
+
+            <div class="pricing-guarantee">
+                <div class="guarantee-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <polyline points="9 12 12 15 16 10"/>
+                    </svg>
+                </div>
+                <div class="guarantee-text">
+                    <strong>Garantia de 30 dias</strong>
+                    <span>Si no estas satisfecho, te devolvemos el 100% de tu dinero. Sin preguntas.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* ========================================
+           PRICING SECTION
+           ======================================== */
+        .pricing {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .pricing-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--success-50), var(--success-100));
+            color: var(--success-600);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .pricing-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-description {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Billing Toggle */
+        .billing-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        .billing-option {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.2s ease;
+        }
+
+        .billing-option.active {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .billing-discount {
+            background: var(--success-500);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            cursor: pointer;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gray-200);
+            border-radius: 26px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background: var(--gradient-teal);
+        }
+
+        .toggle-switch input:checked + .toggle-slider::before {
+            transform: translateX(24px);
+        }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-card.popular {
+            background: linear-gradient(135deg, #0d9488, #0891b2);
+            color: white;
+            border: none;
+            transform: scale(1.05);
+            z-index: 1;
+        }
+
+        .pricing-card.popular:hover {
+            transform: scale(1.05) translateY(-4px);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #fef3c7, #fde68a);
+            color: #92400e;
+            padding: 0.4rem 1.25rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .pricing-card-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .pricing-card-price {
+            display: flex;
+            align-items: baseline;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-currency {
+            font-size: 1rem;
+            font-weight: 500;
+            opacity: 0.7;
+        }
+
+        .price-amount {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .price-period {
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        .annual-savings {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-600);
+            padding: 0.4rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-card.popular .annual-savings {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .pricing-card.popular .pricing-features li {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            color: var(--success-500);
+        }
+
+        .pricing-card.popular .pricing-features svg {
+            color: #86efac;
+        }
+
+        .btn-pricing {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            background: var(--gray-100);
+            color: var(--text-primary);
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-pricing:hover {
+            background: var(--gray-200);
+        }
+
+        .pricing-card.popular .btn-pricing {
+            background: white;
+            color: var(--primary-700);
+        }
+
+        .pricing-card.popular .btn-pricing:hover {
+            background: var(--gray-100);
+        }
+
+        .pricing-card.enterprise .btn-pricing {
+            background: var(--gradient-teal);
+            color: white;
+        }
+
+        .pricing-card.enterprise .btn-pricing:hover {
+            opacity: 0.9;
+        }
+
+        /* Guarantee */
+        .pricing-guarantee {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, var(--success-50), #ecfdf5);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .guarantee-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--success-500);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .guarantee-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .guarantee-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .guarantee-text strong {
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .guarantee-text span {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto 3rem;
+            }
+
+            .pricing-card.popular {
+                transform: none;
+            }
+
+            .pricing-card.popular:hover {
+                transform: translateY(-4px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pricing {
+                padding: 4rem 1rem;
+            }
+
+            .billing-toggle {
+                flex-direction: column;
+                gap: 0.75rem;
+                padding: 1rem;
+                border-radius: 16px;
+            }
+
+            .pricing-guarantee {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        mobileMenuBtn.addEventListener('click', () => {
+            // Toggle mobile menu
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Billing toggle functionality
+        const billingToggle = document.getElementById('billingToggle');
+        const monthlyLabel = document.getElementById('monthlyLabel');
+        const annualLabel = document.getElementById('annualLabel');
+        const monthlyPrices = document.querySelectorAll('.monthly-price');
+        const annualPrices = document.querySelectorAll('.annual-price');
+        const monthlyLinks = document.querySelectorAll('.monthly-link');
+        const annualLinks = document.querySelectorAll('.annual-link');
+        const annualSavings = document.querySelectorAll('.annual-savings');
+
+        function updateBilling() {
+            const isAnnual = billingToggle.checked;
+
+            monthlyLabel.classList.toggle('active', !isAnnual);
+            annualLabel.classList.toggle('active', isAnnual);
+
+            monthlyPrices.forEach(el => el.style.display = isAnnual ? 'none' : 'inline');
+            annualPrices.forEach(el => el.style.display = isAnnual ? 'inline' : 'none');
+            monthlyLinks.forEach(el => el.style.display = isAnnual ? 'none' : 'block');
+            annualLinks.forEach(el => el.style.display = isAnnual ? 'block' : 'none');
+            annualSavings.forEach(el => el.style.display = isAnnual ? 'inline-block' : 'none');
+        }
+
+        billingToggle.addEventListener('change', updateBilling);
+        monthlyLabel.classList.add('active');
+
+        // Check if user is logged in
+        function checkAuthStatus() {
+            const loggedOutButtons = document.getElementById('loggedOutButtons');
+            const loggedInButtons = document.getElementById('loggedInButtons');
+
+            // Check for auth token in localStorage or sessionStorage
+            const token = localStorage.getItem('token') ||
+                          localStorage.getItem('authToken') ||
+                          sessionStorage.getItem('token') ||
+                          sessionStorage.getItem('authToken');
+
+            // Also check for auth cookie
+            const hasAuthCookie = document.cookie.split(';').some(cookie =>
+                cookie.trim().startsWith('token=') ||
+                cookie.trim().startsWith('authToken=') ||
+                cookie.trim().startsWith('session=')
+            );
+
+            const isLoggedIn = !!(token || hasAuthCookie);
+
+            if (isLoggedIn) {
+                loggedOutButtons.style.display = 'none';
+                loggedInButtons.style.display = 'flex';
+            } else {
+                loggedOutButtons.style.display = 'flex';
+                loggedInButtons.style.display = 'none';
+            }
+        }
+
+        // Run on page load
+        checkAuthStatus();
+
+        // Checkout function - redirect to register with plan info
+        function startCheckout(planId, billingCycle) {
+            // Redirect to register page with plan parameters
+            // The app will handle the checkout flow after registration
+            window.location.href = `/register?plan=${planId}&billing=${billingCycle}`;
+        }
+    </script>
+
+    <!-- ========================================
+         CTA SECTION
+         ======================================== -->
+    <section class="cta">
+        <div class="cta-container">
+            <div class="cta-content">
+                <span class="cta-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    Comienza hoy
+                </span>
+                <h2 class="cta-title">
+                    ¿Listo para eliminar el<br>
+                    <span>riesgo de tu empresa?</span>
+                </h2>
+                <p class="cta-description">
+                    Unete a mas de 500 empresas que ya confian en Nexlify para
+                    proteger su negocio. Demo gratuita sin compromiso.
+                </p>
+                <div class="cta-buttons">
+                    <a href="#precios" class="btn-cta-primary">
+                        Solicitar demo gratuita
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <a href="#funcionalidades" class="btn-cta-secondary">
+                        Ver funcionalidades
+                    </a>
+                </div>
+                <div class="cta-trust">
+                    <div class="trust-avatars">
+                        <div class="trust-avatar" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">JM</div>
+                        <div class="trust-avatar" style="background: linear-gradient(135deg, #10b981, #059669);">AL</div>
+                        <div class="trust-avatar" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">CR</div>
+                        <div class="trust-avatar" style="background: linear-gradient(135deg, #f97316, #ea580c);">MP</div>
+                    </div>
+                    <span class="trust-text">+500 empresas confian en nosotros</span>
+                </div>
+            </div>
+            <div class="cta-visual">
+                <div class="cta-card">
+                    <div class="cta-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <polyline points="9 12 12 15 16 10"/>
+                        </svg>
+                    </div>
+                    <h4>Proteccion completa</h4>
+                    <p>Todos los riesgos laborales y financieros monitorizados 24/7</p>
+                </div>
+                <div class="cta-card">
+                    <div class="cta-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <h4>Implementacion rapida</h4>
+                    <p>Operativo en menos de 48 horas con soporte dedicado</p>
+                </div>
+                <div class="cta-card">
+                    <div class="cta-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <h4>Soporte experto</h4>
+                    <p>Equipo de compliance a tu disposicion cuando lo necesites</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* ========================================
+           CTA SECTION
+           ======================================== */
+        .cta {
+            padding: 8rem 2rem;
+            background: var(--gradient-hero);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .cta-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-content {
+            color: white;
+        }
+
+        .cta-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-title span {
+            background: linear-gradient(90deg, #fef3c7, #fde68a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-description {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-cta-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            color: var(--primary-700);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-cta-secondary {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.2s ease;
+        }
+
+        .btn-cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-trust {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .trust-avatars {
+            display: flex;
+        }
+
+        .trust-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+            margin-left: -8px;
+        }
+
+        .trust-avatar:first-child {
+            margin-left: 0;
+        }
+
+        .trust-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .cta-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .cta-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .cta-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(8px);
+        }
+
+        .cta-card-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: white;
+        }
+
+        .cta-card-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .cta-card h4 {
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .cta-card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 1024px) {
+            .cta-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .cta-description {
+                margin: 0 auto 2rem;
+            }
+
+            .cta-buttons {
+                justify-content: center;
+            }
+
+            .cta-trust {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cta {
+                padding: 4rem 1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .cta-card:hover {
+                transform: none;
+            }
+        }
+    </style>
+
+    <!-- ========================================
+         FOOTER
+         ======================================== -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <a href="/" class="footer-logo">
+                        <div class="footer-logo-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <span>Nexlify</span>
+                    </a>
+                    <p class="footer-tagline">
+                        Transformamos datos dispersos en decisiones accionables, auditables y legalmente defendibles.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="YouTube">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Producto</h4>
+                        <ul>
+                            <li><a href="#funcionalidades">Funcionalidades</a></li>
+                            <li><a href="#modulos">Modulos</a></li>
+                            <li><a href="#seguridad">Seguridad</a></li>
+                            <li><a href="#precios">Precios</a></li>
+                            <li><a href="#">Integraciones</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Empresa</h4>
+                        <ul>
+                            <li><a href="#">Sobre nosotros</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Casos de exito</a></li>
+                            <li><a href="#">Trabaja con nosotros</a></li>
+                            <li><a href="#">Contacto</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Recursos</h4>
+                        <ul>
+                            <li><a href="#">Centro de ayuda</a></li>
+                            <li><a href="#">Documentacion</a></li>
+                            <li><a href="#">API</a></li>
+                            <li><a href="#">Status</a></li>
+                            <li><a href="#">Webinars</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Terminos de servicio</a></li>
+                            <li><a href="#">Politica de privacidad</a></li>
+                            <li><a href="#">Politica de cookies</a></li>
+                            <li><a href="#">GDPR</a></li>
+                            <li><a href="#">DPA</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <p>&copy; 2024 Nexlify. Todos los derechos reservados.</p>
+                </div>
+                <div class="footer-certifications">
+                    <span class="cert-badge">ISO 27001</span>
+                    <span class="cert-badge">GDPR</span>
+                    <span class="cert-badge">SOC 2</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        /* ========================================
+           FOOTER
+           ======================================== */
+        .footer {
+            background: var(--gray-900);
+            padding: 5rem 2rem 2rem;
+            color: white;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-main {
+            display: grid;
+            grid-template-columns: 1.5fr 2.5fr;
+            gap: 4rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid var(--gray-700);
+        }
+
+        .footer-brand {
+            max-width: 320px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-teal);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-logo-icon svg {
+            width: 22px;
+            height: 22px;
+            color: white;
+        }
+
+        .footer-logo span {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer-tagline {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: var(--gray-800);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-400);
+            transition: all 0.2s ease;
+        }
+
+        .social-link:hover {
+            background: var(--primary-600);
+            color: white;
+        }
+
+        .social-link svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .footer-column h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            color: white;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-column a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary-400);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+        }
+
+        .footer-copyright p {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        .footer-certifications {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .cert-badge {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 1024px) {
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .footer-brand {
+                max-width: none;
+                text-align: center;
+            }
+
+            .footer-social {
+                justify-content: center;
+            }
+
+            .footer-links {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer {
+                padding: 3rem 1rem 1.5rem;
+            }
+
+            .footer-links {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</body>
+</html>

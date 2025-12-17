@@ -1,0 +1,263 @@
+{
+  "core": {
+    "app": {
+      "name": "Plataforma",
+      "tagline": "Plataforma Empresarial de Riesgos y Cumplimiento"
+    },
+    "nav": {
+      "dashboard": "Panel",
+      "risks": "Riesgos",
+      "modules": "Modulos",
+      "settings": "Configuracion",
+      "audit": "Registro de Auditoria",
+      "users": "Usuarios",
+      "billing": "Facturacion"
+    },
+    "dashboard": {
+      "title": "Panel",
+      "welcome": "Bienvenido de nuevo, {name}",
+      "overview": "Resumen",
+      "risks": {
+        "title": "Resumen de Riesgos",
+        "total": "Riesgos Totales",
+        "active": "Riesgos Activos",
+        "resolved": "Resueltos",
+        "exposure": "Exposicion Total",
+        "by_severity": "Por Severidad",
+        "by_category": "Por Categoria",
+        "recent": "Riesgos Recientes",
+        "trending": "Tendencias de Riesgos"
+      },
+      "quick_actions": {
+        "title": "Acciones Rapidas",
+        "view_risks": "Ver Todos los Riesgos",
+        "generate_report": "Generar Informe",
+        "manage_modules": "Gestionar Modulos"
+      }
+    },
+    "risks": {
+      "title": "Gestion de Riesgos",
+      "list": "Lista de Riesgos",
+      "detail": "Detalles del Riesgo",
+      "create": "Crear Riesgo",
+      "edit": "Editar Riesgo",
+      "acknowledge": "Reconocer",
+      "resolve": "Resolver",
+      "escalate": "Escalar",
+      "mark_false_positive": "Marcar como Falso Positivo",
+      "severity": {
+        "low": "Bajo",
+        "medium": "Medio",
+        "high": "Alto",
+        "critical": "Critico"
+      },
+      "status": {
+        "new": "Nuevo",
+        "acknowledged": "Reconocido",
+        "mitigated": "Mitigado",
+        "resolved": "Resuelto",
+        "false_positive": "Falso Positivo"
+      },
+      "category": {
+        "legal": "Legal",
+        "payroll": "Nominas",
+        "security": "Seguridad",
+        "ops": "Operaciones",
+        "finance": "Finanzas",
+        "compliance": "Cumplimiento"
+      },
+      "fields": {
+        "title": "Titulo",
+        "description": "Descripcion",
+        "severity": "Severidad",
+        "status": "Estado",
+        "category": "Categoria",
+        "likelihood": "Probabilidad",
+        "impact": "Impacto (EUR)",
+        "detected_at": "Detectado En",
+        "entities": "Entidades Afectadas",
+        "evidence": "Evidencia",
+        "recommended_actions": "Acciones Recomendadas"
+      },
+      "filters": {
+        "all_severities": "Todas las Severidades",
+        "all_statuses": "Todos los Estados",
+        "all_categories": "Todas las Categorias",
+        "date_range": "Rango de Fechas"
+      },
+      "empty": {
+        "title": "No se encontraron riesgos",
+        "description": "No hay riesgos que coincidan con los filtros actuales."
+      }
+    },
+    "audit": {
+      "title": "Registro de Auditoria",
+      "event": "Evento",
+      "actor": "Actor",
+      "action": "Accion",
+      "target": "Objetivo",
+      "timestamp": "Fecha y Hora",
+      "details": "Detalles",
+      "ip_address": "Direccion IP",
+      "verified": "Verificado en Blockchain",
+      "verify": "Verificar Integridad",
+      "export": "Exportar Rastro de Auditoria",
+      "filters": {
+        "all_actions": "Todas las Acciones",
+        "date_range": "Rango de Fechas",
+        "actor": "Actor"
+      }
+    },
+    "users": {
+      "title": "Gestion de Usuarios",
+      "list": "Usuarios",
+      "create": "Crear Usuario",
+      "edit": "Editar Usuario",
+      "invite": "Invitar Usuario",
+      "deactivate": "Desactivar",
+      "activate": "Activar",
+      "reset_password": "Restablecer Contrasena",
+      "fields": {
+        "email": "Email",
+        "name": "Nombre",
+        "role": "Rol",
+        "status": "Estado",
+        "last_login": "Ultimo Acceso",
+        "mfa": "MFA Habilitado"
+      },
+      "roles": {
+        "admin": "Administrador",
+        "auditor": "Auditor",
+        "manager": "Gestor",
+        "viewer": "Visualizador",
+        "module_operator": "Operador de Modulos"
+      }
+    },
+    "settings": {
+      "title": "Configuracion",
+      "general": "General",
+      "security": "Seguridad",
+      "notifications": "Notificaciones",
+      "integrations": "Integraciones",
+      "billing": "Facturacion",
+      "sections": {
+        "company": "Informacion de la Empresa",
+        "locale": "Idioma y Region",
+        "security": "Configuracion de Seguridad",
+        "api": "Acceso API"
+      }
+    },
+    "billing": {
+      "title": "Facturacion y Suscripcion",
+      "current_plan": "Plan Actual",
+      "change_plan": "Cambiar Plan",
+      "billing_history": "Historial de Facturacion",
+      "payment_method": "Metodo de Pago",
+      "next_billing": "Proxima Fecha de Facturacion",
+      "manage_subscription": "Gestionar Suscripcion"
+    },
+    "plans": {
+      "essential": {
+        "name": "Essential",
+        "description": "Para equipos pequenos que comienzan"
+      },
+      "professional": {
+        "name": "Professional",
+        "description": "Para organizaciones en crecimiento"
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "description": "Para grandes empresas con necesidades avanzadas"
+      }
+    },
+    "roles": {
+      "admin": {
+        "name": "Administrador",
+        "description": "Acceso completo al sistema"
+      },
+      "auditor": {
+        "name": "Auditor",
+        "description": "Acceso de solo lectura a todos los datos incluyendo logs de auditoria"
+      },
+      "manager": {
+        "name": "Gestor",
+        "description": "Gestionar recursos dentro del alcance asignado"
+      },
+      "viewer": {
+        "name": "Visualizador",
+        "description": "Acceso de solo lectura a recursos asignados"
+      },
+      "module_operator": {
+        "name": "Operador de Modulos",
+        "description": "Operar funciones especificas de modulos"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "Iniciar Sesion",
+        "subtitle": "Ingrese sus credenciales para acceder a su cuenta",
+        "email": "Email",
+        "password": "Contrasena",
+        "remember": "Recordarme",
+        "forgot": "Olvido su contrasena?",
+        "submit": "Iniciar Sesion",
+        "or": "o continuar con",
+        "google": "Iniciar sesion con Google",
+        "no_account": "No tiene una cuenta?",
+        "register": "Registrarse"
+      },
+      "register": {
+        "title": "Crear Cuenta",
+        "subtitle": "Comience con su cuenta gratuita",
+        "name": "Nombre Completo",
+        "email": "Email",
+        "password": "Contrasena",
+        "confirm_password": "Confirmar Contrasena",
+        "terms": "Acepto los Terminos de Servicio y la Politica de Privacidad",
+        "submit": "Crear Cuenta",
+        "has_account": "Ya tiene una cuenta?",
+        "login": "Iniciar sesion"
+      },
+      "forgot_password": {
+        "title": "Restablecer Contrasena",
+        "subtitle": "Ingrese su email para recibir un enlace de restablecimiento",
+        "email": "Email",
+        "submit": "Enviar Enlace",
+        "back": "Volver a iniciar sesion",
+        "sent": "Revise su email para el enlace de restablecimiento"
+      },
+      "reset_password": {
+        "title": "Establecer Nueva Contrasena",
+        "subtitle": "Ingrese su nueva contrasena",
+        "password": "Nueva Contrasena",
+        "confirm_password": "Confirmar Contrasena",
+        "submit": "Restablecer Contrasena",
+        "success": "Contrasena restablecida exitosamente"
+      },
+      "mfa": {
+        "title": "Autenticacion de Dos Factores",
+        "subtitle": "Ingrese el codigo de su aplicacion autenticadora",
+        "code": "Codigo de Verificacion",
+        "submit": "Verificar",
+        "use_backup": "Usar codigo de respaldo"
+      },
+      "logout": "Cerrar Sesion"
+    },
+    "modules": {
+      "title": "Modulos",
+      "marketplace": "Marketplace de Modulos",
+      "installed": "Modulos Instalados",
+      "available": "Modulos Disponibles",
+      "install": "Instalar",
+      "uninstall": "Desinstalar",
+      "configure": "Configurar",
+      "activate": "Activar",
+      "deactivate": "Desactivar",
+      "status": {
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "error": "Error"
+      }
+    }
+  }
+}
