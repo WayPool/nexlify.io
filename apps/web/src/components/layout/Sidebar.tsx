@@ -13,12 +13,19 @@ import {
   HelpCircle,
   CreditCard,
   Building2,
+  UserCheck,
+  FolderLock,
 } from 'lucide-react';
 import clsx from 'clsx';
+import { useAuthStore } from '@/stores/auth';
+import { useState, useEffect } from 'react';
+import { api } from '@/services/api';
 
 interface SidebarProps {
   isCollapsed: boolean;
   onToggle: () => void;
+  onNavigate?: () => void;
+  isMobile?: boolean;
 }
 
 const menuItems = [
@@ -33,24 +40,53 @@ const menuItems = [
 ];
 
 const bottomItems = [
-  { icon: CreditCard, label: 'Facturación', path: '/billing' },
-  { icon: Settings, label: 'Configuración', path: '/settings' },
+  { icon: CreditCard, label: 'Facturacion', path: '/billing' },
+  { icon: Settings, label: 'Configuracion', path: '/settings' },
   { icon: HelpCircle, label: 'Ayuda', path: '/help' },
 ];
 
-export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
+export default function Sidebar({ isCollapsed, onToggle, onNavigate, isMobile = false }: SidebarProps) {
   const location = useLocation();
+  const { user } = useAuthStore();
+  const [hasDataRoomAccess, setHasDataRoomAccess] = useState(false);
+
+  // Admin-only menu items
+  const isInvestorAdmin = user?.email === 'lballanti.lb@gmail.com';
+
+  // Check Data Room access
+  useEffect(() => {
+    const checkDataRoomAccess = async () => {
+      try {
+        const response = await api.get('/data-room/check-access');
+        setHasDataRoomAccess(response.data.hasAccess);
+      } catch {
+        setHasDataRoomAccess(false);
+      }
+    };
+    if (user) {
+      checkDataRoomAccess();
+    }
+  }, [user]);
+
+  const dynamicMenuItems = [
+    ...menuItems,
+    ...(isInvestorAdmin ? [{ icon: UserCheck, label: 'Inversores', path: '/investor-inquiries' }] : []),
+    ...((hasDataRoomAccess || isInvestorAdmin) ? [{ icon: FolderLock, label: 'Data Room', path: '/data-room' }] : []),
+  ];
 
   return (
     <motion.aside
       initial={false}
       animate={{ width: isCollapsed ? 80 : 280 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="fixed left-0 top-0 bottom-0 z-40 flex flex-col bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800"
+      className={clsx(
+        "flex flex-col bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 h-full",
+        !isMobile && "fixed left-0 top-0 bottom-0 z-40"
+      )}
     >
       {/* Logo */}
       <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200 dark:border-slate-800">
-        <Link to="/dashboard" className="flex items-center gap-3">
+        <a href="https://nexlify.io" className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center flex-shrink-0 p-2">
             <svg className="w-full h-full text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -74,7 +110,7 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
               </motion.div>
             )}
           </AnimatePresence>
-        </Link>
+        </a>
         <button
           onClick={onToggle}
           className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -91,12 +127,13 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
       {/* Main Navigation */}
       <nav className="flex-1 py-4 px-3 overflow-y-auto scrollbar-thin">
         <ul className="space-y-1">
-          {menuItems.map((item) => {
+          {dynamicMenuItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
               <li key={item.path}>
                 <Link
                   to={item.path}
+                  onClick={onNavigate}
                   className={clsx(
                     'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200',
                     isActive
@@ -144,6 +181,7 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
               <li key={item.path}>
                 <Link
                   to={item.path}
+                  onClick={onNavigate}
                   className={clsx(
                     'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200',
                     isActive

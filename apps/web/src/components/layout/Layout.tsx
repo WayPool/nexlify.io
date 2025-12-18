@@ -63,7 +63,12 @@ export default function Layout() {
           mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <Sidebar isCollapsed={false} onToggle={() => setMobileMenuOpen(false)} />
+        <Sidebar
+          isCollapsed={false}
+          onToggle={() => setMobileMenuOpen(false)}
+          onNavigate={() => setMobileMenuOpen(false)}
+          isMobile={true}
+        />
       </div>
 
       {/* Main Content */}

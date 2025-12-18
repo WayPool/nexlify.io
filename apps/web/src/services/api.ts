@@ -97,6 +97,43 @@ export const tenantApi = {
   getStats: () => api.get('/tenants/current/stats'),
 };
 
+// Profile endpoints
+export const profileApi = {
+  get: () => api.get('/profile'),
+  update: (data: {
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+    position?: string;
+    department?: string;
+    location?: string;
+    timezone?: string;
+    bio?: string;
+  }) => api.patch('/profile', data),
+  uploadAvatar: (formData: FormData) =>
+    api.post('/profile/avatar', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
+};
+
+// Settings endpoints
+export const settingsApi = {
+  changePassword: (data: { currentPassword: string; newPassword: string }) =>
+    api.post('/settings/password', data),
+  setup2FA: () => api.post('/settings/2fa/setup'),
+  verify2FA: (data: { code: string }) => api.post('/settings/2fa/verify', data),
+  disable2FA: () => api.delete('/settings/2fa'),
+  getSessions: () => api.get('/settings/sessions'),
+  revokeSession: (sessionId: string) => api.delete(`/settings/sessions/${sessionId}`),
+  revokeAllSessions: () => api.delete('/settings/sessions'),
+  getNotifications: () => api.get('/settings/notifications'),
+  updateNotifications: (data: Record<string, unknown>) => api.patch('/settings/notifications', data),
+  getPrivacy: () => api.get('/settings/privacy'),
+  updatePrivacy: (data: Record<string, unknown>) => api.patch('/settings/privacy', data),
+  exportData: () => api.get('/settings/export'),
+  deleteAccount: () => api.delete('/settings/account'),
+};
+
 // Billing endpoints
 export const billingApi = {
   getPlans: () => api.get('/billing/plans'),

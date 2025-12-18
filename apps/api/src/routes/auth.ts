@@ -11,6 +11,7 @@ import { generateToken, generateRefreshToken } from '../middleware/auth.js';
 import { errors } from '../middleware/error-handler.js';
 import { db } from '../db/index.js';
 import { tenants, users, userPermissions } from '../db/schema.js';
+import { recordFailedLogin, recordSuccessfulLogin, logSecurityEvent } from '../middleware/security.js';
 
 export const authRoutes = Router();
 
@@ -33,35 +34,60 @@ const refreshSchema = z.object({
 });
 
 /**
+ * Get client IP address
+ */
+function getClientIP(req: import('express').Request): string {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (forwarded) {
+    const ips = typeof forwarded === 'string' ? forwarded : forwarded[0];
+    return ips.split(',')[0].trim();
+  }
+  return req.ip || req.socket.remoteAddress || 'unknown';
+}
+
+/**
  * POST /api/auth/login
  */
 authRoutes.post('/login', async (req, res, next) => {
+  const clientIP = getClientIP(req);
+  let attemptedEmail: string | undefined;
+
   try {
     const { email, password } = loginSchema.parse(req.body);
+    attemptedEmail = email;
 
     // Look up user in database
     const [user] = await db
       .select()
       .from(users)
-      .where(eq(users.email, email))
+      .where(eq(users.email, email.toLowerCase().trim()))
       .limit(1);
 
     if (!user) {
+      // Record failed attempt
+      recordFailedLogin(clientIP, email);
+      logSecurityEvent('Failed login - user not found', { ip: clientIP, email });
       throw errors.unauthorized('Email o contraseña incorrectos');
     }
 
     // Verify password
     if (!user.password_hash) {
+      recordFailedLogin(clientIP, email);
+      logSecurityEvent('Failed login - no password hash', { ip: clientIP, email });
       throw errors.unauthorized('Esta cuenta requiere inicio de sesión con Google');
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password_hash);
     if (!isValidPassword) {
+      // Record failed attempt
+      recordFailedLogin(clientIP, email);
+      logSecurityEvent('Failed login - invalid password', { ip: clientIP, email });
       throw errors.unauthorized('Email o contraseña incorrectos');
     }
 
     // Check user status
     if (user.status !== 'active') {
+      logSecurityEvent('Failed login - inactive user', { ip: clientIP, email, status: user.status });
       throw errors.forbidden('Tu cuenta está desactivada. Contacta al administrador.');
     }
 
@@ -73,6 +99,7 @@ authRoutes.post('/login', async (req, res, next) => {
       .limit(1);
 
     if (!tenant || tenant.status !== 'active') {
+      logSecurityEvent('Failed login - inactive tenant', { ip: clientIP, email, tenantStatus: tenant?.status });
       throw errors.forbidden('Tu organización está desactivada.');
     }
 
@@ -89,6 +116,10 @@ authRoutes.post('/login', async (req, res, next) => {
       .update(users)
       .set({ last_login: new Date() })
       .where(eq(users.id, user.id));
+
+    // Record successful login (clears failed attempts)
+    recordSuccessfulLogin(clientIP);
+    logSecurityEvent('Successful login', { ip: clientIP, email, userId: user.id }, 'info');
 
     // Generate tokens
     const token = generateToken({
@@ -122,6 +153,10 @@ authRoutes.post('/login', async (req, res, next) => {
       },
     });
   } catch (error) {
+    // Record failed login for any error
+    if (attemptedEmail) {
+      recordFailedLogin(clientIP, attemptedEmail);
+    }
     next(error);
   }
 });

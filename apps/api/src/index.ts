@@ -8,12 +8,19 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
-import rateLimit from 'express-rate-limit';
 import { config } from './config.js';
 import { logger } from './utils/logger.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { authMiddleware } from './middleware/auth.js';
 import { auditMiddleware } from './middleware/audit.js';
+import {
+  securityHeaders,
+  requestValidation,
+  apiRateLimiter,
+  authRateLimiter,
+  formSubmissionLimiter,
+  bruteForceProtection,
+} from './middleware/security.js';
 
 // Routes
 import { authRoutes } from './routes/auth.js';
@@ -26,6 +33,10 @@ import { billingRoutes } from './routes/billing.js';
 import { healthRoutes } from './routes/health.js';
 import { dashboardRoutes } from './routes/dashboard.js';
 import { bankingRoutes } from './routes/banking.js';
+import { profileRoutes } from './routes/profile.js';
+import { settingsRoutes } from './routes/settings.js';
+import { investorInquiriesRoutes } from './routes/investor-inquiries.js';
+import { dataRoomRoutes } from './routes/data-room.js';
 
 const app = express();
 
@@ -36,7 +47,17 @@ app.set('trust proxy', 1);
 // Security Middleware
 // =============================================================================
 
-app.use(helmet());
+// Helmet with SEO-friendly config
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false, // Allow embedding (SEO tools)
+    contentSecurityPolicy: false, // Let frontend handle CSP
+  })
+);
+
+// Additional security headers (SEO-friendly)
+app.use(securityHeaders);
+
 app.use(
   cors({
     origin: config.cors.origins,
@@ -44,13 +65,11 @@ app.use(
   })
 );
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
-  message: { error: 'Too many requests, please try again later.' },
-});
-app.use('/api/', limiter);
+// Request validation (detects malicious patterns)
+app.use('/api/', requestValidation);
+
+// General API rate limiting (allows bots for SEO)
+app.use('/api/', apiRateLimiter);
 
 // =============================================================================
 // Body Parsing
@@ -98,8 +117,8 @@ app.use((req, res, next) => {
 // Health check (no auth)
 app.use('/api/health', healthRoutes);
 
-// Auth routes (no auth required for login/register)
-app.use('/api/auth', authRoutes);
+// Auth routes with brute force protection and stricter rate limiting
+app.use('/api/auth', bruteForceProtection, authRateLimiter, authRoutes);
 
 // Protected routes
 app.use('/api/users', authMiddleware, auditMiddleware, userRoutes);
@@ -111,6 +130,15 @@ app.use('/api/audit', authMiddleware, auditRoutes);
 app.use('/api/billing', billingRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/banking', bankingRoutes);
+app.use('/api/profile', profileRoutes);
+app.use('/api/settings', settingsRoutes);
+
+// Investor inquiries (public POST for contact form, protected GET for admin)
+// Apply form submission rate limiter for spam protection
+app.use('/api/investor-inquiries', formSubmissionLimiter, investorInquiriesRoutes);
+
+// Data Room (managed access for investors)
+app.use('/api/data-room', dataRoomRoutes);
 
 // Module API routes (dynamically registered)
 // These are mounted at /api/modules/:moduleId/...

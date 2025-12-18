@@ -48,3 +48,7 @@ credentials.json
 secrets.json
 palantir.md
 idea.md
+
+# Backups (stored locally, not in git)
+backup/
+backups/

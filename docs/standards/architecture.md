@@ -257,6 +257,7 @@ Kubernetes Cluster
 │   ├── database/           # DB schema docs
 │   │   └── modules/        # Module-specific DB docs
 │   ├── modules/            # Module documentation
+│   ├── pages/              # Public pages documentation
 │   ├── variables/          # Variable registry
 │   ├── standards/          # Coding standards
 │   └── runbooks/           # Operations guides
@@ -302,4 +303,4 @@ packages/ui  → packages/i18n
 
 ---
 
-*Last updated: 2024-12-15*
+*Last updated: 2024-12-18*

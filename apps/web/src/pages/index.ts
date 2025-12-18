@@ -6,3 +6,8 @@ export { default as Modules } from './Modules';
 export { default as Users } from './Users';
 export { default as Billing } from './Billing';
 export { default as CheckoutSuccess } from './CheckoutSuccess';
+export { default as Profile } from './Profile';
+export { default as Settings } from './Settings';
+export { default as InvestorInquiries } from './InvestorInquiries';
+export { default as DataRoom } from './DataRoom';
+export { default as About } from './About';

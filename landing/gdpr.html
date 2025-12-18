@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cumplimiento RGPD - Nexlify | Plataforma de Gestion de Riesgos</title>
+    <meta name="description" content="Compromiso de Nexlify con el Reglamento General de Proteccion de Datos (RGPD). Informacion sobre derechos, bases legales y medidas de cumplimiento.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-50: #ecfeff;
+            --primary-100: #cffafe;
+            --primary-200: #a5f3fc;
+            --primary-300: #67e8f9;
+            --primary-400: #22d3ee;
+            --primary-500: #06b6d4;
+            --primary-600: #0891b2;
+            --primary-700: #0e7490;
+            --primary-800: #155e75;
+            --primary-900: #164e63;
+            --accent-400: #a78bfa;
+            --accent-500: #8b5cf6;
+            --accent-600: #7c3aed;
+            --success-400: #34d399;
+            --success-500: #10b981;
+            --success-50: #ecfdf5;
+            --warning-400: #fb923c;
+            --warning-500: #f97316;
+            --warning-50: #fff7ed;
+            --danger-400: #f87171;
+            --danger-500: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-muted: #9ca3af;
+            --border-color: #e5e7eb;
+            --gradient-hero: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #7c3aed 100%);
+            --gradient-teal: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+            --card-bg: #ffffff;
+            --card-border: #e5e7eb;
+            --sidebar-bg: #f9fafb;
+        }
+
+        /* Dark mode */
+        .dark {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --sidebar-bg: #1e293b;
+            --gray-50: #1e293b;
+            --gray-100: #334155;
+            --gray-200: #475569;
+            --gray-800: #f1f5f9;
+            --gray-900: #f8fafc;
+            --warning-50: rgba(249, 115, 22, 0.1);
+            --success-50: rgba(16, 185, 129, 0.1);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+        .logo-icon {
+            width: 40px; height: 40px;
+            background: var(--gradient-teal);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-icon svg { width: 24px; height: 24px; color: white; }
+        .logo-content { display: flex; flex-direction: column; }
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+        .logo-tagline {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .theme-toggle {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            border: none;
+            background: var(--gray-100);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .theme-toggle:hover { background: var(--gray-200); }
+        .theme-toggle svg { width: 20px; height: 20px; }
+        #loggedOutButtons, #loggedInButtons {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-primary);
+        }
+        .btn-ghost:hover { background: var(--gray-100); }
+        .btn-primary {
+            background: var(--gradient-teal);
+            color: white;
+        }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        /* HERO */
+        .page-hero {
+            background: var(--gradient-hero);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            color: white;
+        }
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+        .hero-badge svg { width: 18px; height: 18px; }
+        .page-hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        .page-hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+        .toc {
+            background: var(--sidebar-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        .toc-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        .toc-list {
+            list-style: none;
+        }
+        .toc-item {
+            margin-bottom: 0.25rem;
+        }
+        .toc-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .toc-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        .toc-link.active {
+            background: var(--primary-50);
+            color: var(--primary-700);
+            font-weight: 500;
+        }
+        .dark .toc-link.active {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--primary-400);
+        }
+        .toc-number {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            min-width: 20px;
+        }
+
+        /* CONTENT */
+        .content {
+            min-width: 0;
+        }
+        .legal-section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 100px;
+        }
+        .section-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-icon {
+            width: 48px; height: 48px;
+            background: var(--gradient-teal);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .section-icon svg { width: 24px; height: 24px; color: white; }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+        .section-content {
+            color: var(--text-secondary);
+        }
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+        .section-content ul, .section-content ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+        .section-content strong {
+            color: var(--text-primary);
+        }
+        .section-content a {
+            color: var(--primary-600);
+            text-decoration: none;
+        }
+        .section-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* HIGHLIGHT BOXES */
+        .highlight-box {
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+        }
+        .highlight-box.info {
+            background: var(--primary-50);
+            border-left: 4px solid var(--primary-500);
+        }
+        .dark .highlight-box.info {
+            background: rgba(6, 182, 212, 0.1);
+        }
+        .highlight-box.warning {
+            background: var(--warning-50);
+            border-left: 4px solid var(--warning-500);
+        }
+        .highlight-box.success {
+            background: var(--success-50);
+            border-left: 4px solid var(--success-500);
+        }
+        .highlight-box p {
+            margin: 0;
+        }
+
+        /* CARDS GRID */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.2s ease;
+        }
+        .info-card:hover {
+            border-color: var(--primary-300);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .info-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .info-card h4 svg {
+            width: 18px;
+            height: 18px;
+            color: var(--primary-500);
+        }
+        .info-card p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* RIGHTS GRID */
+        .rights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .right-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .right-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-300);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        .right-icon {
+            width: 48px; height: 48px;
+            background: var(--gradient-teal);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        .right-icon svg { width: 24px; height: 24px; color: white; }
+        .right-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .right-card p {
+            font-size: 0.813rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* PRINCIPLES TABLE */
+        .principles-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+        .principles-table th,
+        .principles-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .principles-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .principles-table td {
+            color: var(--text-secondary);
+        }
+        .principles-table tr:hover td {
+            background: var(--bg-secondary);
+        }
+        .principle-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .principle-icon svg {
+            width: 18px;
+            height: 18px;
+            color: var(--primary-500);
+        }
+
+        /* LEGAL BASES */
+        .legal-bases {
+            display: grid;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .legal-base {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .legal-base-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .legal-base-icon {
+            width: 36px; height: 36px;
+            background: var(--primary-50);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dark .legal-base-icon {
+            background: rgba(6, 182, 212, 0.1);
+        }
+        .legal-base-icon svg {
+            width: 18px; height: 18px;
+            color: var(--primary-600);
+        }
+        .legal-base h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        .legal-base p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* CONTACT BOX */
+        .contact-box {
+            background: var(--card-bg);
+            border: 2px solid var(--primary-200);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .dark .contact-box {
+            border-color: var(--primary-700);
+        }
+        .contact-box h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .contact-box h3 svg {
+            width: 24px;
+            height: 24px;
+            color: var(--primary-500);
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        .contact-item svg {
+            width: 20px;
+            height: 20px;
+            color: var(--primary-500);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .contact-item strong {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        .contact-item span, .contact-item a {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* FOOTER */
+        .footer {
+            background: var(--gray-900);
+            padding: 5rem 2rem 2rem;
+            color: white;
+        }
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-main {
+            display: grid;
+            grid-template-columns: 1.5fr 2.5fr;
+            gap: 4rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid var(--gray-700);
+        }
+        .footer-brand { max-width: 320px; }
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        .footer-logo-icon {
+            width: 40px; height: 40px;
+            background: var(--gradient-teal);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .footer-logo-icon svg { width: 22px; height: 22px; color: white; }
+        .footer-logo span { font-size: 1.5rem; font-weight: 700; }
+        .footer-tagline {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        .footer-social { display: flex; gap: 0.75rem; }
+        .social-link {
+            width: 40px; height: 40px;
+            background: var(--gray-800);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-400);
+            transition: all 0.2s ease;
+        }
+        .social-link:hover { background: var(--primary-600); color: white; }
+        .social-link svg { width: 18px; height: 18px; }
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        .footer-column h4 {
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .footer-column ul { list-style: none; }
+        .footer-column li { margin-bottom: 0.5rem; }
+        .footer-column a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+        }
+        .footer-column a:hover { color: white; }
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+        }
+        .footer-copyright { color: var(--gray-500); font-size: 0.875rem; }
+        .footer-certifications { display: flex; gap: 1rem; }
+        .cert-badge {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* BACK TO TOP */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-teal);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 100;
+        }
+        .back-to-top.visible { opacity: 1; visibility: visible; }
+        .back-to-top:hover { transform: translateY(-3px); }
+        .back-to-top svg { width: 24px; height: 24px; }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .main-content { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .footer-main { grid-template-columns: 1fr; gap: 3rem; }
+            .footer-brand { max-width: none; text-align: center; }
+            .footer-social { justify-content: center; }
+            .footer-links { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .page-hero { padding: 7rem 1rem 3rem; }
+            .page-hero h1 { font-size: 2rem; }
+            .page-hero p { font-size: 1rem; }
+            .main-content { padding: 2rem 1rem; }
+            .section-header { flex-direction: column; gap: 0.75rem; }
+            .section-icon { width: 40px; height: 40px; }
+            .section-icon svg { width: 20px; height: 20px; }
+            .section-title { font-size: 1.5rem; }
+            .footer { padding: 3rem 1rem 1.5rem; }
+            .footer-links { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+            .nav-actions .btn-ghost { display: none; }
+            .rights-grid { grid-template-columns: 1fr; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .principles-table { font-size: 0.8rem; }
+            .principles-table th, .principles-table td { padding: 0.75rem 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR (Shared Component) -->
+    <nexlify-header></nexlify-header>
+
+    <!-- HERO -->
+    <section class="page-hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                Cumplimiento Normativo
+            </div>
+            <h1>Cumplimiento RGPD</h1>
+            <p>Nuestro compromiso con la proteccion de datos personales y el cumplimiento del Reglamento General de Proteccion de Datos de la Union Europea</p>
+        </div>
+    </section>
+
+    <!-- MAIN -->
+    <main class="main-content">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <nav class="toc">
+                <h3 class="toc-title">Contenido</h3>
+                <ul class="toc-list">
+                    <li class="toc-item"><a href="#introduccion" class="toc-link active"><span class="toc-number">1</span> Introduccion</a></li>
+                    <li class="toc-item"><a href="#principios" class="toc-link"><span class="toc-number">2</span> Principios RGPD</a></li>
+                    <li class="toc-item"><a href="#bases-legales" class="toc-link"><span class="toc-number">3</span> Bases Legales</a></li>
+                    <li class="toc-item"><a href="#derechos" class="toc-link"><span class="toc-number">4</span> Tus Derechos</a></li>
+                    <li class="toc-item"><a href="#responsable" class="toc-link"><span class="toc-number">5</span> Responsable del Tratamiento</a></li>
+                    <li class="toc-item"><a href="#dpd" class="toc-link"><span class="toc-number">6</span> Delegado de Proteccion</a></li>
+                    <li class="toc-item"><a href="#transferencias" class="toc-link"><span class="toc-number">7</span> Transferencias Internacionales</a></li>
+                    <li class="toc-item"><a href="#seguridad" class="toc-link"><span class="toc-number">8</span> Medidas de Seguridad</a></li>
+                    <li class="toc-item"><a href="#brechas" class="toc-link"><span class="toc-number">9</span> Notificacion de Brechas</a></li>
+                    <li class="toc-item"><a href="#eipd" class="toc-link"><span class="toc-number">10</span> Evaluaciones de Impacto</a></li>
+                    <li class="toc-item"><a href="#encargados" class="toc-link"><span class="toc-number">11</span> Encargados del Tratamiento</a></li>
+                    <li class="toc-item"><a href="#registro" class="toc-link"><span class="toc-number">12</span> Registro de Actividades</a></li>
+                    <li class="toc-item"><a href="#reclamaciones" class="toc-link"><span class="toc-number">13</span> Reclamaciones</a></li>
+                    <li class="toc-item"><a href="#contacto" class="toc-link"><span class="toc-number">14</span> Contacto</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- 1. INTRODUCCION -->
+            <section id="introduccion" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 16v-4M12 8h.01"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">1. Introduccion al RGPD</h2>
+                        <p class="section-subtitle">Nuestro compromiso con la proteccion de datos</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>En <strong>Nexlify</strong>, la proteccion de los datos personales es una prioridad fundamental. Este documento detalla nuestro compromiso y cumplimiento con el <strong>Reglamento (UE) 2016/679</strong> del Parlamento Europeo y del Consejo, de 27 de abril de 2016, relativo a la proteccion de las personas fisicas en lo que respecta al tratamiento de datos personales y a la libre circulacion de estos datos (RGPD).</p>
+
+                    <div class="highlight-box info">
+                        <p><strong>Marco Normativo:</strong> Ademas del RGPD, cumplimos con la <strong>Ley Organica 3/2018</strong>, de 5 de diciembre, de Proteccion de Datos Personales y garantia de los derechos digitales (LOPDGDD), que adapta el Reglamento europeo al ordenamiento juridico espanol.</p>
+                    </div>
+
+                    <p>El RGPD establece un marco juridico uniforme para la proteccion de datos en toda la Union Europea, otorgando a los ciudadanos mayor control sobre sus datos personales y estableciendo obligaciones claras para las organizaciones que tratan dichos datos.</p>
+
+                    <div class="cards-grid">
+                        <div class="info-card">
+                            <h4>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                Proteccion Integral
+                            </h4>
+                            <p>Implementamos medidas tecnicas y organizativas para garantizar la seguridad de tus datos en todo momento.</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                Cumplimiento Verificado
+                            </h4>
+                            <p>Auditorias periodicas y certificaciones que avalan nuestro compromiso con la proteccion de datos.</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                Transparencia Total
+                            </h4>
+                            <p>Informacion clara y accesible sobre como tratamos tus datos y que derechos te asisten.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. PRINCIPIOS -->
+            <section id="principios" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">2. Principios del RGPD</h2>
+                        <p class="section-subtitle">Fundamentos que guian nuestro tratamiento de datos</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>Todos los tratamientos de datos personales que realizamos se rigen por los principios establecidos en el <strong>articulo 5 del RGPD</strong>:</p>
+
+                    <table class="principles-table">
+                        <thead>
+                            <tr>
+                                <th>Principio</th>
+                                <th>Descripcion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span class="principle-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        Licitud, lealtad y transparencia
+                                    </span>
+                                </td>
+                                <td>Tratamos los datos de manera licita, leal y transparente, informandote siempre sobre como y por que procesamos tu informacion.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="principle-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                        Limitacion de la finalidad
+                                    </span>
+                                </td>
+                                <td>Recogemos datos para fines determinados, explicitos y legitimos, y no los tratamos de manera incompatible con dichos fines.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="principle-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                                        Minimizacion de datos
+                                    </span>
+                                </td>
+                                <td>Solo recogemos los datos estrictamente necesarios para los fines del tratamiento, evitando recopilar informacion excesiva.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="principle-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                        Exactitud
+                                    </span>
+                                </td>
+                                <td>Mantenemos los datos exactos y actualizados, adoptando medidas para suprimir o rectificar datos inexactos.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="principle-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                        Limitacion del plazo de conservacion
+                                    </span>
+                                </td>
+                                <td>Conservamos los datos solo durante el tiempo necesario para los fines del tratamiento.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="principle-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                        Integridad y confidencialidad
+                                    </span>
+                                </td>
+                                <td>Garantizamos la seguridad de los datos mediante medidas tecnicas y organizativas apropiadas.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="principle-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+                                        Responsabilidad proactiva
+                                    </span>
+                                </td>
+                                <td>Somos responsables del cumplimiento de estos principios y podemos demostrarlo.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 3. BASES LEGALES -->
+            <section id="bases-legales" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">3. Bases Legales del Tratamiento</h2>
+                        <p class="section-subtitle">Fundamentos juridicos para el procesamiento de datos</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>Conforme al <strong>articulo 6 del RGPD</strong>, todo tratamiento de datos personales debe basarse en al menos una de las siguientes bases legales:</p>
+
+                    <div class="legal-bases">
+                        <div class="legal-base">
+                            <div class="legal-base-header">
+                                <div class="legal-base-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                </div>
+                                <h4>Consentimiento (Art. 6.1.a)</h4>
+                            </div>
+                            <p>El interesado ha dado su consentimiento para el tratamiento de sus datos personales para uno o varios fines especificos. Solicitamos tu consentimiento expreso para comunicaciones comerciales, cookies no esenciales y tratamientos que lo requieran.</p>
+                        </div>
+
+                        <div class="legal-base">
+                            <div class="legal-base-header">
+                                <div class="legal-base-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+                                </div>
+                                <h4>Ejecucion de Contrato (Art. 6.1.b)</h4>
+                            </div>
+                            <p>El tratamiento es necesario para la ejecucion de un contrato en el que el interesado es parte. Procesamos tus datos para prestarte los servicios contratados de la plataforma Nexlify.</p>
+                        </div>
+
+                        <div class="legal-base">
+                            <div class="legal-base-header">
+                                <div class="legal-base-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                </div>
+                                <h4>Obligacion Legal (Art. 6.1.c)</h4>
+                            </div>
+                            <p>El tratamiento es necesario para el cumplimiento de una obligacion legal aplicable al responsable. Conservamos determinados datos por obligaciones fiscales, mercantiles y de prevencion de blanqueo de capitales.</p>
+                        </div>
+
+                        <div class="legal-base">
+                            <div class="legal-base-header">
+                                <div class="legal-base-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                </div>
+                                <h4>Interes Legitimo (Art. 6.1.f)</h4>
+                            </div>
+                            <p>El tratamiento es necesario para la satisfaccion de intereses legitimos perseguidos por el responsable, siempre que no prevalezcan los intereses o derechos del interesado. Utilizamos esta base para seguridad, prevencion de fraude y mejora del servicio.</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box warning">
+                        <p><strong>Importante:</strong> Siempre te informamos de la base legal aplicable a cada tratamiento en el momento de la recogida de tus datos. Puedes consultar el detalle en nuestra <a href="/privacy.html">Politica de Privacidad</a>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. DERECHOS -->
+            <section id="derechos" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">4. Tus Derechos RGPD</h2>
+                        <p class="section-subtitle">Derechos que te asisten como interesado</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>El RGPD te otorga una serie de derechos sobre tus datos personales que puedes ejercer en cualquier momento:</p>
+
+                    <div class="rights-grid">
+                        <div class="right-card">
+                            <div class="right-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <path d="m21 21-4.35-4.35"/>
+                                </svg>
+                            </div>
+                            <h4>Derecho de Acceso</h4>
+                            <p>Obtener confirmacion sobre si tratamos tus datos y acceder a una copia de los mismos</p>
+                        </div>
+
+                        <div class="right-card">
+                            <div class="right-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                            </div>
+                            <h4>Derecho de Rectificacion</h4>
+                            <p>Solicitar la correccion de datos inexactos o completar datos incompletos</p>
+                        </div>
+
+                        <div class="right-card">
+                            <div class="right-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                            </div>
+                            <h4>Derecho de Supresion</h4>
+                            <p>Solicitar la eliminacion de tus datos cuando ya no sean necesarios (derecho al olvido)</p>
+                        </div>
+
+                        <div class="right-card">
+                            <div class="right-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="9" y1="9" x2="15" y2="15"/>
+                                    <line x1="15" y1="9" x2="9" y2="15"/>
+                                </svg>
+                            </div>
+                            <h4>Derecho de Oposicion</h4>
+                            <p>Oponerte al tratamiento de tus datos en determinadas circunstancias</p>
+                        </div>
+
+                        <div class="right-card">
+                            <div class="right-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="10" y1="15" x2="10" y2="9"/>
+                                    <line x1="14" y1="15" x2="14" y2="9"/>
+                                </svg>
+                            </div>
+                            <h4>Derecho de Limitacion</h4>
+                            <p>Solicitar que se limite el tratamiento de tus datos en ciertos supuestos</p>
+                        </div>
+
+                        <div class="right-card">
+                            <div class="right-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                            </div>
+                            <h4>Derecho de Portabilidad</h4>
+                            <p>Recibir tus datos en formato estructurado y transmitirlos a otro responsable</p>
+                        </div>
+
+                        <div class="right-card">
+                            <div class="right-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                    <polyline points="16 17 21 12 16 7"/>
+                                    <line x1="21" y1="12" x2="9" y2="12"/>
+                                </svg>
+                            </div>
+                            <h4>Retirar Consentimiento</h4>
+                            <p>Retirar tu consentimiento en cualquier momento sin afectar tratamientos previos</p>
+                        </div>
+
+                        <div class="right-card">
+                            <div class="right-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                            </div>
+                            <h4>Decisiones Automatizadas</h4>
+                            <p>No ser objeto de decisiones basadas unicamente en tratamientos automatizados</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box success">
+                        <p><strong>Como ejercer tus derechos:</strong> Puedes ejercer cualquiera de estos derechos enviando un correo a <a href="mailto:privacidad@nexlify.io">privacidad@nexlify.io</a> o a traves del panel de configuracion de tu cuenta. Responderemos en un plazo maximo de un mes.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. RESPONSABLE -->
+            <section id="responsable" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">5. Responsable del Tratamiento</h2>
+                        <p class="section-subtitle">Identidad del responsable de tus datos</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>Conforme al RGPD, el <strong>responsable del tratamiento</strong> es la persona fisica o juridica que determina los fines y medios del tratamiento de datos personales.</p>
+
+                    <div class="contact-box">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            Datos del Responsable
+                        </h3>
+                        <div class="contact-grid">
+                            <div class="contact-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                                <div>
+                                    <strong>Razon Social</strong>
+                                    <span>Nexlify Technologies, S.L.</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                <div>
+                                    <strong>CIF</strong>
+                                    <span>B-XXXXXXXX</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <div>
+                                    <strong>Domicilio</strong>
+                                    <span>Calle Ejemplo, 123 - 28001 Madrid, Espana</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                <div>
+                                    <strong>Email de contacto</strong>
+                                    <a href="mailto:privacidad@nexlify.io">privacidad@nexlify.io</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. DPD -->
+            <section id="dpd" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">6. Delegado de Proteccion de Datos</h2>
+                        <p class="section-subtitle">Tu punto de contacto para cuestiones de privacidad</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>Conforme al <strong>articulo 37 del RGPD</strong>, hemos designado un <strong>Delegado de Proteccion de Datos (DPD)</strong> que supervisa el cumplimiento normativo y actua como punto de contacto para todas las cuestiones relacionadas con la proteccion de datos personales.</p>
+
+                    <div class="cards-grid">
+                        <div class="info-card">
+                            <h4>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                Funciones del DPD
+                            </h4>
+                            <p>Informar y asesorar, supervisar el cumplimiento, cooperar con la autoridad de control y actuar como punto de contacto.</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                Contacto
+                            </h4>
+                            <p>Puedes contactar con nuestro DPD en <a href="mailto:dpd@nexlify.io">dpd@nexlify.io</a> para cualquier consulta sobre proteccion de datos.</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box info">
+                        <p><strong>Independencia:</strong> El DPD actua con total independencia y no recibe instrucciones respecto al desempeno de sus funciones. Tiene acceso directo al mas alto nivel de direccion de Nexlify.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. TRANSFERENCIAS -->
+            <section id="transferencias" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">7. Transferencias Internacionales</h2>
+                        <p class="section-subtitle">Garantias para transferencias fuera del EEE</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>Cuando sea necesario transferir datos personales fuera del Espacio Economico Europeo (EEE), garantizamos que se aplican las salvaguardas adecuadas conforme al <strong>Capitulo V del RGPD</strong>:</p>
+
+                    <ul>
+                        <li><strong>Decisiones de adecuacion:</strong> Transferencias a paises con nivel de proteccion adecuado reconocido por la Comision Europea.</li>
+                        <li><strong>Clausulas contractuales tipo:</strong> Utilizamos las clausulas contractuales tipo aprobadas por la Comision Europea para garantizar un nivel de proteccion equivalente.</li>
+                        <li><strong>Normas corporativas vinculantes:</strong> En su caso, transferencias dentro de grupos empresariales con BCRs aprobadas.</li>
+                        <li><strong>Marco de Privacidad UE-EE.UU.:</strong> Para transferencias a EE.UU., verificamos la certificacion bajo el Data Privacy Framework.</li>
+                    </ul>
+
+                    <div class="highlight-box warning">
+                        <p><strong>Transparencia:</strong> Puedes solicitar informacion detallada sobre las transferencias internacionales de tus datos y las garantias aplicadas contactando a nuestro DPD.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. SEGURIDAD -->
+            <section id="seguridad" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">8. Medidas de Seguridad</h2>
+                        <p class="section-subtitle">Proteccion tecnica y organizativa de tus datos</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>Conforme al <strong>articulo 32 del RGPD</strong>, implementamos medidas tecnicas y organizativas apropiadas para garantizar un nivel de seguridad adecuado al riesgo:</p>
+
+                    <div class="cards-grid">
+                        <div class="info-card">
+                            <h4>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                Cifrado
+                            </h4>
+                            <p>Cifrado de datos en transito (TLS 1.3) y en reposo (AES-256) para toda la informacion sensible.</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                Control de Acceso
+                            </h4>
+                            <p>Autenticacion multifactor, control de acceso basado en roles y principio de minimo privilegio.</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                                Monitorizacion
+                            </h4>
+                            <p>Sistemas de deteccion de intrusiones, logs de auditoria y monitorizacion 24/7.</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                                Backups
+                            </h4>
+                            <p>Copias de seguridad cifradas con retencion geograficamente distribuida y pruebas de restauracion.</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box success">
+                        <p><strong>Certificaciones:</strong> Nuestras medidas de seguridad estan respaldadas por certificaciones ISO 27001, SOC 2 Tipo II y auditorias independientes de seguridad.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. BRECHAS -->
+            <section id="brechas" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">9. Notificacion de Brechas de Seguridad</h2>
+                        <p class="section-subtitle">Procedimiento ante incidentes de seguridad</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>Conforme a los <strong>articulos 33 y 34 del RGPD</strong>, disponemos de procedimientos para gestionar y notificar las violaciones de seguridad de datos personales:</p>
+
+                    <ul>
+                        <li><strong>Notificacion a la autoridad de control:</strong> Comunicaremos cualquier brecha a la AEPD en un plazo maximo de 72 horas desde que tengamos conocimiento, salvo que sea improbable que constituya un riesgo para los derechos de los interesados.</li>
+                        <li><strong>Notificacion a los afectados:</strong> Cuando la brecha entrane un alto riesgo para tus derechos y libertades, te comunicaremos el incidente sin dilacion indebida.</li>
+                        <li><strong>Documentacion:</strong> Mantenemos un registro de todas las violaciones de seguridad, sus efectos y las medidas correctoras adoptadas.</li>
+                    </ul>
+
+                    <div class="highlight-box info">
+                        <p><strong>Compromiso:</strong> Contamos con un equipo de respuesta a incidentes y planes de contingencia para minimizar el impacto de cualquier brecha de seguridad.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 10. EIPD -->
+            <section id="eipd" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="12" y1="18" x2="12" y2="12"/>
+                            <line x1="9" y1="15" x2="15" y2="15"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">10. Evaluaciones de Impacto (EIPD)</h2>
+                        <p class="section-subtitle">Analisis de riesgos para la proteccion de datos</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>Conforme al <strong>articulo 35 del RGPD</strong>, realizamos Evaluaciones de Impacto relativas a la Proteccion de Datos (EIPD) antes de iniciar cualquier tratamiento que pueda entrañar un alto riesgo para los derechos y libertades de las personas:</p>
+
+                    <ul>
+                        <li>Evaluacion sistematica y exhaustiva de aspectos personales mediante tratamiento automatizado.</li>
+                        <li>Tratamiento a gran escala de categorias especiales de datos.</li>
+                        <li>Observacion sistematica a gran escala de una zona de acceso publico.</li>
+                        <li>Nuevas tecnologias que puedan suponer un riesgo elevado.</li>
+                    </ul>
+
+                    <div class="highlight-box info">
+                        <p><strong>Metodologia:</strong> Nuestras EIPD siguen las directrices del Grupo de Trabajo del Articulo 29 (GT29) y las guias publicadas por la AEPD, evaluando necesidad, proporcionalidad, riesgos y medidas mitigadoras.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 11. ENCARGADOS -->
+            <section id="encargados" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="8.5" cy="7" r="4"/>
+                            <line x1="20" y1="8" x2="20" y2="14"/>
+                            <line x1="23" y1="11" x2="17" y2="11"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">11. Encargados del Tratamiento</h2>
+                        <p class="section-subtitle">Terceros que procesan datos por nuestra cuenta</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>Cuando contratamos proveedores que tratan datos personales por nuestra cuenta, nos aseguramos de que cumplen con el <strong>articulo 28 del RGPD</strong>:</p>
+
+                    <ul>
+                        <li><strong>Seleccion rigurosa:</strong> Solo contratamos encargados que ofrezcan garantias suficientes de cumplimiento del RGPD.</li>
+                        <li><strong>Contrato de encargo:</strong> Formalizamos contratos que establecen el objeto, duracion, naturaleza y finalidad del tratamiento, asi como las obligaciones del encargado.</li>
+                        <li><strong>Subencargados:</strong> Exigimos autorizacion previa para la subcontratacion y garantias equivalentes de los subencargados.</li>
+                        <li><strong>Auditorias:</strong> Nos reservamos el derecho de realizar auditorias y verificar el cumplimiento.</li>
+                    </ul>
+
+                    <div class="highlight-box warning">
+                        <p><strong>Lista de proveedores:</strong> Puedes solicitar informacion sobre los encargados del tratamiento que acceden a tus datos contactando a nuestro DPD.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 12. REGISTRO -->
+            <section id="registro" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">12. Registro de Actividades de Tratamiento</h2>
+                        <p class="section-subtitle">Documentacion de nuestros tratamientos</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>Conforme al <strong>articulo 30 del RGPD</strong>, mantenemos un Registro de Actividades de Tratamiento (RAT) que documenta:</p>
+
+                    <ul>
+                        <li>Nombre y datos de contacto del responsable y del DPD.</li>
+                        <li>Fines de cada tratamiento de datos personales.</li>
+                        <li>Categorias de interesados y de datos personales tratados.</li>
+                        <li>Categorias de destinatarios, incluidas transferencias internacionales.</li>
+                        <li>Plazos previstos para la supresion de las diferentes categorias de datos.</li>
+                        <li>Descripcion general de las medidas tecnicas y organizativas de seguridad.</li>
+                    </ul>
+
+                    <div class="highlight-box info">
+                        <p><strong>Disponibilidad:</strong> El Registro de Actividades de Tratamiento esta disponible para la autoridad de control a su solicitud.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 13. RECLAMACIONES -->
+            <section id="reclamaciones" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                            <line x1="4" y1="22" x2="4" y2="15"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">13. Derecho de Reclamacion</h2>
+                        <p class="section-subtitle">Tutela ante la autoridad de control</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>Conforme al <strong>articulo 77 del RGPD</strong>, si consideras que el tratamiento de tus datos personales infringe la normativa de proteccion de datos, tienes derecho a presentar una reclamacion ante la autoridad de control competente:</p>
+
+                    <div class="contact-box">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                            Agencia Espanola de Proteccion de Datos (AEPD)
+                        </h3>
+                        <div class="contact-grid">
+                            <div class="contact-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <div>
+                                    <strong>Direccion</strong>
+                                    <span>C/ Jorge Juan, 6 - 28001 Madrid</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                                <div>
+                                    <strong>Web</strong>
+                                    <a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72"/></svg>
+                                <div>
+                                    <strong>Telefono</strong>
+                                    <span>901 100 099 / 912 663 517</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                <div>
+                                    <strong>Canal de reclamaciones</strong>
+                                    <a href="https://sedeagpd.gob.es" target="_blank" rel="noopener">Sede electronica AEPD</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>No obstante, te animamos a que antes de acudir a la autoridad de control, contactes con nosotros para resolver cualquier incidencia o discrepancia.</p>
+                </div>
+            </section>
+
+            <!-- 14. CONTACTO -->
+            <section id="contacto" class="legal-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="4" width="20" height="16" rx="2"/>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="section-title">14. Contacto</h2>
+                        <p class="section-subtitle">Estamos aqui para ayudarte</p>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <p>Para cualquier cuestion relacionada con el tratamiento de tus datos personales o el ejercicio de tus derechos RGPD, puedes contactar con nosotros a traves de los siguientes canales:</p>
+
+                    <div class="contact-box">
+                        <h3>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                            Canales de Contacto
+                        </h3>
+                        <div class="contact-grid">
+                            <div class="contact-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                <div>
+                                    <strong>Email de Privacidad</strong>
+                                    <a href="mailto:privacidad@nexlify.io">privacidad@nexlify.io</a>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                <div>
+                                    <strong>Delegado de Proteccion de Datos</strong>
+                                    <a href="mailto:dpd@nexlify.io">dpd@nexlify.io</a>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <div>
+                                    <strong>Direccion Postal</strong>
+                                    <span>Nexlify Technologies, S.L.<br>Calle Ejemplo, 123 - 28001 Madrid</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                                <div>
+                                    <strong>Panel de Privacidad</strong>
+                                    <span>Configuracion > Privacidad en tu cuenta</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box success">
+                        <p><strong>Compromiso RGPD:</strong> En Nexlify, la proteccion de tus datos personales es un compromiso fundamental. Trabajamos continuamente para garantizar el cumplimiento del RGPD y ofrecer la maxima transparencia sobre el tratamiento de tu informacion.</p>
+                    </div>
+
+                    <p style="margin-top: 2rem; color: var(--text-muted); font-size: 0.875rem;"><strong>Ultima actualizacion:</strong> Diciembre 2025</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- FOOTER (Shared Component) -->
+    <nexlify-footer></nexlify-footer>
+
+    <!-- BACK TO TOP -->
+    <button class="back-to-top" id="backToTop" aria-label="Volver arriba">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"/>
+        </svg>
+    </button>
+
+    <!-- Shared Components -->
+    <script src="/components/header.js"></script>
+    <script src="/components/footer.js"></script>
+
+    <script>
+        // Back to top button
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop?.classList.toggle('visible', window.scrollY > 500);
+        });
+        backToTop?.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // TOC active state on scroll
+        const sections = document.querySelectorAll('.legal-section');
+        const tocLinks = document.querySelectorAll('.toc-link');
+
+        function updateTOC() {
+            let current = '';
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+            tocLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+            });
+        }
+
+        window.addEventListener('scroll', updateTOC);
+        updateTOC();
+
+        // Smooth scroll for TOC links
+        tocLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    const offset = 100;
+                    const targetPosition = targetSection.offsetTop - offset;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

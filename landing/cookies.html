@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politica de Cookies - Nexlify | Plataforma de Gestion de Riesgos</title>
+    <meta name="description" content="Politica de cookies de Nexlify. Informacion sobre el uso de cookies y tecnologias similares en nuestra plataforma.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-50: #ecfeff;
+            --primary-100: #cffafe;
+            --primary-200: #a5f3fc;
+            --primary-300: #67e8f9;
+            --primary-400: #22d3ee;
+            --primary-500: #06b6d4;
+            --primary-600: #0891b2;
+            --primary-700: #0e7490;
+            --primary-800: #155e75;
+            --primary-900: #164e63;
+            --accent-400: #a78bfa;
+            --accent-500: #8b5cf6;
+            --accent-600: #7c3aed;
+            --success-400: #34d399;
+            --success-500: #10b981;
+            --warning-400: #fb923c;
+            --warning-500: #f97316;
+            --warning-50: #fff7ed;
+            --danger-400: #f87171;
+            --danger-500: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-muted: #9ca3af;
+            --border-color: #e5e7eb;
+            --gradient-hero: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #7c3aed 100%);
+            --gradient-teal: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+            --card-bg: #ffffff;
+            --card-border: #e5e7eb;
+            --sidebar-bg: #f9fafb;
+        }
+
+        .dark {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --sidebar-bg: #1e293b;
+            --gray-50: #1e293b;
+            --gray-100: #334155;
+            --gray-200: #475569;
+            --gray-800: #f1f5f9;
+            --gray-900: #f8fafc;
+            --warning-50: rgba(249, 115, 22, 0.1);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: var(--bg-primary);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+        .logo-icon {
+            width: 40px; height: 40px;
+            background: var(--gradient-teal);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-icon svg { width: 24px; height: 24px; color: white; }
+        .logo-content {
+            display: flex;
+            flex-direction: column;
+        }
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+        .logo-tagline {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .theme-toggle {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .theme-toggle:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-500);
+        }
+        .theme-toggle svg { width: 20px; height: 20px; color: var(--text-secondary); }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: var(--gradient-teal);
+            color: white;
+        }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        .btn-ghost:hover { background: var(--bg-secondary); }
+
+        /* HERO */
+        .page-hero {
+            background: var(--gradient-hero);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+        .hero-badge svg { width: 16px; height: 16px; }
+        .page-hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        .page-hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .hero-meta svg { width: 16px; height: 16px; }
+
+        /* MAIN LAYOUT */
+        .main-layout {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 4rem;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+        .sidebar-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .sidebar-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        .toc-list {
+            list-style: none;
+        }
+        .toc-item {
+            margin-bottom: 0.25rem;
+        }
+        .toc-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.625rem 0.875rem;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .toc-link:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        .toc-link.active {
+            background: var(--primary-50);
+            color: var(--primary-700);
+        }
+        .dark .toc-link.active {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--primary-400);
+        }
+        .toc-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+        .toc-link.active .toc-number {
+            background: var(--primary-500);
+            color: white;
+        }
+        .sidebar-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--primary-50);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: var(--primary-800);
+        }
+        .dark .sidebar-info {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--primary-300);
+        }
+        .sidebar-info svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* CONTENT */
+        .content {
+            min-width: 0;
+        }
+        .legal-section {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        .legal-section:hover {
+            border-color: var(--primary-300);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+        .dark .legal-section:hover {
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .section-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .section-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .section-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+        .section-icon.teal { background: linear-gradient(135deg, #14b8a6, #0891b2); color: white; }
+        .section-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; }
+        .section-icon.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+        .section-icon.green { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .section-icon.orange { background: linear-gradient(135deg, #f97316, #ea580c); color: white; }
+        .section-icon.red { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+        .section-icon.gray { background: linear-gradient(135deg, #6b7280, #4b5563); color: white; }
+        .section-icon.indigo { background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; }
+        .section-icon.pink { background: linear-gradient(135deg, #ec4899, #db2777); color: white; }
+        .section-icon.cyan { background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; }
+        .section-icon.amber { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+        .section-icon.yellow { background: linear-gradient(135deg, #eab308, #ca8a04); color: white; }
+        .section-meta {
+            flex: 1;
+        }
+        .section-number {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--primary-600);
+            margin-bottom: 0.25rem;
+        }
+        .dark .section-number {
+            color: var(--primary-400);
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .section-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .legal-content h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 2rem 0 1rem;
+        }
+        .legal-content h3:first-child {
+            margin-top: 0;
+        }
+        .legal-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+        .legal-content ul, .legal-content ol {
+            color: var(--text-secondary);
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+        .legal-content li {
+            margin-bottom: 0.75rem;
+            line-height: 1.7;
+        }
+        .legal-content li::marker {
+            color: var(--primary-500);
+        }
+        .legal-content strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .highlight-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--primary-500);
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.5rem 0;
+        }
+        .highlight-box.warning {
+            border-left-color: var(--warning-500);
+            background: var(--warning-50);
+        }
+        .dark .highlight-box.warning {
+            background: rgba(249, 115, 22, 0.1);
+        }
+        .highlight-box.info {
+            border-left-color: var(--primary-500);
+            background: var(--primary-50);
+        }
+        .dark .highlight-box.info {
+            background: rgba(6, 182, 212, 0.1);
+        }
+        .highlight-box.success {
+            border-left-color: var(--success-500);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .highlight-box p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+        .data-table th, .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .data-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .data-table td {
+            color: var(--text-secondary);
+        }
+        .data-table tr:hover td {
+            background: var(--bg-secondary);
+        }
+
+        /* Cookie cards */
+        .cookie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .cookie-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.2s;
+        }
+        .cookie-card:hover {
+            border-color: var(--primary-400);
+            transform: translateY(-2px);
+        }
+        .cookie-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+        .cookie-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        .cookie-card h4 svg {
+            width: 18px;
+            height: 18px;
+            color: var(--primary-500);
+        }
+        .cookie-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .cookie-badge.required {
+            background: var(--primary-100);
+            color: var(--primary-700);
+        }
+        .dark .cookie-badge.required {
+            background: rgba(6, 182, 212, 0.2);
+            color: var(--primary-400);
+        }
+        .cookie-badge.optional {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+        .dark .cookie-badge.optional {
+            background: var(--gray-700);
+            color: var(--gray-300);
+        }
+        .cookie-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin: 0 0 0.75rem 0;
+            line-height: 1.6;
+        }
+        .cookie-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .cookie-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Browser icons */
+        .browser-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .browser-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .browser-card:hover {
+            border-color: var(--primary-400);
+        }
+        .browser-card svg {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+        }
+        .browser-card h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .browser-card a {
+            font-size: 0.8rem;
+            color: var(--primary-500);
+            text-decoration: none;
+        }
+        .browser-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: var(--gray-900);
+            padding: 5rem 2rem 2rem;
+            color: white;
+        }
+        .dark .footer {
+            background: #020617;
+            border-top: 1px solid var(--border-color);
+        }
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-main {
+            display: grid;
+            grid-template-columns: 1.5fr 2.5fr;
+            gap: 4rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid var(--gray-700);
+        }
+        .footer-brand { max-width: 320px; }
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        .footer-logo-icon {
+            width: 40px; height: 40px;
+            background: var(--gradient-teal);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .footer-logo-icon svg { width: 22px; height: 22px; color: white; }
+        .footer-logo span { font-size: 1.5rem; font-weight: 700; }
+        .footer-tagline {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        .footer-social { display: flex; gap: 0.75rem; }
+        .social-link {
+            width: 40px; height: 40px;
+            background: var(--gray-800);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-400);
+            transition: all 0.2s;
+        }
+        .social-link:hover { background: var(--primary-600); color: white; }
+        .social-link svg { width: 18px; height: 18px; }
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        .footer-column h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            color: white;
+        }
+        .footer-column ul { list-style: none; }
+        .footer-column li { margin-bottom: 0.75rem; }
+        .footer-column a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+        .footer-column a:hover { color: var(--primary-400); }
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+        }
+        .footer-copyright p { color: var(--gray-500); font-size: 0.875rem; }
+        .footer-certifications { display: flex; gap: 0.75rem; }
+        .cert-badge {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* BACK TO TOP */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-teal);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3);
+            z-index: 100;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .back-to-top:hover {
+            transform: translateY(-4px);
+        }
+        .back-to-top svg { width: 24px; height: 24px; }
+
+        /* PRINT STYLES */
+        .print-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .print-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        .print-btn svg { width: 18px; height: 18px; }
+
+        @media print {
+            .navbar, .sidebar, .footer, .back-to-top, .print-btn { display: none !important; }
+            .main-layout { grid-template-columns: 1fr; padding: 0; }
+            .legal-section { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+            body { font-size: 12pt; }
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .footer-main { grid-template-columns: 1fr; gap: 3rem; }
+            .footer-links { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .page-hero { padding: 7rem 1.5rem 3rem; }
+            .page-hero h1 { font-size: 2rem; }
+            .hero-meta { flex-direction: column; gap: 0.5rem; }
+            .legal-section { padding: 2rem 1.5rem; }
+            .section-header { flex-direction: column; gap: 1rem; }
+            .section-icon { width: 48px; height: 48px; }
+            .section-icon svg { width: 24px; height: 24px; }
+            .section-title { font-size: 1.5rem; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+            .nav-actions .btn-ghost { display: none; }
+            .cookie-grid { grid-template-columns: 1fr; }
+            .browser-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR (Shared Component) -->
+    <nexlify-header></nexlify-header>
+
+    <!-- HERO -->
+    <section class="page-hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="12" cy="12" r="4"/>
+                    <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/>
+                    <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/>
+                    <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/>
+                    <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/>
+                </svg>
+                Configuracion de Cookies
+            </div>
+            <h1>Politica de Cookies</h1>
+            <p>Informacion transparente sobre las cookies y tecnologias similares que utilizamos para mejorar tu experiencia en Nexlify.</p>
+            <div class="hero-meta">
+                <span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    Ultima actualizacion: 18 de diciembre de 2025
+                </span>
+                <span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Tiempo de lectura: 12 min
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Indice de contenidos</h3>
+                <ul class="toc-list">
+                    <li class="toc-item"><a href="#que-son" class="toc-link active"><span class="toc-number">1</span> Que son las cookies</a></li>
+                    <li class="toc-item"><a href="#tipos" class="toc-link"><span class="toc-number">2</span> Tipos de cookies</a></li>
+                    <li class="toc-item"><a href="#cookies-utilizadas" class="toc-link"><span class="toc-number">3</span> Cookies que utilizamos</a></li>
+                    <li class="toc-item"><a href="#cookies-terceros" class="toc-link"><span class="toc-number">4</span> Cookies de terceros</a></li>
+                    <li class="toc-item"><a href="#finalidades" class="toc-link"><span class="toc-number">5</span> Finalidades</a></li>
+                    <li class="toc-item"><a href="#consentimiento" class="toc-link"><span class="toc-number">6</span> Consentimiento</a></li>
+                    <li class="toc-item"><a href="#gestion" class="toc-link"><span class="toc-number">7</span> Gestion de cookies</a></li>
+                    <li class="toc-item"><a href="#navegadores" class="toc-link"><span class="toc-number">8</span> Configurar navegadores</a></li>
+                    <li class="toc-item"><a href="#actualizaciones" class="toc-link"><span class="toc-number">9</span> Actualizaciones</a></li>
+                    <li class="toc-item"><a href="#contacto" class="toc-link"><span class="toc-number">10</span> Contacto</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-card">
+                <div class="sidebar-info">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <circle cx="12" cy="12" r="4"/>
+                    </svg>
+                    <div>
+                        <strong>Tu eleccion importa</strong>
+                        <p style="margin-top:0.25rem;font-size:0.8rem;">Puedes gestionar tus preferencias de cookies en cualquier momento.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="print-btn" onclick="window.print()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 6 2 18 2 18 9"/>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                    <rect x="6" y="14" width="12" height="8"/>
+                </svg>
+                Imprimir documento
+            </button>
+        </aside>
+
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- Section 1: Que son las cookies -->
+            <section class="legal-section" id="que-son">
+                <div class="section-header">
+                    <div class="section-icon teal">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="4"/>
+                            <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/>
+                            <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/>
+                        </svg>
+                    </div>
+                    <div class="section-meta">
+                        <div class="section-number">Articulo 1</div>
+                        <h2 class="section-title">Que son las cookies</h2>
+                        <p class="section-subtitle">Definicion y funcionamiento basico</p>
+                    </div>
+                </div>
+                <div class="legal-content">
+                    <p>Las <strong>cookies</strong> son pequenos archivos de texto que los sitios web almacenan en tu dispositivo (ordenador, tablet o movil) cuando los visitas. Estas cookies contienen informacion que permite al sitio web recordar tus preferencias y mejorar tu experiencia de navegacion.</p>
+
+                    <h3>1.1 Como funcionan</h3>
+                    <p>Cuando visitas nuestra plataforma, el servidor envia una cookie a tu navegador, que la almacena localmente. En visitas posteriores, el navegador envia esta cookie de vuelta al servidor, permitiendo:</p>
+                    <ul>
+                        <li>Recordar tu sesion iniciada</li>
+                        <li>Mantener tus preferencias de configuracion (idioma, tema claro/oscuro)</li>
+                        <li>Analizar como utilizas la plataforma para mejorarla</li>
+                        <li>Garantizar la seguridad de tu cuenta</li>
+                    </ul>
+
+                    <h3>1.2 Marco legal aplicable</h3>
+                    <p>El uso de cookies esta regulado por:</p>
+                    <ul>
+                        <li><strong>Ley 34/2002 (LSSI-CE)</strong> - Articulo 22.2 sobre cookies y almacenamiento local</li>
+                        <li><strong>Reglamento (UE) 2016/679 (RGPD)</strong> - Tratamiento de datos personales mediante cookies</li>
+                        <li><strong>Directiva 2002/58/CE (ePrivacy)</strong> - Privacidad en comunicaciones electronicas</li>
+                        <li><strong>Guia de la AEPD</strong> - Sobre el uso de cookies</li>
+                    </ul>
+
+                    <div class="highlight-box info">
+                        <p><strong>Transparencia:</strong> Esta politica cumple con las directrices de la Agencia Espanola de Proteccion de Datos (AEPD) sobre informacion y consentimiento en el uso de cookies.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Tipos de cookies -->
+            <section class="legal-section" id="tipos">
+                <div class="section-header">
+                    <div class="section-icon purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="3" y1="9" x2="21" y2="9"/>
+                            <line x1="9" y1="21" x2="9" y2="9"/>
+                        </svg>
+                    </div>
+                    <div class="section-meta">
+                        <div class="section-number">Articulo 2</div>
+                        <h2 class="section-title">Tipos de cookies</h2>
+                        <p class="section-subtitle">Clasificacion segun diferentes criterios</p>
+                    </div>
+                </div>
+                <div class="legal-content">
+                    <h3>2.1 Segun su origen</h3>
+                    <table class="data-table">
+                        <tr>
+                            <th style="width:30%">Tipo</th>
+                            <th>Descripcion</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Cookies propias</strong></td>
+                            <td>Enviadas a tu dispositivo desde nuestros propios servidores (nexlify.io)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cookies de terceros</strong></td>
+                            <td>Enviadas desde dominios de terceros que prestan servicios en nuestra plataforma (analytics, pagos, etc.)</td>
+                        </tr>
+                    </table>
+
+                    <h3>2.2 Segun su duracion</h3>
+                    <table class="data-table">
+                        <tr>
+                            <th style="width:30%">Tipo</th>
+                            <th>Descripcion</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Cookies de sesion</strong></td>
+                            <td>Se eliminan automaticamente cuando cierras el navegador. No se almacenan de forma permanente.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cookies persistentes</strong></td>
+                            <td>Permanecen en tu dispositivo durante un periodo determinado o hasta que las elimines manualmente.</td>
+                        </tr>
+                    </table>
+
+                    <h3>2.3 Segun su finalidad</h3>
+                    <table class="data-table">
+                        <tr>
+                            <th style="width:30%">Tipo</th>
+                            <th>Descripcion</th>
+                            <th style="width:20%">Consentimiento</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Tecnicas/Esenciales</strong></td>
+                            <td>Necesarias para el funcionamiento basico del sitio</td>
+                            <td>No requerido</td>
+                        </tr>
+                        <tr>
+                            <td><strong>De preferencias</strong></td>
+                            <td>Recuerdan tu configuracion (idioma, tema)</td>
+                            <td>No requerido</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Analiticas</strong></td>
+                            <td>Recopilan informacion sobre el uso del sitio</td>
+                            <td>Requerido</td>
+                        </tr>
+                        <tr>
+                            <td><strong>De marketing</strong></td>
+                            <td>Seguimiento para publicidad personalizada</td>
+                            <td>Requerido</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 3: Cookies que utilizamos -->
+            <section class="legal-section" id="cookies-utilizadas">
+                <div class="section-header">
+                    <div class="section-icon blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                        </svg>
+                    </div>
+                    <div class="section-meta">
+                        <div class="section-number">Articulo 3</div>
+                        <h2 class="section-title">Cookies que utilizamos</h2>
+                        <p class="section-subtitle">Detalle de cada cookie en nuestra plataforma</p>
+                    </div>
+                </div>
+                <div class="legal-content">
+                    <h3>3.1 Cookies tecnicas (esenciales)</h3>
+                    <p>Estas cookies son necesarias para el funcionamiento basico de la plataforma y no pueden desactivarse:</p>
+
+                    <div class="cookie-grid">
+                        <div class="cookie-card">
+                            <div class="cookie-card-header">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    auth-storage
+                                </h4>
+                                <span class="cookie-badge required">Esencial</span>
+                            </div>
+                            <p>Almacena tu token de autenticacion para mantener la sesion iniciada de forma segura.</p>
+                            <div class="cookie-meta">
+                                <span>Duracion: 30 dias</span>
+                                <span>Propia</span>
+                            </div>
+                        </div>
+
+                        <div class="cookie-card">
+                            <div class="cookie-card-header">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                    csrf-token
+                                </h4>
+                                <span class="cookie-badge required">Esencial</span>
+                            </div>
+                            <p>Token de seguridad para prevenir ataques CSRF (Cross-Site Request Forgery).</p>
+                            <div class="cookie-meta">
+                                <span>Duracion: Sesion</span>
+                                <span>Propia</span>
+                            </div>
+                        </div>
+
+                        <div class="cookie-card">
+                            <div class="cookie-card-header">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                    session-id
+                                </h4>
+                                <span class="cookie-badge required">Esencial</span>
+                            </div>
+                            <p>Identificador unico de sesion para el funcionamiento del servidor.</p>
+                            <div class="cookie-meta">
+                                <span>Duracion: Sesion</span>
+                                <span>Propia</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>3.2 Cookies de preferencias</h3>
+                    <p>Permiten recordar tu configuracion personalizada:</p>
+
+                    <div class="cookie-grid">
+                        <div class="cookie-card">
+                            <div class="cookie-card-header">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                                    theme-storage
+                                </h4>
+                                <span class="cookie-badge required">Esencial</span>
+                            </div>
+                            <p>Guarda tu preferencia de tema visual (claro u oscuro) para todas las paginas.</p>
+                            <div class="cookie-meta">
+                                <span>Duracion: 1 ano</span>
+                                <span>Propia</span>
+                            </div>
+                        </div>
+
+                        <div class="cookie-card">
+                            <div class="cookie-card-header">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                                    locale
+                                </h4>
+                                <span class="cookie-badge required">Esencial</span>
+                            </div>
+                            <p>Almacena tu preferencia de idioma para la interfaz de usuario.</p>
+                            <div class="cookie-meta">
+                                <span>Duracion: 1 ano</span>
+                                <span>Propia</span>
+                            </div>
+                        </div>
+
+                        <div class="cookie-card">
+                            <div class="cookie-card-header">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                                    sidebar-collapsed
+                                </h4>
+                                <span class="cookie-badge required">Esencial</span>
+                            </div>
+                            <p>Recuerda si prefieres la barra lateral expandida o contraida.</p>
+                            <div class="cookie-meta">
+                                <span>Duracion: 1 ano</span>
+                                <span>Propia</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>3.3 Cookies analiticas</h3>
+                    <p>Nos ayudan a entender como utilizas la plataforma (requieren tu consentimiento):</p>
+
+                    <div class="cookie-grid">
+                        <div class="cookie-card">
+                            <div class="cookie-card-header">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                                    _ga
+                                </h4>
+                                <span class="cookie-badge optional">Opcional</span>
+                            </div>
+                            <p>Cookie de Google Analytics para distinguir usuarios unicos.</p>
+                            <div class="cookie-meta">
+                                <span>Duracion: 2 anos</span>
+                                <span>Terceros</span>
+                            </div>
+                        </div>
+
+                        <div class="cookie-card">
+                            <div class="cookie-card-header">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                                    _gid
+                                </h4>
+                                <span class="cookie-badge optional">Opcional</span>
+                            </div>
+                            <p>Cookie de Google Analytics para distinguir usuarios durante 24 horas.</p>
+                            <div class="cookie-meta">
+                                <span>Duracion: 24 horas</span>
+                                <span>Terceros</span>
+                            </div>
+                        </div>
+
+                        <div class="cookie-card">
+                            <div class="cookie-card-header">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                                    _gat
+                                </h4>
+                                <span class="cookie-badge optional">Opcional</span>
+                            </div>
+                            <p>Cookie de Google Analytics para limitar la tasa de solicitudes.</p>
+                            <div class="cookie-meta">
+                                <span>Duracion: 1 minuto</span>
+                                <span>Terceros</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Cookies de terceros -->
+            <section class="legal-section" id="cookies-terceros">
+                <div class="section-header">
+                    <div class="section-icon orange">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <div class="section-meta">
+                        <div class="section-number">Articulo 4</div>
+                        <h2 class="section-title">Cookies de terceros</h2>
+                        <p class="section-subtitle">Servicios externos que utilizan cookies</p>
+                    </div>
+                </div>
+                <div class="legal-content">
+                    <p>Utilizamos servicios de terceros que pueden instalar sus propias cookies en tu dispositivo:</p>
+
+                    <table class="data-table">
+                        <tr>
+                            <th>Proveedor</th>
+                            <th>Proposito</th>
+                            <th>Politica de privacidad</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Google Analytics</strong></td>
+                            <td>Analisis de uso y comportamiento de usuarios</td>
+                            <td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Ver politica</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Stripe</strong></td>
+                            <td>Procesamiento seguro de pagos</td>
+                            <td><a href="https://stripe.com/privacy" target="_blank" rel="noopener">Ver politica</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Intercom</strong></td>
+                            <td>Chat de soporte al cliente</td>
+                            <td><a href="https://www.intercom.com/legal/privacy" target="_blank" rel="noopener">Ver politica</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cloudflare</strong></td>
+                            <td>Seguridad y rendimiento (CDN)</td>
+                            <td><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Ver politica</a></td>
+                        </tr>
+                    </table>
+
+                    <div class="highlight-box warning">
+                        <p><strong>Importante:</strong> No tenemos control sobre las cookies de terceros. Te recomendamos revisar las politicas de privacidad de cada proveedor para mas informacion sobre como gestionan tus datos.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Finalidades -->
+            <section class="legal-section" id="finalidades">
+                <div class="section-header">
+                    <div class="section-icon green">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div class="section-meta">
+                        <div class="section-number">Articulo 5</div>
+                        <h2 class="section-title">Finalidades del uso de cookies</h2>
+                        <p class="section-subtitle">Para que utilizamos las cookies</p>
+                    </div>
+                </div>
+                <div class="legal-content">
+                    <h3>5.1 Finalidades tecnicas</h3>
+                    <ul>
+                        <li><strong>Autenticacion:</strong> Mantener tu sesion iniciada de forma segura</li>
+                        <li><strong>Seguridad:</strong> Proteger contra ataques CSRF y detectar accesos no autorizados</li>
+                        <li><strong>Equilibrio de carga:</strong> Distribuir el trafico entre servidores</li>
+                        <li><strong>Rendimiento:</strong> Optimizar la velocidad de carga de la plataforma</li>
+                    </ul>
+
+                    <h3>5.2 Finalidades de personalizacion</h3>
+                    <ul>
+                        <li><strong>Preferencias visuales:</strong> Recordar tu eleccion de tema (claro/oscuro)</li>
+                        <li><strong>Idioma:</strong> Mostrar la interfaz en tu idioma preferido</li>
+                        <li><strong>Configuracion de interfaz:</strong> Recordar el estado de paneles y menus</li>
+                        <li><strong>Experiencia personalizada:</strong> Adaptar contenido a tu perfil de uso</li>
+                    </ul>
+
+                    <h3>5.3 Finalidades analiticas</h3>
+                    <ul>
+                        <li><strong>Estadisticas de uso:</strong> Conocer que funcionalidades son mas utilizadas</li>
+                        <li><strong>Mejora del servicio:</strong> Identificar areas de mejora en la experiencia</li>
+                        <li><strong>Deteccion de errores:</strong> Identificar y resolver problemas tecnicos</li>
+                        <li><strong>Rendimiento:</strong> Medir tiempos de carga y optimizar la plataforma</li>
+                    </ul>
+
+                    <div class="highlight-box info">
+                        <p><strong>Anonimizacion:</strong> Las cookies analiticas recopilan datos de forma agregada y anonimizada. No nos permiten identificarte personalmente de forma directa.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 6: Consentimiento -->
+            <section class="legal-section" id="consentimiento">
+                <div class="section-header">
+                    <div class="section-icon indigo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                    </div>
+                    <div class="section-meta">
+                        <div class="section-number">Articulo 6</div>
+                        <h2 class="section-title">Consentimiento</h2>
+                        <p class="section-subtitle">Tu control sobre las cookies</p>
+                    </div>
+                </div>
+                <div class="legal-content">
+                    <h3>6.1 Banner de cookies</h3>
+                    <p>La primera vez que visitas nuestra plataforma, mostramos un banner de cookies que te permite:</p>
+                    <ul>
+                        <li><strong>Aceptar todas:</strong> Consientes el uso de todas las cookies</li>
+                        <li><strong>Rechazar opcionales:</strong> Solo se utilizan cookies esenciales</li>
+                        <li><strong>Personalizar:</strong> Elegir que tipos de cookies aceptas</li>
+                    </ul>
+
+                    <h3>6.2 Cookies exentas de consentimiento</h3>
+                    <p>Conforme a la LSSI-CE, las siguientes cookies NO requieren tu consentimiento previo:</p>
+                    <ul>
+                        <li>Cookies de autenticacion (para mantener tu sesion)</li>
+                        <li>Cookies de seguridad (prevencion de fraude)</li>
+                        <li>Cookies de preferencias de usuario (tema, idioma)</li>
+                        <li>Cookies de equilibrio de carga (funcionamiento del servidor)</li>
+                    </ul>
+
+                    <h3>6.3 Revocacion del consentimiento</h3>
+                    <p>Puedes retirar tu consentimiento en cualquier momento mediante:</p>
+                    <ul>
+                        <li>El enlace "Configurar cookies" en el pie de pagina</li>
+                        <li>La configuracion de tu navegador</li>
+                        <li>La seccion Configuracion > Privacidad de tu cuenta</li>
+                    </ul>
+
+                    <div class="highlight-box success">
+                        <p><strong>Sin consecuencias negativas:</strong> Rechazar las cookies opcionales no afectara al funcionamiento basico de la plataforma, aunque algunas funcionalidades personalizadas podrian verse limitadas.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 7: Gestion de cookies -->
+            <section class="legal-section" id="gestion">
+                <div class="section-header">
+                    <div class="section-icon cyan">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                    </div>
+                    <div class="section-meta">
+                        <div class="section-number">Articulo 7</div>
+                        <h2 class="section-title">Gestion de cookies</h2>
+                        <p class="section-subtitle">Como controlar las cookies en Nexlify</p>
+                    </div>
+                </div>
+                <div class="legal-content">
+                    <h3>7.1 Panel de preferencias</h3>
+                    <p>Desde nuestra plataforma puedes gestionar tus preferencias de cookies:</p>
+                    <ul>
+                        <li><strong>Usuarios registrados:</strong> Configuracion > Privacidad > Preferencias de cookies</li>
+                        <li><strong>Visitantes:</strong> Enlace "Configurar cookies" en el pie de pagina</li>
+                    </ul>
+
+                    <h3>7.2 Opciones disponibles</h3>
+                    <table class="data-table">
+                        <tr>
+                            <th>Categoria</th>
+                            <th>Descripcion</th>
+                            <th>Desactivable</th>
+                        </tr>
+                        <tr>
+                            <td>Esenciales</td>
+                            <td>Necesarias para el funcionamiento</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>Preferencias</td>
+                            <td>Recuerdan tu configuracion</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>Analiticas</td>
+                            <td>Estadisticas de uso</td>
+                            <td>Si</td>
+                        </tr>
+                        <tr>
+                            <td>Marketing</td>
+                            <td>Publicidad personalizada</td>
+                            <td>Si</td>
+                        </tr>
+                    </table>
+
+                    <h3>7.3 Eliminar cookies existentes</h3>
+                    <p>Para eliminar las cookies ya almacenadas en tu dispositivo:</p>
+                    <ol>
+                        <li>Accede a la configuracion de tu navegador</li>
+                        <li>Busca la seccion de privacidad o cookies</li>
+                        <li>Selecciona "Eliminar datos de navegacion" o similar</li>
+                        <li>Marca la opcion de cookies y confirma</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- Section 8: Navegadores -->
+            <section class="legal-section" id="navegadores">
+                <div class="section-header">
+                    <div class="section-icon amber">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="4"/>
+                            <line x1="21.17" y1="8" x2="12" y2="8"/>
+                            <line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
+                            <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
+                        </svg>
+                    </div>
+                    <div class="section-meta">
+                        <div class="section-number">Articulo 8</div>
+                        <h2 class="section-title">Configurar navegadores</h2>
+                        <p class="section-subtitle">Como gestionar cookies en cada navegador</p>
+                    </div>
+                </div>
+                <div class="legal-content">
+                    <p>Puedes configurar tu navegador para bloquear o eliminar cookies. A continuacion te indicamos como hacerlo en los navegadores mas comunes:</p>
+
+                    <div class="browser-grid">
+                        <div class="browser-card">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0zM1.931 5.47A11.943 11.943 0 0 0 0 12c0 6.012 4.42 10.991 10.189 11.864l3.953-6.847a5.45 5.45 0 0 1-6.865-2.29zm13.342 2.166a5.446 5.446 0 0 1 1.45 7.09l.002.001h-.002l-3.952 6.848a12.014 12.014 0 0 0 9.341-10.027H15.31a5.416 5.416 0 0 1-.036-.912z"/></svg>
+                            <h4>Google Chrome</h4>
+                            <a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Ver instrucciones</a>
+                        </div>
+                        <div class="browser-card">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.001 0C18.351 0 23.511 4.934 23.961 11.166h-8.018a3.981 3.981 0 1 0 0 1.668h8.018C23.511 19.066 18.351 24 12.001 24 5.373 24 0 18.627 0 12S5.373 0 12.001 0z"/></svg>
+                            <h4>Mozilla Firefox</h4>
+                            <a href="https://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies-sitios-web-rastrear-preferencias" target="_blank" rel="noopener">Ver instrucciones</a>
+                        </div>
+                        <div class="browser-card">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2.182c5.423 0 9.818 4.395 9.818 9.818S17.423 21.818 12 21.818 2.182 17.423 2.182 12 6.577 2.182 12 2.182z"/></svg>
+                            <h4>Safari</h4>
+                            <a href="https://support.apple.com/es-es/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Ver instrucciones</a>
+                        </div>
+                        <div class="browser-card">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 12c0 6.627 5.373 12 12 12s12-5.373 12-12S18.627 0 12 0 0 5.373 0 12zm12-9.5c5.247 0 9.5 4.253 9.5 9.5s-4.253 9.5-9.5 9.5S2.5 17.247 2.5 12 6.753 2.5 12 2.5z"/></svg>
+                            <h4>Microsoft Edge</h4>
+                            <a href="https://support.microsoft.com/es-es/microsoft-edge/eliminar-cookies-en-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener">Ver instrucciones</a>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box warning">
+                        <p><strong>Advertencia:</strong> Bloquear todas las cookies puede afectar al funcionamiento de la plataforma. Te recomendamos mantener activas al menos las cookies esenciales para una experiencia optima.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Actualizaciones -->
+            <section class="legal-section" id="actualizaciones">
+                <div class="section-header">
+                    <div class="section-icon gray">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                    </div>
+                    <div class="section-meta">
+                        <div class="section-number">Articulo 9</div>
+                        <h2 class="section-title">Actualizaciones de esta politica</h2>
+                        <p class="section-subtitle">Cambios y versiones</p>
+                    </div>
+                </div>
+                <div class="legal-content">
+                    <p>Podemos actualizar esta Politica de Cookies periodicamente para reflejar cambios en las cookies que utilizamos o por motivos legales.</p>
+
+                    <h3>9.1 Notificacion de cambios</h3>
+                    <p>Cuando realicemos cambios significativos:</p>
+                    <ul>
+                        <li>Actualizaremos la fecha de "ultima modificacion" en esta pagina</li>
+                        <li>Mostraremos un nuevo banner de cookies si es necesario</li>
+                        <li>Te notificaremos por email si los cambios afectan a tu privacidad</li>
+                    </ul>
+
+                    <h3>9.2 Historial de versiones</h3>
+                    <table class="data-table">
+                        <tr>
+                            <th>Version</th>
+                            <th>Fecha</th>
+                            <th>Cambios</th>
+                        </tr>
+                        <tr>
+                            <td>1.0</td>
+                            <td>18/12/2025</td>
+                            <td>Version inicial de la politica de cookies</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 10: Contacto -->
+            <section class="legal-section" id="contacto">
+                <div class="section-header">
+                    <div class="section-icon teal">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <div class="section-meta">
+                        <div class="section-number">Articulo 10</div>
+                        <h2 class="section-title">Contacto</h2>
+                        <p class="section-subtitle">Preguntas sobre cookies</p>
+                    </div>
+                </div>
+                <div class="legal-content">
+                    <p>Si tienes preguntas sobre nuestra Politica de Cookies o sobre como gestionamos las cookies, puedes contactar con nosotros:</p>
+
+                    <table class="data-table">
+                        <tr>
+                            <th>Canal</th>
+                            <th>Contacto</th>
+                        </tr>
+                        <tr>
+                            <td>Correo electronico</td>
+                            <td><a href="mailto:privacy@nexlify.io">privacy@nexlify.io</a></td>
+                        </tr>
+                        <tr>
+                            <td>Delegado de Proteccion de Datos</td>
+                            <td><a href="mailto:dpo@nexlify.io">dpo@nexlify.io</a></td>
+                        </tr>
+                        <tr>
+                            <td>Direccion postal</td>
+                            <td>Nexlify Technologies, S.L.<br>Calle Ejemplo, 123<br>28001 Madrid, Espana</td>
+                        </tr>
+                    </table>
+
+                    <div class="highlight-box info">
+                        <p><strong>Mas informacion:</strong> Para conocer en detalle como tratamos tus datos personales, consulta nuestra <a href="/privacy.html">Politica de Privacidad</a>.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- FOOTER (Shared Component) -->
+    <nexlify-footer></nexlify-footer>
+
+    <!-- BACK TO TOP -->
+    <button class="back-to-top" id="backToTop" aria-label="Volver arriba">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"/>
+        </svg>
+    </button>
+
+    <!-- Shared Components -->
+    <script src="/components/header.js"></script>
+    <script src="/components/footer.js"></script>
+
+    <script>
+        // Back to top button
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop?.classList.toggle('visible', window.scrollY > 500);
+        });
+        backToTop?.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // TOC active state on scroll
+        const sections = document.querySelectorAll('.legal-section');
+        const tocLinks = document.querySelectorAll('.toc-link');
+
+        function updateTOC() {
+            let current = '';
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+            tocLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+            });
+        }
+
+        window.addEventListener('scroll', updateTOC);
+        updateTOC();
+
+    </script>
+</body>
+</html>

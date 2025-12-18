@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, lazy, Suspense } from 'react';
 import { Layout } from '@/components/layout';
-import { Login, Register, Dashboard, Risks, Modules, Users, Billing, CheckoutSuccess } from '@/pages';
+import { Login, Register, Dashboard, Risks, Modules, Users, Billing, CheckoutSuccess, Profile, Settings, InvestorInquiries, DataRoom, About } from '@/pages';
 import { useAuthStore } from '@/stores/auth';
 import { useThemeStore } from '@/stores/theme';
 
@@ -159,10 +159,15 @@ export default function App() {
         <Route path="/reports" element={<PlaceholderPage title="Reportes" />} />
         <Route path="/compliance" element={<PlaceholderPage title="Cumplimiento" />} />
         <Route path="/billing" element={<Billing />} />
-        <Route path="/settings" element={<PlaceholderPage title="Configuración" />} />
+        <Route path="/settings" element={<Settings />} />
         <Route path="/help" element={<PlaceholderPage title="Ayuda" />} />
-        <Route path="/profile" element={<PlaceholderPage title="Mi Perfil" />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/investor-inquiries" element={<InvestorInquiries />} />
+        <Route path="/data-room" element={<DataRoom />} />
       </Route>
+
+      {/* Public About Page - No auth required */}
+      <Route path="/about" element={<About />} />
 
       {/* Redirect root to dashboard */}
       <Route path="/" element={<Navigate to="/dashboard" replace />} />

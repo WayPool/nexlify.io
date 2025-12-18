@@ -399,3 +399,146 @@ export const notifications = mysqlTable(
     userReadIdx: index('notifications_user_read_idx').on(table.user_id, table.read_at),
   })
 );
+
+// =============================================================================
+// Investor Inquiries
+// =============================================================================
+
+export const investorInquiries = mysqlTable(
+  'investor_inquiries',
+  {
+    id: varchar('id', { length: 36 }).primaryKey(),
+    first_name: varchar('first_name', { length: 100 }).notNull(),
+    last_name: varchar('last_name', { length: 100 }).notNull(),
+    email: varchar('email', { length: 255 }).notNull(),
+    phone: varchar('phone', { length: 50 }).notNull(),
+    company: varchar('company', { length: 255 }),
+    country: varchar('country', { length: 10 }).notNull(),
+    investor_type: mysqlEnum('investor_type', [
+      'institutional',
+      'professional',
+      'experienced',
+      'high_net_worth',
+      'family_office',
+      'other',
+    ]).notNull(),
+    investment_range: mysqlEnum('investment_range', [
+      '100k-250k',
+      '250k-500k',
+      '500k-1m',
+      '1m+',
+    ]),
+    message: text('message'),
+    is_qualified: boolean('is_qualified').default(false).notNull(),
+    understands_risks: boolean('understands_risks').default(false).notNull(),
+    understands_structure: boolean('understands_structure').default(false).notNull(),
+    accepts_privacy: boolean('accepts_privacy').default(false).notNull(),
+    accepts_contact: boolean('accepts_contact').default(false).notNull(),
+    status: mysqlEnum('status', ['new', 'contacted', 'qualified', 'rejected', 'converted'])
+      .default('new')
+      .notNull(),
+    notes: text('notes'),
+    ip_address: varchar('ip_address', { length: 45 }),
+    user_agent: text('user_agent'),
+    created_at: timestamp('created_at').defaultNow().notNull(),
+    updated_at: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => ({
+    emailIdx: index('investor_inquiries_email_idx').on(table.email),
+    statusIdx: index('investor_inquiries_status_idx').on(table.status),
+    createdAtIdx: index('investor_inquiries_created_at_idx').on(table.created_at),
+  })
+);
+
+// =============================================================================
+// Data Room Access
+// =============================================================================
+
+export const dataRoomAccess = mysqlTable(
+  'data_room_access',
+  {
+    id: varchar('id', { length: 36 }).primaryKey(),
+    email: varchar('email', { length: 255 }).notNull(),
+    name: varchar('name', { length: 255 }),
+    company: varchar('company', { length: 255 }),
+    investor_inquiry_id: varchar('investor_inquiry_id', { length: 36 }).references(
+      () => investorInquiries.id
+    ),
+    access_level: mysqlEnum('access_level', ['view', 'download', 'full'])
+      .default('view')
+      .notNull(),
+    status: mysqlEnum('status', ['pending', 'active', 'revoked', 'expired'])
+      .default('pending')
+      .notNull(),
+    invited_by: varchar('invited_by', { length: 255 }).notNull(),
+    last_access: timestamp('last_access'),
+    expires_at: timestamp('expires_at'),
+    notes: text('notes'),
+    created_at: timestamp('created_at').defaultNow().notNull(),
+    updated_at: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => ({
+    emailIdx: uniqueIndex('data_room_access_email_idx').on(table.email),
+    statusIdx: index('data_room_access_status_idx').on(table.status),
+    inquiryIdx: index('data_room_access_inquiry_idx').on(table.investor_inquiry_id),
+  })
+);
+
+// =============================================================================
+// Data Room Documents
+// =============================================================================
+
+export const dataRoomDocuments = mysqlTable(
+  'data_room_documents',
+  {
+    id: varchar('id', { length: 36 }).primaryKey(),
+    name: varchar('name', { length: 255 }).notNull(),
+    description: text('description'),
+    category: mysqlEnum('category', [
+      'financials',
+      'legal',
+      'corporate',
+      'technical',
+      'market',
+      'team',
+      'other',
+    ]).notNull(),
+    file_path: varchar('file_path', { length: 500 }).notNull(),
+    file_size: int('file_size'),
+    mime_type: varchar('mime_type', { length: 100 }),
+    version: varchar('version', { length: 20 }).default('1.0'),
+    is_public: boolean('is_public').default(false).notNull(),
+    sort_order: int('sort_order').default(0),
+    uploaded_by: varchar('uploaded_by', { length: 255 }).notNull(),
+    created_at: timestamp('created_at').defaultNow().notNull(),
+    updated_at: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => ({
+    categoryIdx: index('data_room_documents_category_idx').on(table.category),
+    sortIdx: index('data_room_documents_sort_idx').on(table.sort_order),
+  })
+);
+
+// =============================================================================
+// Data Room Access Log
+// =============================================================================
+
+export const dataRoomAccessLog = mysqlTable(
+  'data_room_access_log',
+  {
+    id: varchar('id', { length: 36 }).primaryKey(),
+    access_id: varchar('access_id', { length: 36 })
+      .notNull()
+      .references(() => dataRoomAccess.id),
+    document_id: varchar('document_id', { length: 36 }).references(() => dataRoomDocuments.id),
+    action: mysqlEnum('action', ['login', 'view', 'download', 'logout']).notNull(),
+    ip_address: varchar('ip_address', { length: 45 }),
+    user_agent: text('user_agent'),
+    created_at: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    accessIdx: index('data_room_access_log_access_idx').on(table.access_id),
+    documentIdx: index('data_room_access_log_document_idx').on(table.document_id),
+    createdAtIdx: index('data_room_access_log_created_at_idx').on(table.created_at),
+  })
+);

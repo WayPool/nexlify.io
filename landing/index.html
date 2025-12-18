@@ -165,11 +165,29 @@
             color: white;
         }
 
+        .logo-content {
+            display: flex;
+            flex-direction: column;
+        }
+
         .logo-text {
             font-size: 1.5rem;
             font-weight: 700;
             color: white;
             transition: color 0.3s ease;
+            line-height: 1.2;
+        }
+
+        .logo-tagline {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .navbar.scrolled .logo-tagline {
+            color: var(--text-muted);
         }
 
         .nav-links {
@@ -256,6 +274,86 @@
 
         .navbar.scrolled .btn-primary:hover {
             opacity: 0.9;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar.scrolled .theme-toggle {
+            background: var(--gray-100);
+            color: var(--text-primary);
+        }
+
+        .navbar.scrolled .theme-toggle:hover {
+            background: var(--gray-200);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Dark Mode Support */
+        html.dark {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --gray-50: #1e293b;
+            --gray-100: #334155;
+            --gray-200: #475569;
+        }
+
+        html.dark .navbar.scrolled {
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        html.dark .navbar.scrolled .nav-link {
+            color: var(--text-primary);
+        }
+
+        html.dark .navbar.scrolled .logo-text {
+            color: var(--text-primary);
+        }
+
+        html.dark .navbar.scrolled .logo-tagline {
+            color: var(--text-muted);
+        }
+
+        html.dark .navbar.scrolled .btn-ghost {
+            color: var(--text-primary);
+        }
+
+        html.dark .navbar.scrolled .btn-ghost:hover {
+            background: var(--gray-100);
+        }
+
+        html.dark .navbar.scrolled .theme-toggle {
+            background: var(--gray-100);
+            color: var(--text-primary);
+        }
+
+        html.dark .navbar.scrolled .theme-toggle:hover {
+            background: var(--gray-200);
         }
 
         /* ========================================
@@ -611,7 +709,10 @@
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                     </svg>
                 </div>
-                <span class="logo-text">Nexlify</span>
+                <div class="logo-content">
+                    <span class="logo-text">Nexlify</span>
+                    <span class="logo-tagline">Donde el riesgo se convierte en decisión</span>
+                </div>
             </a>
 
             <div class="nav-links">
@@ -622,6 +723,16 @@
             </div>
 
             <div class="nav-buttons" id="navButtons">
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <svg class="moon-icon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
                 <!-- Botones para usuarios NO logueados -->
                 <div id="loggedOutButtons">
                     <a href="/app/login" class="btn btn-ghost">Iniciar sesion</a>
@@ -5549,6 +5660,56 @@
         // Run on page load
         checkAuthStatus();
 
+        // Theme toggle functionality
+        (function initTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            const sunIcon = themeToggle?.querySelector('.sun-icon');
+            const moonIcon = themeToggle?.querySelector('.moon-icon');
+
+            // Get stored theme
+            const getStoredTheme = () => {
+                try {
+                    const stored = localStorage.getItem('theme-storage');
+                    if (stored) {
+                        const parsed = JSON.parse(stored);
+                        return parsed.state?.theme || 'light';
+                    }
+                } catch (e) {}
+                return 'light';
+            };
+
+            // Set theme
+            const setTheme = (theme) => {
+                document.documentElement.classList.toggle('dark', theme === 'dark');
+                if (sunIcon && moonIcon) {
+                    sunIcon.style.display = theme === 'dark' ? 'none' : 'block';
+                    moonIcon.style.display = theme === 'dark' ? 'block' : 'none';
+                }
+            };
+
+            // Save theme
+            const saveTheme = (theme) => {
+                try {
+                    const stored = localStorage.getItem('theme-storage');
+                    let data = stored ? JSON.parse(stored) : { state: {} };
+                    data.state.theme = theme;
+                    localStorage.setItem('theme-storage', JSON.stringify(data));
+                } catch (e) {}
+            };
+
+            // Initialize
+            const initialTheme = getStoredTheme();
+            setTheme(initialTheme);
+
+            // Toggle handler
+            themeToggle?.addEventListener('click', () => {
+                const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+                saveTheme(newTheme);
+            });
+        })();
+
         // Checkout function - redirect based on auth status
         function startCheckout(planId, billingCycle) {
             let isLoggedIn = false;
@@ -5929,7 +6090,7 @@
                         <h4>Producto</h4>
                         <ul>
                             <li><a href="#funcionalidades">Funcionalidades</a></li>
-                            <li><a href="#modulos">Modulos</a></li>
+                            <li><a href="/modules.html">Modulos</a></li>
                             <li><a href="#seguridad">Seguridad</a></li>
                             <li><a href="#precios">Precios</a></li>
                             <li><a href="#">Integraciones</a></li>
@@ -5942,6 +6103,7 @@
                             <li><a href="#">Blog</a></li>
                             <li><a href="#">Casos de exito</a></li>
                             <li><a href="#">Trabaja con nosotros</a></li>
+                            <li><a href="/investors.html">Inversores</a></li>
                             <li><a href="#">Contacto</a></li>
                         </ul>
                     </div>
@@ -5958,11 +6120,11 @@
                     <div class="footer-column">
                         <h4>Legal</h4>
                         <ul>
-                            <li><a href="#">Terminos de servicio</a></li>
-                            <li><a href="#">Politica de privacidad</a></li>
-                            <li><a href="#">Politica de cookies</a></li>
-                            <li><a href="#">GDPR</a></li>
-                            <li><a href="#">DPA</a></li>
+                            <li><a href="/terms.html">Terminos de servicio</a></li>
+                            <li><a href="/privacy.html">Politica de privacidad</a></li>
+                            <li><a href="/cookies.html">Politica de cookies</a></li>
+                            <li><a href="/gdpr.html">GDPR</a></li>
+                            <li><a href="/dpa.html">DPA</a></li>
                         </ul>
                     </div>
                 </div>
