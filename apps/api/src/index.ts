@@ -76,6 +76,13 @@ app.use('/api/', apiRateLimiter);
 // =============================================================================
 
 app.use(compression());
+
+// IMPORTANT: Stripe webhook needs raw body for signature verification
+// Must be registered BEFORE express.json() middleware
+app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
+app.use('/api/billing/webhook', express.raw({ type: 'application/json' }));
+
+// Regular JSON parsing for all other routes
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -128,6 +135,8 @@ app.use('/api/modules', authMiddleware, auditMiddleware, moduleRoutes);
 app.use('/api/audit', authMiddleware, auditRoutes);
 // Billing routes - webhook is public, other routes have their own auth
 app.use('/api/billing', billingRoutes);
+// Stripe webhook alias (for backwards compatibility with Stripe dashboard config)
+app.use('/api/stripe', billingRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/banking', bankingRoutes);
 app.use('/api/profile', profileRoutes);
